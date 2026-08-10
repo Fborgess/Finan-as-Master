@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, AccessProfile } from '../../types';
+import { generateSalt, hashSecret } from '../../utils/credentials';
 import { UserCheck, Plus, Edit2, Trash2, X, KeyRound, CheckCircle2, XCircle, Mail, Eye, EyeOff } from 'lucide-react';
 
 interface Props {
@@ -39,7 +40,7 @@ export const UsersView: React.FC<Props> = ({
       setName(u.name);
       setEmail(u.email);
       setProfileId(u.profileId);
-      setPin(u.pin);
+      setPin('');
       setStatus(u.status);
     } else {
       setEditingUser(null);
@@ -52,19 +53,41 @@ export const UsersView: React.FC<Props> = ({
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
 
-    onSaveUser({
+    const next: User = {
       id: editingUser?.id || `usr-${Date.now()}`,
       name: name.trim(),
       email: email.trim(),
       profileId,
-      pin: pin.trim() || '1234',
       status,
-    });
+    };
 
+    // Preserve existing credentials when editing without changing the PIN
+    if (editingUser) {
+      next.pinHash = editingUser.pinHash;
+      next.pinSalt = editingUser.pinSalt;
+      next.passwordHash = editingUser.passwordHash;
+      next.passwordSalt = editingUser.passwordSalt;
+      next.pin = editingUser.pin;
+      next.password = editingUser.password;
+    }
+
+    const trimmedPin = pin.trim();
+    if (trimmedPin) {
+      const salt = generateSalt();
+      next.pinHash = await hashSecret(trimmedPin, salt);
+      next.pinSalt = salt;
+      next.passwordHash = await hashSecret(trimmedPin, salt);
+      next.passwordSalt = salt;
+      // New credentials are stored only as hashes
+      delete next.pin;
+      delete next.password;
+    }
+
+    onSaveUser(next);
     setIsModalOpen(false);
   };
 
@@ -166,7 +189,7 @@ export const UsersView: React.FC<Props> = ({
                       PIN Rápido
                     </span>
                     <span className="font-mono text-slate-300">
-                      •••• ({u.pin})
+                      {u.pinHash || u.pin ? '••••' : '—'}
                     </span>
                   </div>
                 </div>
@@ -261,14 +284,14 @@ export const UsersView: React.FC<Props> = ({
 
                 <div>
                   <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    PIN (4 Dígitos) *
+                    {editingUser ? 'PIN (deixe em branco para manter)' : 'PIN (4 Dígitos) *'}
                   </label>
                   <div className="relative">
                     <input
                       type={showPin ? 'text' : 'password'}
                       maxLength={4}
-                      required
-                      placeholder="1234"
+                      required={!editingUser}
+                      placeholder={editingUser ? '••••' : '1234'}
                       value={pin}
                       onChange={(e) => setPin(e.target.value)}
                       className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-3 pr-8 py-1.5 text-xs text-white font-mono tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-purple-500"

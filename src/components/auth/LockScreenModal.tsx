@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { User, AccessProfile, BiometricSettings } from '../../types';
 import { authenticateWithBiometrics } from '../../utils/biometrics';
+import { verifyUserPin, verifyUserPassword } from '../../utils/credentials';
+import { safeLocalStorage } from '../../utils/safeStorage';
 import {
   Eye,
   EyeOff,
@@ -24,6 +26,34 @@ interface Props {
   onLogout: () => void;
 }
 
+const MAX_UNLOCK_ATTEMPTS = 5;
+const UNLOCK_LOCK_DURATION_MS = 60 * 1000;
+
+const getUnlockAttempts = (): number => {
+  const raw = safeLocalStorage.getItem('fm_unlock_attempts');
+  const value = raw ? parseInt(raw, 10) : 0;
+  return Number.isFinite(value) ? value : 0;
+};
+
+const getUnlockLockRemainingMs = (): number => {
+  const raw = safeLocalStorage.getItem('fm_unlock_lock_until');
+  const until = raw ? parseInt(raw, 10) : 0;
+  return Number.isFinite(until) ? Math.max(0, until - Date.now()) : 0;
+};
+
+const recordFailedUnlockAttempt = (): void => {
+  const attempts = getUnlockAttempts() + 1;
+  safeLocalStorage.setItem('fm_unlock_attempts', String(attempts));
+  if (attempts >= MAX_UNLOCK_ATTEMPTS) {
+    safeLocalStorage.setItem('fm_unlock_lock_until', String(Date.now() + UNLOCK_LOCK_DURATION_MS));
+  }
+};
+
+const clearUnlockAttempts = (): void => {
+  safeLocalStorage.removeItem('fm_unlock_attempts');
+  safeLocalStorage.removeItem('fm_unlock_lock_until');
+};
+
 export const LockScreenModal: React.FC<Props> = ({
   user,
   profile,
@@ -36,6 +66,28 @@ export const LockScreenModal: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanSuccess, setScanSuccess] = useState(false);
+  const [lockRemaining, setLockRemaining] = useState<number>(() => {
+    const remaining = Math.ceil(getUnlockLockRemainingMs() / 1000);
+    return remaining > 0 ? remaining : 0;
+  });
+
+  // Live countdown while temporarily locked
+  useEffect(() => {
+    if (lockRemaining <= 0) return;
+
+    const id = setInterval(() => {
+      const remaining = Math.ceil(getUnlockLockRemainingMs() / 1000);
+      if (remaining <= 0) {
+        setLockRemaining(0);
+        setErrorMessage(null);
+        clearUnlockAttempts();
+      } else {
+        setLockRemaining(remaining);
+      }
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [lockRemaining]);
 
   // Auto-trigger biometric prompt on mount if biometric is enabled
   useEffect(() => {
@@ -68,6 +120,7 @@ export const LockScreenModal: React.FC<Props> = ({
   }, [pinInput, user]);
 
   const handleDigitClick = (digit: string) => {
+    if (lockRemaining > 0) return;
     if (pinInput.length < 4) {
       const newPin = pinInput + digit;
       setPinInput(newPin);
@@ -86,25 +139,51 @@ export const LockScreenModal: React.FC<Props> = ({
     }
   };
 
-  const verifyPin = (pinToTest: string) => {
-    if (pinToTest === user.pin || (user.password && pinToTest === user.password)) {
+  const verifyPin = async (pinToTest: string) => {
+    if (getUnlockLockRemainingMs() > 0) {
+      setErrorMessage('Muitas tentativas. Aguarde alguns segundos.');
+      setPinInput('');
+      return;
+    }
+
+    const [pinValid, passwordValid] = await Promise.all([
+      verifyUserPin(user, pinToTest),
+      verifyUserPassword(user, pinToTest),
+    ]);
+
+    if (pinValid || passwordValid) {
+      clearUnlockAttempts();
       setScanSuccess(true);
       setTimeout(() => {
         onUnlockSuccess();
       }, 400);
     } else {
-      setErrorMessage('PIN incorreto. Tente novamente.');
+      recordFailedUnlockAttempt();
+      const remainingAttempts = Math.max(0, MAX_UNLOCK_ATTEMPTS - getUnlockAttempts());
+      if (remainingAttempts > 0) {
+        setErrorMessage(`PIN incorreto. ${remainingAttempts} tentativa(s) restante(s).`);
+      } else {
+        const secs = Math.ceil(getUnlockLockRemainingMs() / 1000);
+        setLockRemaining(secs);
+        setErrorMessage(`Muitas tentativas. Aguarde ${secs} segundos.`);
+      }
       setPinInput('');
     }
   };
 
   const handleBiometricUnlock = async () => {
+    if (getUnlockLockRemainingMs() > 0) {
+      setErrorMessage('Muitas tentativas. Aguarde alguns segundos.');
+      return;
+    }
+
     setIsScanning(true);
     setErrorMessage(null);
 
     const result = await authenticateWithBiometrics();
 
     if (result.success) {
+      clearUnlockAttempts();
       setIsScanning(false);
       setScanSuccess(true);
       setTimeout(() => {
@@ -196,7 +275,7 @@ export const LockScreenModal: React.FC<Props> = ({
               return (
                 <div
                   key={index}
-                  className={`w-12 h-13 rounded-2xl border-2 flex items-center justify-center font-mono text-xl font-extrabold transition-all duration-200 ${
+                  className={`w-12 h-14 rounded-2xl border-2 flex items-center justify-center font-mono text-xl font-extrabold transition-all duration-200 ${
                     errorMessage && pinInput.length === 4
                       ? 'border-rose-500 bg-rose-500/20 text-rose-300'
                       : isFilled
@@ -216,6 +295,14 @@ export const LockScreenModal: React.FC<Props> = ({
           <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold flex items-center justify-center space-x-2 animate-in fade-in">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Temporary Lock Banner */}
+        {lockRemaining > 0 && (
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold flex items-center justify-center space-x-2 animate-in fade-in">
+            <Lock className="w-4 h-4 shrink-0" />
+            <span>Acesso temporariamente bloqueado. Tente novamente em {lockRemaining}s.</span>
           </div>
         )}
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { User, AccessProfile } from '../../types';
 import { StorageService } from '../../utils/storage';
 import { safeLocalStorage, safeSessionStorage } from '../../utils/safeStorage';
-import { authenticateWithBiometrics } from '../../utils/biometrics';
+import { authenticateWithBiometrics, isBiometricAvailable } from '../../utils/biometrics';
+import { verifyUserPin, verifyUserPassword } from '../../utils/credentials';
 import {
   Lock,
   Mail,
@@ -27,6 +28,34 @@ interface Props {
   onLoginSuccess: (user: User) => void;
 }
 
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOGIN_LOCK_DURATION_MS = 60 * 1000;
+
+const getLoginAttempts = (): number => {
+  const raw = safeLocalStorage.getItem('fm_login_attempts');
+  const value = raw ? parseInt(raw, 10) : 0;
+  return Number.isFinite(value) ? value : 0;
+};
+
+const getLoginLockRemainingMs = (): number => {
+  const raw = safeLocalStorage.getItem('fm_login_lock_until');
+  const until = raw ? parseInt(raw, 10) : 0;
+  return Number.isFinite(until) ? Math.max(0, until - Date.now()) : 0;
+};
+
+const recordFailedLoginAttempt = (): void => {
+  const attempts = getLoginAttempts() + 1;
+  safeLocalStorage.setItem('fm_login_attempts', String(attempts));
+  if (attempts >= MAX_LOGIN_ATTEMPTS) {
+    safeLocalStorage.setItem('fm_login_lock_until', String(Date.now() + LOGIN_LOCK_DURATION_MS));
+  }
+};
+
+const clearLoginAttempts = (): void => {
+  safeLocalStorage.removeItem('fm_login_attempts');
+  safeLocalStorage.removeItem('fm_login_lock_until');
+};
+
 export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) => {
   const [loginMode, setLoginMode] = useState<'password' | 'pin_select'>('password');
   
@@ -34,7 +63,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
   const [emailOrUser, setEmailOrUser] = useState('');
   const [passwordOrPin, setPasswordOrPin] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(false);
 
   // Form fields for Quick PIN user selection
   const [selectedUserId, setSelectedUserId] = useState<string>(users[0]?.id || '');
@@ -44,6 +73,40 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
   // Status & Feedback
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+  const [lockRemaining, setLockRemaining] = useState<number>(() => {
+    const remaining = Math.ceil(getLoginLockRemainingMs() / 1000);
+    return remaining > 0 ? remaining : 0;
+  });
+
+  // Check if the device actually supports native biometrics
+  useEffect(() => {
+    let mounted = true;
+    isBiometricAvailable().then((supported) => {
+      if (mounted) setIsBiometricSupported(supported);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Live countdown while the login is temporarily locked
+  useEffect(() => {
+    if (lockRemaining <= 0) return;
+
+    const id = setInterval(() => {
+      const remaining = Math.ceil(getLoginLockRemainingMs() / 1000);
+      if (remaining <= 0) {
+        setLockRemaining(0);
+        setErrorMessage(null);
+        clearLoginAttempts();
+      } else {
+        setLockRemaining(remaining);
+      }
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [lockRemaining]);
 
   // Keyboard navigation for Quick PIN Pad mode
   useEffect(() => {
@@ -78,7 +141,13 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
     setErrorMessage(null);
     setIsLoading(true);
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      if (getLoginLockRemainingMs() > 0) {
+        setErrorMessage('Muitas tentativas de login. Aguarde para tentar novamente.');
+        setIsLoading(false);
+        return;
+      }
+
       const trimmedEmailOrUser = emailOrUser.trim().toLowerCase();
       const trimmedSecret = passwordOrPin.trim();
 
@@ -88,15 +157,15 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
         return;
       }
 
-      // Search matching user by email or name
+      // Search matching user by exact email or exact name (no partial match)
       const matchedUser = users.find(
         (u) =>
           u.email.toLowerCase() === trimmedEmailOrUser ||
-          u.email.toLowerCase().includes(trimmedEmailOrUser) ||
-          u.name.toLowerCase().includes(trimmedEmailOrUser)
+          u.name.toLowerCase() === trimmedEmailOrUser
       );
 
       if (!matchedUser) {
+        recordFailedLoginAttempt();
         setErrorMessage('Usuário ou e-mail não encontrado no sistema.');
         setIsLoading(false);
         return;
@@ -108,21 +177,33 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
         return;
       }
 
-      // Check PIN or password
-      const isPinValid = matchedUser.pin === trimmedSecret;
-      const isPasswordValid = matchedUser.password ? matchedUser.password === trimmedSecret : false;
+      // Check PIN or password (hashed or legacy plaintext)
+      const [isPinValid, isPasswordValid] = await Promise.all([
+        verifyUserPin(matchedUser, trimmedSecret),
+        verifyUserPassword(matchedUser, trimmedSecret),
+      ]);
 
       if (!isPinValid && !isPasswordValid) {
-        setErrorMessage('Senha ou PIN de acesso incorreto. Tente novamente.');
+        recordFailedLoginAttempt();
+        const remainingAttempts = Math.max(0, MAX_LOGIN_ATTEMPTS - getLoginAttempts());
+        if (remainingAttempts > 0) {
+          setErrorMessage(`Senha ou PIN de acesso incorreto. ${remainingAttempts} tentativa(s) restante(s).`);
+        } else {
+          setErrorMessage(`Muitas tentativas. Aguarde ${Math.ceil(getLoginLockRemainingMs() / 1000)} segundos.`);
+          setLockRemaining(Math.ceil(getLoginLockRemainingMs() / 1000));
+        }
         setIsLoading(false);
         return;
       }
 
       // Authentication successful
+      clearLoginAttempts();
+
       if (rememberMe) {
         safeLocalStorage.setItem('fm_authenticated_user', matchedUser.id);
       } else {
         safeSessionStorage.setItem('fm_authenticated_user', matchedUser.id);
+        safeLocalStorage.removeItem('fm_authenticated_user');
       }
 
       setIsLoading(false);
@@ -131,28 +212,47 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
   };
 
   // Handler for Quick PIN Pad login
-  const handlePinPadLogin = (usr: User, enteredPin: string) => {
+  const handlePinPadLogin = async (usr: User, enteredPin: string) => {
     setErrorMessage(null);
-    if (usr.status === 'inactive') {
-      setErrorMessage('Este usuário está inativo.');
+    if (getLoginLockRemainingMs() > 0) {
+      setErrorMessage('Muitas tentativas de login. Aguarde para tentar novamente.');
+      setPinInput('');
       return;
     }
 
-    if (usr.pin === enteredPin) {
+    if (usr.status === 'inactive') {
+      setErrorMessage('Este usuário está inativo.');
+      setPinInput('');
+      return;
+    }
+
+    const pinValid = await verifyUserPin(usr, enteredPin);
+
+    if (pinValid) {
+      clearLoginAttempts();
       if (rememberMe) {
         safeLocalStorage.setItem('fm_authenticated_user', usr.id);
       } else {
         safeSessionStorage.setItem('fm_authenticated_user', usr.id);
+        safeLocalStorage.removeItem('fm_authenticated_user');
       }
       onLoginSuccess(usr);
     } else {
-      setErrorMessage(`PIN incorreto para ${usr.name}. Digite novamente.`);
+      recordFailedLoginAttempt();
+      const remainingAttempts = Math.max(0, MAX_LOGIN_ATTEMPTS - getLoginAttempts());
+      if (remainingAttempts > 0) {
+        setErrorMessage(`PIN incorreto para ${usr.name}. ${remainingAttempts} tentativa(s) restante(s).`);
+      } else {
+        setErrorMessage(`Muitas tentativas. Aguarde ${Math.ceil(getLoginLockRemainingMs() / 1000)} segundos.`);
+        setLockRemaining(Math.ceil(getLoginLockRemainingMs() / 1000));
+      }
       setPinInput('');
     }
   };
 
   // Quick PIN pad number click
   const handlePinDigitClick = (digit: string) => {
+    if (lockRemaining > 0) return;
     if (pinInput.length < 4) {
       const newPin = pinInput + digit;
       setPinInput(newPin);
@@ -164,13 +264,13 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
     }
   };
 
-  // Quick Demo Login Helper
+  // Quick User Selection Helper (no auto-login: the user still types the PIN)
   const handleDemoQuickLogin = (usr: User) => {
     setEmailOrUser(usr.email);
-    setPasswordOrPin(usr.pin);
     setSelectedUserId(usr.id);
-    setPinInput(usr.pin);
-    handlePinPadLogin(usr, usr.pin);
+    setPinInput('');
+    setErrorMessage(null);
+    setLoginMode('pin_select');
   };
 
   const activeSelectedUser = users.find((u) => u.id === selectedUserId) || users[0];
@@ -241,6 +341,16 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
             </div>
           )}
 
+          {/* Temporary Lock Banner */}
+          {lockRemaining > 0 && (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 text-xs text-amber-300 flex items-center justify-center space-x-2.5 animate-in fade-in duration-150">
+              <Lock className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="font-extrabold">
+                Login temporariamente bloqueado. Tente novamente em {lockRemaining}s.
+              </span>
+            </div>
+          )}
+
           {/* Mode 1: Email/Username + Password/PIN Form */}
           {loginMode === 'password' && (
             <form onSubmit={handlePasswordLogin} className="space-y-4">
@@ -255,6 +365,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                   <input
                     type="text"
                     required
+                    autoFocus
                     placeholder="fsborgess@gmail.com"
                     value={emailOrUser}
                     onChange={(e) => setEmailOrUser(e.target.value)}
@@ -303,11 +414,13 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
 
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || lockRemaining > 0}
                 className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-purple-600/30 transition flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.98]"
               >
                 {isLoading ? (
                   <span>Validando Credenciais...</span>
+                ) : lockRemaining > 0 ? (
+                  <span>Aguarde {lockRemaining}s...</span>
                 ) : (
                   <>
                     <LogIn className="w-4 h-4" />
@@ -321,8 +434,8 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
           {/* Mode 2: Quick User Selection + PIN Pad + Biometric Trigger */}
           {loginMode === 'pin_select' && (
             <div className="space-y-4">
-              {/* Biometric Quick Login Button if enabled */}
-              {StorageService.getBiometricSettings().enabled && (
+              {/* Biometric Quick Login Button if enabled AND supported by the device */}
+              {StorageService.getBiometricSettings().enabled && isBiometricSupported && (
                 <button
                   type="button"
                   onClick={async () => {
@@ -341,12 +454,17 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                       setIsLoading(false);
                       const userToLogin = users.find((u) => u.id === selectedUserId) || users[0];
                       if (userToLogin) {
-                        safeLocalStorage.setItem('fm_authenticated_user', userToLogin.id);
+                        if (rememberMe) {
+                          safeLocalStorage.setItem('fm_authenticated_user', userToLogin.id);
+                        } else {
+                          safeSessionStorage.setItem('fm_authenticated_user', userToLogin.id);
+                          safeLocalStorage.removeItem('fm_authenticated_user');
+                        }
                         onLoginSuccess(userToLogin);
                       }
                     }, 400);
                   }}
-                  disabled={isLoading}
+                  disabled={isLoading || lockRemaining > 0}
                   className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-950/40 transition flex items-center justify-center space-x-2.5 active:scale-95 disabled:opacity-50"
                 >
                   {StorageService.getBiometricSettings().biometricType === 'faceid' ? (
@@ -356,6 +474,12 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                   )}
                   <span>Entrar com Impressão Digital / Face ID</span>
                 </button>
+              )}
+
+              {StorageService.getBiometricSettings().enabled && !isBiometricSupported && (
+                <div className="p-3 rounded-2xl bg-slate-800/60 border border-slate-700 text-[11px] text-slate-400 font-semibold text-center">
+                  Biometria não disponível neste navegador/dispositivo. Use o PIN abaixo.
+                </div>
               )}
 
               <div>
@@ -484,11 +608,11 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
             </div>
           )}
 
-          {/* Demo Quick Access Helper */}
+          {/* Quick User Selection Helper */}
           <div className="border-t border-slate-800/80 pt-4 space-y-2">
             <div className="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider flex items-center justify-between">
-              <span>Usuários Cadastrados no Sistema (Demo):</span>
-              <span className="text-purple-400">Clique para Entrar</span>
+              <span>Usuários Cadastrados no Sistema:</span>
+              <span className="text-purple-400">Selecionar</span>
             </div>
             <div className="grid grid-cols-1 gap-1.5">
               {users.map((u) => (
@@ -504,7 +628,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                     </div>
                     <div>
                       <span className="font-bold text-slate-200">{u.name}</span>
-                      <span className="text-[10px] text-slate-400 ml-1.5 font-mono">(PIN: {u.pin})</span>
+                      <span className="text-[10px] text-slate-400 ml-1.5">Toque para selecionar e digitar o PIN</span>
                     </div>
                   </div>
                   <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400 transition" />

@@ -3,14 +3,44 @@ import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 
+// Cloud Run / hosting platforms inject $PORT (e.g. 8080) and probe that port
+// to consider the app "started". Bind to it when present, else default 3000.
+const PORT = Number(process.env.PORT) || 3000;
+const HOST = '0.0.0.0';
+const DB_FILE = 'app_db.json';
+
+// Atomic JSON write: write to temp file then rename to avoid corrupting the DB
+// if the process crashes mid-write.
+function writeDbFileAtomic(filePath: string, data: unknown) {
+  const tmpPath = `${filePath}.tmp`;
+  fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
+  fs.renameSync(tmpPath, filePath);
+}
+
+// Read DB file, returning null if missing. If corrupt, back it up and return
+// null so the sync API can recover instead of returning persistent 500s.
+function readDbFile(filePath: string): unknown | null {
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch (err) {
+    console.error('Sync DB corrupted, backing up and starting fresh:', err);
+    try {
+      fs.copyFileSync(filePath, `${filePath}.corrupt-${Date.now()}`);
+    } catch (e) {
+      console.error('Failed to back up corrupted DB:', e);
+    }
+    return null;
+  }
+}
+
 async function startServer() {
   const app = express();
-  const PORT = 3000;
 
   app.use(express.json({ limit: '10mb' }));
 
   const dataDir = path.resolve(process.cwd(), 'data');
-  const dbFilePath = path.join(dataDir, 'app_db.json');
+  const dbFilePath = path.join(dataDir, DB_FILE);
 
   if (!fs.existsSync(dataDir)) {
     try {
@@ -28,12 +58,8 @@ async function startServer() {
   // Cloud Sync GET - Pull latest state for all devices
   app.get('/api/sync/pull', (_req, res) => {
     try {
-      if (fs.existsSync(dbFilePath)) {
-        const raw = fs.readFileSync(dbFilePath, 'utf-8');
-        const data = JSON.parse(raw);
-        return res.json({ success: true, data });
-      }
-      return res.json({ success: true, data: null });
+      const data = readDbFile(dbFilePath);
+      return res.json({ success: true, data });
     } catch (err) {
       console.error('Error reading sync DB:', err);
       return res.status(500).json({ success: false, error: 'Failed to read sync database' });
@@ -53,7 +79,7 @@ async function startServer() {
         lastUpdated: new Date().toISOString(),
       };
 
-      fs.writeFileSync(dbFilePath, JSON.stringify(syncData, null, 2), 'utf-8');
+      writeDbFileAtomic(dbFilePath, syncData);
       return res.json({ success: true, lastUpdated: syncData.lastUpdated });
     } catch (err) {
       console.error('Error writing sync DB:', err);
@@ -89,9 +115,45 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
   });
+
+  // Handle port already in use without crashing the whole process
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Kill the conflicting process or change PORT.`);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+
+  // Graceful shutdown: close the server so ongoing requests finish
+  const shutdown = (signal: string) => {
+    console.log(`${signal} received, shutting down gracefully...`);
+    server.close(() => {
+      console.log('Server closed.');
+      process.exit(0);
+    });
+    // Force exit if connections hang
+    setTimeout(() => process.exit(0), 5000).unref();
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
+
+  return server;
 }
 
-startServer();
+// Prevent a single unhandled error from taking the whole server down
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception (server kept alive):', err);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled rejection (server kept alive):', reason);
+});
+
+startServer().catch((err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
+});

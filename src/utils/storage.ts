@@ -12,6 +12,7 @@ import {
   CreditCardInvoicePayment
 } from '../types';
 import { safeLocalStorage } from './safeStorage';
+import { migrateUserCredentials } from './credentials';
 
 const INITIAL_CATEGORIES: Category[] = [
   // Categorias Pai
@@ -179,15 +180,12 @@ const cleanSampleDataIfNeeded = () => {
       safeLocalStorage.setItem('fm_users', JSON.stringify(filtered));
     }
 
-    // 7. Point active user and authenticated user to fsborgess@gmail.com if set to a sample user
+    // 7. Point active user to the default admin if set to a sample user.
+    // NOTE: we do NOT auto-set fm_authenticated_user here, so the app always
+    // requires credentials on first open instead of silently logging in.
     const activeUserId = safeLocalStorage.getItem('fm_active_user_id');
     if (!activeUserId || SAMPLE_IDS.has(activeUserId)) {
       safeLocalStorage.setItem('fm_active_user_id', 'usr-admin-fs');
-    }
-
-    const authUserId = safeLocalStorage.getItem('fm_authenticated_user');
-    if (!authUserId || SAMPLE_IDS.has(authUserId)) {
-      safeLocalStorage.setItem('fm_authenticated_user', 'usr-admin-fs');
     }
   } catch (e) {
     // Ignore storage errors
@@ -290,7 +288,8 @@ export class StorageService {
     let users: User[] = safeParse(raw, INITIAL_USERS);
     users = users.filter((u) => !SAMPLE_IDS.has(u.id) && !SAMPLE_EMAILS.has(u.email?.toLowerCase()));
 
-    // Garante que o e-mail de admin (fsborgess@gmail.com) sempre esteja disponível e atualizado para PIN 1910
+    // Garante que o e-mail de admin (fsborgess@gmail.com) sempre esteja disponível
+    // com as credenciais padrão (PIN/senha 1910) apenas na primeira criação.
     const adminIndex = users.findIndex((u) => u.email.toLowerCase() === 'fsborgess@gmail.com');
     if (adminIndex === -1) {
       users.unshift({
@@ -303,18 +302,21 @@ export class StorageService {
         status: 'active',
       });
       StorageService.saveUsers(users);
-    } else {
-      if (users[adminIndex].pin !== '1910' || users[adminIndex].password !== '1910') {
-        users[adminIndex].pin = '1910';
-        users[adminIndex].password = '1910';
-        StorageService.saveUsers(users);
-      }
     }
 
     return users;
   }
   static saveUsers(data: User[]): void {
     safeLocalStorage.setItem('fm_users', JSON.stringify(data));
+  }
+
+  // Migra credenciais em texto puro (PIN/senha) para hashes PBKDF2 com salt
+  static async migrateCredentials(): Promise<void> {
+    const users = StorageService.getUsers();
+    const migrated = await migrateUserCredentials(users);
+    if (migrated !== users) {
+      StorageService.saveUsers(migrated);
+    }
   }
 
   // Active User ID

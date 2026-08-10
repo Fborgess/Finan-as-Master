@@ -404,7 +404,7 @@ export const BiometricSettingsView: React.FC<Props> = ({
               <div className="pr-3">
                 <p className="text-xs font-extrabold text-white">PIN de Contingência</p>
                 <p className="text-[10px] text-slate-400 mt-0.5">
-                  Permite usar o PIN de 4 dígitos ({currentUser.pin}) em falhas.
+                  Permite usar o PIN de 4 dígitos como alternativa quando a biometria falha.
                 </p>
               </div>
               <input

@@ -155,8 +155,14 @@ export interface User {
   name: string;
   email: string;
   profileId: string;
-  pin: string;
+  // Legacy plaintext credentials (migrated to hashes on first load)
+  pin?: string;
   password?: string;
+  // Hashed credentials (PBKDF2-SHA256 with per-user salt)
+  pinHash?: string;
+  pinSalt?: string;
+  passwordHash?: string;
+  passwordSalt?: string;
   status: 'active' | 'inactive';
   avatarUrl?: string;
 }
