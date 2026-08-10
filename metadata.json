@@ -1,0 +1,7 @@
+{
+  "name": "Finança Master - Gestão Financeira Completa",
+  "description": "Aplicativo financeiro multiplataforma com cadastros completos (Categorias, Contas, Cartões, Pagamentos, Beneficiários), controle de Orçamento e Transações, e Gestão de Perfis de Acesso e Usuários.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

@@ -1,0 +1,44 @@
+{
+  "id": "financa-master-app",
+  "short_name": "Finança Master",
+  "name": "Finança Master - Gestão Financeira",
+  "description": "Aplicativo de Gestão Financeira Pessoal Finança Master",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "categories": ["finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/pwa-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nova Transação",
+      "short_name": "Nova Tx",
+      "description": "Registrar nova receita ou despesa",
+      "url": "/",
+      "icons": [{ "src": "/pwa-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

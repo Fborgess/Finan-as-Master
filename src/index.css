@@ -1,0 +1,444 @@
+@import "tailwindcss";
+
+/* BASE TRANSITIONS, SAFE AREAS & MOBILE/TABLET TOUCH SCROLLING */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+html, body {
+  transition: background-color 0.25s ease, color 0.25s ease;
+  overscroll-behavior-y: auto;
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* iOS Safe Area Utilities */
+.ios-safe-top {
+  padding-top: max(8px, env(safe-area-inset-top, 0px));
+}
+
+.ios-safe-bottom {
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+}
+
+/* ==========================================================================
+   LIGHT THEME DESIGN SYSTEM (SOFT, EYE-SAFE, ELEGANT & HIGH-READABILITY)
+   ========================================================================== */
+
+/* 1. Page Body & Canvas - Soft Eye-Comfortable Medium Slate Gray (Low Glare) */
+html.light-theme,
+body.light-theme {
+  background-color: #e2e8f0 !important; /* Soft Slate 200, zero-glare canvas */
+  color: #0f172a !important;            /* Slate 900 */
+}
+
+/* Page Outer Backgrounds */
+html.light-theme .bg-slate-950 {
+  background-color: #e2e8f0 !important;
+}
+
+/* Main Cards, Modals, Headers, Floating Surfaces */
+html.light-theme .bg-slate-900 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 12px -2px rgba(15, 23, 42, 0.08), 0 1px 3px -1px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Secondary Panels, Inner Containers, Input Containers & Cards */
+html.light-theme .bg-slate-800 {
+  background-color: #f1f5f9 !important; /* Slate 100 */
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Opacity variations of bg-slate-800 / bg-slate-900 / bg-slate-950 */
+html.light-theme .bg-slate-800\/90,
+html.light-theme .bg-slate-800\/80,
+html.light-theme .bg-slate-800\/60,
+html.light-theme .bg-slate-800\/50,
+html.light-theme .bg-slate-800\/40,
+html.light-theme .bg-slate-800\/30,
+html.light-theme .bg-slate-800\/20,
+html.light-theme .bg-slate-800\/10 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light-theme .bg-slate-900\/90,
+html.light-theme .bg-slate-900\/80,
+html.light-theme .bg-slate-900\/70,
+html.light-theme .bg-slate-900\/60,
+html.light-theme .bg-slate-900\/50,
+html.light-theme .bg-slate-900\/40,
+html.light-theme .bg-slate-900\/30,
+html.light-theme .bg-slate-900\/20 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html.light-theme .bg-slate-950\/90,
+html.light-theme .bg-slate-950\/80,
+html.light-theme .bg-slate-950\/60,
+html.light-theme .bg-slate-950\/50,
+html.light-theme .bg-slate-950\/40 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 2. OVERRIDE DARK GRADIENTS THAT CREATED DARK SPOTS */
+html.light-theme .bg-gradient-to-r,
+html.light-theme .bg-gradient-to-b,
+html.light-theme .bg-gradient-to-br,
+html.light-theme .bg-gradient-to-tr,
+html.light-theme .bg-gradient-to-l,
+html.light-theme .bg-gradient-to-t {
+  background-image: none !important;
+}
+
+html.light-theme .from-slate-950,
+html.light-theme .from-slate-900,
+html.light-theme .from-slate-850,
+html.light-theme .from-slate-800 {
+  --tw-gradient-from: #f8fafc !important;
+}
+
+html.light-theme .to-slate-950,
+html.light-theme .to-slate-900,
+html.light-theme .to-slate-800 {
+  --tw-gradient-to: #f1f5f9 !important;
+}
+
+html.light-theme .via-slate-900,
+html.light-theme .via-slate-800 {
+  --tw-gradient-stops: var(--tw-gradient-from), #f1f5f9, var(--tw-gradient-to) !important;
+}
+
+/* 3. BORDERS IN LIGHT THEME */
+html.light-theme .border-slate-800,
+html.light-theme .border-slate-700,
+html.light-theme .border-slate-800\/80,
+html.light-theme .border-slate-800\/60,
+html.light-theme .border-slate-800\/40,
+html.light-theme .border-slate-700\/50,
+html.light-theme .divide-slate-800 > :not([hidden]) ~ :not([hidden]),
+html.light-theme .divide-slate-700 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #cbd5e1 !important;
+}
+
+/* 4. TEXT COLOR OVERRIDES (HIGH CONTRAST & READABILITY) */
+html.light-theme .text-white {
+  color: #0f172a !important; /* Default dark slate for titles/text */
+}
+
+html.light-theme .text-slate-100,
+html.light-theme .text-slate-200 {
+  color: #0f172a !important; /* Slate 900 */
+}
+
+html.light-theme .text-slate-300 {
+  color: #1e293b !important; /* Slate 800 */
+}
+
+html.light-theme .text-slate-400 {
+  color: #475569 !important; /* Slate 600 */
+}
+
+html.light-theme .text-slate-500 {
+  color: #64748b !important; /* Slate 500 */
+}
+
+/* Hover text overrides */
+html.light-theme .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+/* 5. PRESERVE WHITE TEXT ON SOLID ACTION BUTTONS & BADGES */
+html.light-theme .bg-purple-600,
+html.light-theme .bg-purple-700,
+html.light-theme .bg-blue-600,
+html.light-theme .bg-blue-700,
+html.light-theme .bg-emerald-600,
+html.light-theme .bg-emerald-700,
+html.light-theme .bg-rose-600,
+html.light-theme .bg-rose-700,
+html.light-theme .bg-amber-600,
+html.light-theme .bg-indigo-600,
+html.light-theme .bg-purple-600 *,
+html.light-theme .bg-purple-700 *,
+html.light-theme .bg-blue-600 *,
+html.light-theme .bg-blue-700 *,
+html.light-theme .bg-emerald-600 *,
+html.light-theme .bg-emerald-700 *,
+html.light-theme .bg-rose-600 *,
+html.light-theme .bg-rose-700 *,
+html.light-theme .bg-amber-600 *,
+html.light-theme .bg-indigo-600 * {
+  color: #ffffff !important;
+}
+
+/* Solid Button Styling in Light Theme */
+html.light-theme button.bg-purple-600,
+html.light-theme button.bg-blue-600,
+html.light-theme button.bg-emerald-600,
+html.light-theme button.bg-rose-600,
+html.light-theme button.bg-amber-600,
+html.light-theme a.bg-purple-600,
+html.light-theme a.bg-blue-600 {
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Secondary Button Hovers in Light Theme */
+html.light-theme .hover\:bg-slate-800:hover,
+html.light-theme .hover\:bg-slate-800\/80:hover,
+html.light-theme .hover\:bg-slate-800\/50:hover,
+html.light-theme .hover\:bg-slate-700:hover,
+html.light-theme .hover\:bg-slate-900:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+/* 6. COLORED ACCENTS, ICONS & BADGES (DEEP TONES IN LIGHT THEME) */
+html.light-theme .text-purple-400 {
+  color: #7e22ce !important; /* purple-700 */
+}
+html.light-theme .text-purple-300,
+html.light-theme .text-purple-200 {
+  color: #581c87 !important; /* purple-900 */
+}
+
+html.light-theme .text-emerald-400 {
+  color: #047857 !important; /* emerald-700 */
+}
+html.light-theme .text-emerald-300,
+html.light-theme .text-emerald-200 {
+  color: #064e3b !important; /* emerald-900 */
+}
+
+html.light-theme .text-rose-400 {
+  color: #be123c !important; /* rose-700 */
+}
+html.light-theme .text-rose-300,
+html.light-theme .text-rose-200 {
+  color: #881337 !important; /* rose-900 */
+}
+
+html.light-theme .text-blue-400 {
+  color: #1d4ed8 !important; /* blue-700 */
+}
+html.light-theme .text-blue-300,
+html.light-theme .text-blue-200 {
+  color: #1e3a8a !important; /* blue-900 */
+}
+
+html.light-theme .text-amber-400 {
+  color: #b45309 !important; /* amber-700 */
+}
+html.light-theme .text-amber-300,
+html.light-theme .text-amber-200 {
+  color: #78350f !important; /* amber-900 */
+}
+
+html.light-theme .text-indigo-400 {
+  color: #4338ca !important; /* indigo-700 */
+}
+html.light-theme .text-indigo-300,
+html.light-theme .text-indigo-200 {
+  color: #312e81 !important; /* indigo-900 */
+}
+
+html.light-theme .text-cyan-400 {
+  color: #0e7490 !important; /* cyan-700 */
+}
+html.light-theme .text-cyan-300,
+html.light-theme .text-cyan-200 {
+  color: #164e63 !important; /* cyan-900 */
+}
+
+html.light-theme .text-sky-400 {
+  color: #0369a1 !important; /* sky-700 */
+}
+html.light-theme .text-sky-300,
+html.light-theme .text-sky-200 {
+  color: #0c4a6e !important; /* sky-900 */
+}
+
+/* Soft Badge & Button Container Backgrounds in Light Theme */
+html.light-theme .bg-purple-500\/10,
+html.light-theme .bg-purple-500\/20,
+html.light-theme .bg-purple-600\/20,
+html.light-theme .bg-purple-900\/40,
+html.light-theme .bg-purple-900,
+html.light-theme .bg-purple-950\/80,
+html.light-theme .bg-purple-950 {
+  background-color: #f3e8ff !important;
+  color: #581c87 !important;
+  border-color: #d8b4fe !important;
+}
+
+html.light-theme .bg-emerald-500\/10,
+html.light-theme .bg-emerald-500\/20,
+html.light-theme .bg-emerald-600\/20,
+html.light-theme .bg-emerald-900\/40,
+html.light-theme .bg-emerald-900,
+html.light-theme .bg-emerald-950\/80,
+html.light-theme .bg-emerald-950 {
+  background-color: #d1fae5 !important;
+  color: #064e3b !important;
+  border-color: #6ee7b7 !important;
+}
+
+html.light-theme .bg-rose-500\/10,
+html.light-theme .bg-rose-500\/20,
+html.light-theme .bg-rose-600\/20,
+html.light-theme .bg-rose-900\/40,
+html.light-theme .bg-rose-900,
+html.light-theme .bg-rose-950\/80,
+html.light-theme .bg-rose-950 {
+  background-color: #ffe4e6 !important;
+  color: #881337 !important;
+  border-color: #fca5a5 !important;
+}
+
+html.light-theme .bg-blue-500\/10,
+html.light-theme .bg-blue-500\/20,
+html.light-theme .bg-blue-600\/20,
+html.light-theme .bg-blue-900\/40,
+html.light-theme .bg-blue-900,
+html.light-theme .bg-blue-950\/80,
+html.light-theme .bg-blue-950 {
+  background-color: #dbeafe !important;
+  color: #1e3a8a !important;
+  border-color: #93c5fd !important;
+}
+
+html.light-theme .bg-amber-500\/10,
+html.light-theme .bg-amber-500\/20,
+html.light-theme .bg-amber-600\/20,
+html.light-theme .bg-amber-900\/40,
+html.light-theme .bg-amber-900,
+html.light-theme .bg-amber-950\/80,
+html.light-theme .bg-amber-950 {
+  background-color: #fef3c7 !important;
+  color: #78350f !important;
+  border-color: #fcd34d !important;
+}
+
+html.light-theme .bg-indigo-500\/10,
+html.light-theme .bg-indigo-500\/20,
+html.light-theme .bg-indigo-600\/20,
+html.light-theme .bg-indigo-900\/40,
+html.light-theme .bg-indigo-900,
+html.light-theme .bg-indigo-950\/80,
+html.light-theme .bg-indigo-950 {
+  background-color: #e0e7ff !important;
+  color: #312e81 !important;
+  border-color: #a5b4fc !important;
+}
+
+/* 7. FORM INPUTS, SELECTS & TEXTAREAS */
+html.light-theme input:not([type="checkbox"]):not([type="radio"]),
+html.light-theme select,
+html.light-theme textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light-theme select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html.light-theme input::placeholder,
+html.light-theme textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light-theme input:focus,
+html.light-theme select:focus,
+html.light-theme textarea:focus {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15) !important;
+}
+
+/* 8. TABLE HEADERS, ROWS & HOVER */
+html.light-theme thead,
+html.light-theme thead th,
+html.light-theme tr.bg-slate-900\/50,
+html.light-theme tr.bg-slate-950\/60 {
+  background-color: #f1f5f9 !important;
+  color: #334155 !important;
+  border-bottom-color: #cbd5e1 !important;
+}
+
+html.light-theme tbody tr {
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html.light-theme tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* 9. HEADER & NAVIGATION IN LIGHT THEME */
+html.light-theme header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme header .text-white {
+  color: #0f172a !important;
+}
+
+/* Floating menus (Module switcher, user profile, popovers) */
+html.light-theme .absolute.z-50,
+html.light-theme .fixed.z-50 {
+  color: #0f172a !important;
+}
+
+/* Modal Backdrops */
+html.light-theme .bg-slate-950\/80,
+html.light-theme .bg-black\/60,
+html.light-theme .bg-slate-900\/80 {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* 10. RECHARTS & DATA VISUALIZATION TOOLTIPS */
+html.light-theme .recharts-default-tooltip {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+}
+
+html.light-theme .recharts-tooltip-item {
+  color: #1e293b !important;
+}
+
+html.light-theme .recharts-cartesian-grid-line {
+  stroke: #e2e8f0 !important;
+}
+
+html.light-theme .recharts-text {
+  fill: #475569 !important;
+}
+
+

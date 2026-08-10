@@ -1,0 +1,282 @@
+{
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Alimentação & Gastronomia",
+      "type": "expense",
+      "color": "#f59e0b",
+      "icon": "Utensils",
+      "description": "Compras de mercado, feira, restaurantes e delivery"
+    },
+    {
+      "id": "cat-2",
+      "name": "Moradia & Habitação",
+      "type": "expense",
+      "color": "#ef4444",
+      "icon": "Home",
+      "description": "Aluguel, luz, água, condomínio, internet e manutenção da casa"
+    },
+    {
+      "id": "cat-3",
+      "name": "Transporte & Veículos",
+      "type": "expense",
+      "color": "#3b82f6",
+      "icon": "Car",
+      "description": "Combustível, seguro, IPVA, Uber e manutenção"
+    },
+    {
+      "id": "cat-4",
+      "name": "Saúde & Cuidados Pessoais",
+      "type": "expense",
+      "color": "#10b981",
+      "icon": "HeartPulse",
+      "description": "Farmácia, consultas, plano de saúde e academia"
+    },
+    {
+      "id": "cat-5",
+      "name": "Lazer & Estilo de Vida",
+      "type": "expense",
+      "color": "#ec4899",
+      "icon": "Film",
+      "description": "Cinema, viagens, hobbies, assinaturas e passeios"
+    },
+    {
+      "id": "cat-6",
+      "name": "Rendimentos de Trabalho",
+      "type": "income",
+      "color": "#059669",
+      "icon": "Briefcase",
+      "description": "Salário mensal fixo, pró-labore e bônus"
+    },
+    {
+      "id": "cat-7",
+      "name": "Serviços & Freelances",
+      "type": "income",
+      "color": "#10b981",
+      "icon": "TrendingUp",
+      "description": "Receitas de freelancers e consultorias"
+    },
+    {
+      "id": "cat-8",
+      "name": "Investimentos & Finanças",
+      "type": "both",
+      "color": "#8b5cf6",
+      "icon": "PiggyBank",
+      "description": "Aplicações financeiras, dividendos e rendimentos"
+    },
+    {
+      "id": "sub-101",
+      "parentId": "cat-1",
+      "name": "Supermercado & Feira",
+      "type": "expense",
+      "color": "#f59e0b",
+      "description": "Compras de mantimentos para casa"
+    },
+    {
+      "id": "sub-102",
+      "parentId": "cat-1",
+      "name": "Restaurantes & Bares",
+      "type": "expense",
+      "color": "#f59e0b",
+      "description": "Refeições fora de casa"
+    },
+    {
+      "id": "sub-103",
+      "parentId": "cat-1",
+      "name": "Delivery & iFood",
+      "type": "expense",
+      "color": "#f59e0b",
+      "description": "Pedidos de comida em casa"
+    },
+    {
+      "id": "sub-201",
+      "parentId": "cat-2",
+      "name": "Aluguel & Condomínio",
+      "type": "expense",
+      "color": "#ef4444",
+      "description": "Taxa condominial e aluguel do imóvel"
+    },
+    {
+      "id": "sub-202",
+      "parentId": "cat-2",
+      "name": "Energia, Água & Gás",
+      "type": "expense",
+      "color": "#ef4444",
+      "description": "Contas básicas de consumo residencial"
+    },
+    {
+      "id": "sub-203",
+      "parentId": "cat-2",
+      "name": "Internet, TV & Telefone",
+      "type": "expense",
+      "color": "#ef4444",
+      "description": "Serviços de telecomunicação"
+    },
+    {
+      "id": "sub-301",
+      "parentId": "cat-3",
+      "name": "Combustível (Gasolina/Etanol)",
+      "type": "expense",
+      "color": "#3b82f6",
+      "description": "Abastecimento do veículo"
+    },
+    {
+      "id": "sub-302",
+      "parentId": "cat-3",
+      "name": "Aplicativos (Uber / 99)",
+      "type": "expense",
+      "color": "#3b82f6",
+      "description": "Corridas de aplicativo e táxi"
+    },
+    {
+      "id": "sub-303",
+      "parentId": "cat-3",
+      "name": "Manutenção & IPVA",
+      "type": "expense",
+      "color": "#3b82f6",
+      "description": "Oficina, revisão e impostos veiculares"
+    },
+    {
+      "id": "sub-601",
+      "parentId": "cat-6",
+      "name": "Salário Fixo Mensal",
+      "type": "income",
+      "color": "#059669",
+      "description": "Remuneração principal em conta"
+    },
+    {
+      "id": "sub-602",
+      "parentId": "cat-6",
+      "name": "Bônus & Participação nos Lucros",
+      "type": "income",
+      "color": "#059669",
+      "description": "PLR, prêmios e comissões"
+    }
+  ],
+  "accounts": [],
+  "cards": [
+    {
+      "id": "card-1786363165654",
+      "name": "Bradesco prime",
+      "brand": "Mastercard",
+      "creditLimit": 5000,
+      "closingDay": 30,
+      "dueDay": 10,
+      "color": "#1e293b",
+      "scope": "familia"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": "pm-1",
+      "name": "PIX Instantâneo",
+      "code": "pix",
+      "description": "Transferência imediata sem taxa",
+      "active": true,
+      "allowInstallments": false
+    },
+    {
+      "id": "pm-2",
+      "name": "Cartão de Crédito",
+      "code": "credit",
+      "description": "Pagamento em fatura mensal com opção de parcelamento",
+      "active": true,
+      "allowInstallments": true
+    },
+    {
+      "id": "pm-3",
+      "name": "Cartão de Débito",
+      "code": "debit",
+      "description": "Débito direto em conta corrente",
+      "active": true,
+      "allowInstallments": false
+    },
+    {
+      "id": "pm-4",
+      "name": "Boleto Bancário",
+      "code": "boleto",
+      "description": "Pagamento via código de barras com vencimento e opção de parcelas",
+      "active": true,
+      "allowInstallments": true
+    },
+    {
+      "id": "pm-5",
+      "name": "Dinheiro em Espécie",
+      "code": "cash",
+      "description": "Pagamento em cédulas/moeda física",
+      "active": true,
+      "allowInstallments": false
+    },
+    {
+      "id": "pm-6",
+      "name": "Transferência TED/DOC",
+      "code": "transfer",
+      "description": "Transferência bancária tradicional",
+      "active": true,
+      "allowInstallments": false
+    }
+  ],
+  "beneficiaries": [],
+  "budgets": [],
+  "transactions": [],
+  "profiles": [
+    {
+      "id": "prof-admin",
+      "name": "Administrador Financeiro",
+      "description": "Acesso total a todas as funcionalidades e configurações do sistema.",
+      "isSystemRole": true,
+      "permissions": {
+        "canManageCadastros": true,
+        "canManageTransactions": true,
+        "canManageBudgets": true,
+        "canManageSettings": true,
+        "canViewReports": true,
+        "canAccessPessoalScope": true,
+        "canAccessFamiliaScope": true
+      }
+    },
+    {
+      "id": "prof-operador",
+      "name": "Operador Financeiro",
+      "description": "Pode gerenciar cadastros, lançar transações e orçamentos, mas sem acesso a configurações avançadas.",
+      "isSystemRole": false,
+      "permissions": {
+        "canManageCadastros": true,
+        "canManageTransactions": true,
+        "canManageBudgets": true,
+        "canManageSettings": false,
+        "canViewReports": true,
+        "canAccessPessoalScope": true,
+        "canAccessFamiliaScope": true
+      }
+    },
+    {
+      "id": "prof-leitor",
+      "name": "Somente Leitura / Audit",
+      "description": "Pode apenas visualizar relatórios e movimentações sem alterar registros.",
+      "isSystemRole": false,
+      "permissions": {
+        "canManageCadastros": false,
+        "canManageTransactions": false,
+        "canManageBudgets": false,
+        "canManageSettings": false,
+        "canViewReports": true,
+        "canAccessPessoalScope": true,
+        "canAccessFamiliaScope": true
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "usr-admin-fs",
+      "name": "Administrador (fsborgess)",
+      "email": "fsborgess@gmail.com",
+      "profileId": "prof-admin",
+      "pin": "1910",
+      "password": "1910",
+      "status": "active"
+    }
+  ],
+  "cardInvoicePayments": [],
+  "lastUpdated": "2026-08-10T12:01:28.581Z"
+}
