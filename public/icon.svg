@@ -1,46 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="45%" stop-color="#064e3b" />
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="55%" stop-color="#064e3b" />
       <stop offset="100%" stop-color="#022c22" />
     </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34d399" />
-      <stop offset="100%" stop-color="#0d9488" />
-    </linearGradient>
-    <linearGradient id="coin" x1="0%" y1="0%" x2="100%" y2="100%">
+    <radialGradient id="coinFace" cx="38%" cy="32%" r="75%">
+      <stop offset="0%" stop-color="#fde68a" />
+      <stop offset="45%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </radialGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.4"/>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity="0.5"/>
     </filter>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+    <filter id="innerShadow">
+      <feOffset dx="0" dy="3" in="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#000" flood-opacity="0.45"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
     </filter>
   </defs>
 
   <!-- Background with rounded corners -->
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
 
+  <!-- Coin (money / Χρήμα) -->
   <g filter="url(#shadow)">
-    <!-- Coin / currency disc behind the K -->
-    <circle cx="256" cy="256" r="150" fill="url(#coin)" opacity="0.95"/>
-    <circle cx="256" cy="256" r="150" fill="none" stroke="#fde68a" stroke-width="10" opacity="0.8"/>
-    <circle cx="256" cy="256" r="126" fill="none" stroke="#b45309" stroke-width="5" opacity="0.7"/>
+    <!-- Coin rim -->
+    <circle cx="256" cy="256" r="172" fill="url(#ring)"/>
+    <circle cx="256" cy="256" r="152" fill="none" stroke="#fde68a" stroke-width="5" opacity="0.9"/>
+    <!-- Coin face -->
+    <circle cx="256" cy="256" r="148" fill="url(#coinFace)"/>
 
-    <!-- K Monogram -->
-    <path d="M 178 140 L 178 372" fill="none" stroke="#0f172a" stroke-width="34" stroke-linecap="round"/>
-    <path d="M 232 256 L 392 148" fill="none" stroke="#0f172a" stroke-width="34" stroke-linecap="round"/>
-    <path d="M 286 302 L 392 372" fill="none" stroke="#0f172a" stroke-width="34" stroke-linecap="round"/>
+    <!-- Inner dotted ring (like engraved coin) -->
+    <circle cx="256" cy="256" r="126" fill="none" stroke="#92400e" stroke-width="2.5" stroke-dasharray="1 8" stroke-linecap="round" opacity="0.75"/>
 
-    <!-- Financial Growth Trend (characteristic of the app) -->
-    <path d="M 104 340 L 168 292 L 226 306 L 292 238 L 356 252 L 408 200" fill="none" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
-    <circle cx="408" cy="200" r="12" fill="#34d399" filter="url(#glow)"/>
+    <!-- K Monogram engraved -->
+    <path d="M 196 152 L 196 360" fill="none" stroke="#78350f" stroke-width="34" stroke-linecap="round"/>
+    <path d="M 242 256 L 372 160" fill="none" stroke="#78350f" stroke-width="34" stroke-linecap="round"/>
+    <path d="M 286 300 L 372 360" fill="none" stroke="#78350f" stroke-width="34" stroke-linecap="round"/>
+
+    <!-- Small mint dot (Greek obol motif) -->
+    <circle cx="256" cy="420" r="10" fill="#92400e" opacity="0.6"/>
+
+    <!-- Growth spark (modern finance accent) -->
+    <path d="M 120 336 L 172 296 L 224 310 L 286 250" fill="none" stroke="#065f46" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="286" cy="250" r="11" fill="#065f46"/>
   </g>
 </svg>

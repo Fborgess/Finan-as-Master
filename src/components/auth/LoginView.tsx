@@ -291,6 +291,9 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             Khrima
           </h1>
+          <p className="text-[13px] font-semibold text-emerald-400 tracking-[0.35em] uppercase">
+            Χρήμα
+          </p>
           <p className="text-xs text-slate-400 font-medium">
             Acesse sua plataforma de gestão financeira com segurança
           </p>
