@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { User, AccessProfile } from '../../types';
 import { generateSalt, hashSecret } from '../../utils/credentials';
 import { UserCheck, Plus, Edit2, Trash2, X, KeyRound, CheckCircle2, XCircle, Mail, Eye, EyeOff } from 'lucide-react';
+import { can } from '../../utils/permissions';
 
 interface Props {
   users: User[];
@@ -31,7 +32,10 @@ export const UsersView: React.FC<Props> = ({
   const [showPin, setShowPin] = useState(false);
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
 
-  const canManage = activeProfile?.permissions.canManageSettings ?? true;
+  const canCreate = can(activeProfile, 'usuarios', 'create');
+  const canEdit = can(activeProfile, 'usuarios', 'edit');
+  const canDelete = can(activeProfile, 'usuarios', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const handleOpenModal = (u?: User) => {
     setShowPin(false);
@@ -106,7 +110,7 @@ export const UsersView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs shadow-md shadow-purple-600/30 transition flex items-center justify-center space-x-1.5"
@@ -152,8 +156,9 @@ export const UsersView: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  {canManage && (
+                  {(canEdit || canDelete) && (
                     <div className="flex items-center space-x-1">
+                      {canEdit && (
                       <button
                         onClick={() => handleOpenModal(u)}
                         className="p-1.5 text-slate-400 hover:text-purple-400 rounded-lg hover:bg-slate-800 transition"
@@ -161,14 +166,15 @@ export const UsersView: React.FC<Props> = ({
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
-                      {users.length > 1 && (
-                        <button
-                          onClick={() => onDeleteUser(u.id)}
-                          className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
-                          title="Excluir"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                      )}
+                      {canDelete && users.length > 1 && (
+                      <button
+                        onClick={() => onDeleteUser(u.id)}
+                        className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
+                        title="Excluir"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                       )}
                     </div>
                   )}

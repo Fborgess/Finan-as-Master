@@ -3,6 +3,7 @@ import { Beneficiary, Category, BeneficiaryType, AccessProfile } from '../../typ
 import { Users2, Plus, Edit2, Trash2, X, Search, Mail, Phone, FileText, FolderTree } from 'lucide-react';
 import { SearchableSelect, SelectOption } from '../common/SearchableSelect';
 import { getSystemPreferences, formatTextWithCasing } from '../../utils/preferences';
+import { can } from '../../utils/permissions';
 
 interface Props {
   beneficiaries: Beneficiary[];
@@ -31,7 +32,10 @@ export const BeneficiariesView: React.FC<Props> = ({
   const [type, setType] = useState<BeneficiaryType>('supplier');
   const [defaultCategoryId, setDefaultCategoryId] = useState('');
 
-  const canManage = activeProfile?.permissions.canManageCadastros ?? true;
+  const canCreate = can(activeProfile, 'beneficiarios', 'create');
+  const canEdit = can(activeProfile, 'beneficiarios', 'edit');
+  const canDelete = can(activeProfile, 'beneficiarios', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const handleOpenModal = (b?: Beneficiary) => {
     if (b) {
@@ -129,7 +133,7 @@ export const BeneficiariesView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-1.5"
@@ -185,8 +189,9 @@ export const BeneficiariesView: React.FC<Props> = ({
                     </span>
                   </div>
 
-                  {canManage && (
+                  {(canEdit || canDelete) && (
                     <div className="flex items-center space-x-1">
+                      {canEdit && (
                       <button
                         onClick={() => handleOpenModal(b)}
                         className="p-1.5 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
@@ -194,6 +199,8 @@ export const BeneficiariesView: React.FC<Props> = ({
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
+                      )}
+                      {canDelete && (
                       <button
                         onClick={() => onDeleteBeneficiary(b.id)}
                         className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -201,6 +208,7 @@ export const BeneficiariesView: React.FC<Props> = ({
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
+                      )}
                     </div>
                   )}
                 </div>

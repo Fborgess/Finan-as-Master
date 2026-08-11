@@ -17,19 +17,25 @@ import {
   Zap,
   Sliders
 } from 'lucide-react';
+import { AccessProfile } from '../../types';
+import { can } from '../../utils/permissions';
 
 interface Props {
   onPreferencesChange?: (prefs: SystemPreferences) => void;
+  activeProfile?: AccessProfile;
 }
 
-export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange }) => {
+export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange, activeProfile }) => {
   const [preferences, setPreferences] = useState<SystemPreferences>(() => getSystemPreferences());
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  const canEdit = can(activeProfile, 'aparencia', 'edit') || can(activeProfile, 'aparencia', 'create');
 
   const sampleOriginal = 'bom de preço - alimentos e bebidas';
   const sampleFormatted = formatTextWithCasing(sampleOriginal, preferences.textCasing);
 
   const handleSelectTheme = (theme: ThemeMode) => {
+    if (!canEdit) return;
     const updated = { ...preferences, theme };
     setPreferences(updated);
     saveSystemPreferences(updated);
@@ -40,6 +46,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
   };
 
   const handleSelectCasing = (textCasing: TextCasingMode) => {
+    if (!canEdit) return;
     const updated = { ...preferences, textCasing };
     setPreferences(updated);
     saveSystemPreferences(updated);
@@ -73,6 +80,13 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
         )}
       </div>
 
+      {!canEdit && (
+        <div className="flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold px-4 py-3 rounded-2xl animate-in fade-in">
+          <Info className="w-4 h-4 shrink-0" />
+          <span>Seu perfil não tem permissão para alterar a aparência e formatação de texto.</span>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* 1. SEÇÃO DE TEMAS */}
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
@@ -90,11 +104,12 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
             <button
               type="button"
               onClick={() => handleSelectTheme('dark')}
+              disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
                 preferences.theme === 'dark'
                   ? 'bg-slate-950 border-purple-500 ring-2 ring-purple-500/40 text-white'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-              }`}
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="flex items-center justify-between">
                 <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-purple-400">
@@ -125,11 +140,12 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
             <button
               type="button"
               onClick={() => handleSelectTheme('light')}
+              disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
                 preferences.theme === 'light'
                   ? 'bg-white text-slate-900 border-purple-600 ring-2 ring-purple-500/40'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
-              }`}
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="flex items-center justify-between">
                 <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500">
@@ -176,11 +192,12 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
             <button
               type="button"
               onClick={() => handleSelectCasing('uppercase')}
+              disabled={!canEdit}
               className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between ${
                 preferences.textCasing === 'uppercase'
                   ? 'bg-purple-600/20 border-purple-500 ring-1 ring-purple-500/50 text-white'
                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
-              }`}
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="space-y-1">
                 <div className="font-extrabold text-xs text-white flex items-center space-x-2">
@@ -202,11 +219,12 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
             <button
               type="button"
               onClick={() => handleSelectCasing('titlecase')}
+              disabled={!canEdit}
               className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between ${
                 preferences.textCasing === 'titlecase'
                   ? 'bg-purple-600/20 border-purple-500 ring-1 ring-purple-500/50 text-white'
                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
-              }`}
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="space-y-1">
                 <div className="font-extrabold text-xs text-white flex items-center space-x-2">
@@ -228,11 +246,12 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange 
             <button
               type="button"
               onClick={() => handleSelectCasing('none')}
+              disabled={!canEdit}
               className={`w-full p-3.5 rounded-2xl border text-left transition flex items-center justify-between ${
                 preferences.textCasing === 'none'
                   ? 'bg-purple-600/20 border-purple-500 ring-1 ring-purple-500/50 text-white'
                   : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
-              }`}
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="space-y-1">
                 <div className="font-extrabold text-xs text-white flex items-center space-x-2">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PaymentMethod, PaymentMethodCode, AccessProfile } from '../../types';
 import { Receipt, Plus, Edit2, Trash2, X, Check, CheckCircle2, XCircle, CreditCard, CalendarCheck } from 'lucide-react';
 import { SearchableSelect } from '../common/SearchableSelect';
+import { can } from '../../utils/permissions';
 
 interface Props {
   paymentMethods: PaymentMethod[];
@@ -26,7 +27,10 @@ export const PaymentMethodsView: React.FC<Props> = ({
   const [active, setActive] = useState(true);
   const [allowInstallments, setAllowInstallments] = useState(false);
 
-  const canManage = activeProfile?.permissions.canManageCadastros ?? true;
+  const canCreate = can(activeProfile, 'pagamentos', 'create');
+  const canEdit = can(activeProfile, 'pagamentos', 'edit');
+  const canDelete = can(activeProfile, 'pagamentos', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const handleOpenModal = (pm?: PaymentMethod) => {
     if (pm) {
@@ -64,7 +68,7 @@ export const PaymentMethodsView: React.FC<Props> = ({
   };
 
   const toggleActive = (pm: PaymentMethod) => {
-    if (!canManage) return;
+    if (!canEdit) return;
     onSavePaymentMethod({
       ...pm,
       active: !pm.active,
@@ -96,7 +100,7 @@ export const PaymentMethodsView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-1.5"
@@ -123,11 +127,13 @@ export const PaymentMethodsView: React.FC<Props> = ({
                     <h3 className="font-extrabold text-sm text-white">{pm.name}</h3>
                     <button
                       onClick={() => toggleActive(pm)}
+                      disabled={!canEdit}
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center space-x-1 ${
                         pm.active
                           ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
                           : 'bg-slate-800 text-slate-400 border-slate-700'
-                      }`}
+                      } ${canEdit ? 'cursor-pointer' : 'cursor-default'}`}
+                      title={canEdit ? 'Clique para ativar/desativar' : 'Sem permissão para editar'}
                     >
                       {pm.active ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
                       <span>{pm.active ? 'Ativo' : 'Inativo'}</span>
@@ -152,8 +158,9 @@ export const PaymentMethodsView: React.FC<Props> = ({
                   </div>
                 </div>
 
-                {canManage && (
+                {(canEdit || canDelete) && (
                   <div className="flex items-center space-x-1">
+                    {canEdit && (
                     <button
                       onClick={() => handleOpenModal(pm)}
                       className="p-1.5 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
@@ -161,6 +168,8 @@ export const PaymentMethodsView: React.FC<Props> = ({
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
+                    {canDelete && (
                     <button
                       onClick={() => onDeletePaymentMethod(pm.id)}
                       className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -168,6 +177,7 @@ export const PaymentMethodsView: React.FC<Props> = ({
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
                   </div>
                 )}
               </div>

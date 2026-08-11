@@ -134,17 +134,34 @@ export interface Transaction {
   recurrenceIndex?: number;       // Índice da repetição (1, 2, 3...)
 }
 
+export type PermissionAction = 'view' | 'create' | 'edit' | 'delete';
+
+export type PermissionKey =
+  | 'dashboard'
+  | 'categorias'
+  | 'contas'
+  | 'cartoes'
+  | 'pagamentos'
+  | 'beneficiarios'
+  | 'orcamento'
+  | 'transacoes'
+  | 'pagar_receber'
+  | 'realizadas'
+  | 'por_categoria'
+  | 'perfis'
+  | 'usuarios'
+  | 'biometria'
+  | 'aparencia';
+
+export type PermissionMatrix = Record<PermissionKey, Record<PermissionAction, boolean>>;
+
 export interface AccessProfile {
   id: string;
   name: string;
   description: string;
   isSystemRole?: boolean;
   permissions: {
-    canManageCadastros: boolean;
-    canManageTransactions: boolean;
-    canManageBudgets: boolean;
-    canManageSettings: boolean;
-    canViewReports: boolean;
+    modules: PermissionMatrix;
     canAccessPessoalScope?: boolean;
     canAccessFamiliaScope?: boolean;
   };

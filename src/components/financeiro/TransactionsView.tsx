@@ -27,6 +27,7 @@ import {
   Zap
 } from 'lucide-react';
 import { formatModalityBadge } from '../../utils/recurrence';
+import { can } from '../../utils/permissions';
 
 interface Props {
   transactions: Transaction[];
@@ -63,7 +64,10 @@ export const TransactionsView: React.FC<Props> = ({
   const [filterCategory, setFilterCategory] = useState<string>('ALL');
   const [filterModality, setFilterModality] = useState<string>('ALL');
 
-  const canManage = activeProfile?.permissions.canManageTransactions ?? true;
+  const canCreate = can(activeProfile, 'transacoes', 'create');
+  const canEdit = can(activeProfile, 'transacoes', 'edit');
+  const canDelete = can(activeProfile, 'transacoes', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const formatBRL = (val: number) => {
     return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -113,7 +117,7 @@ export const TransactionsView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={onOpenNewTransaction}
             className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-1.5"
@@ -244,7 +248,7 @@ export const TransactionsView: React.FC<Props> = ({
                 <th className="py-3 px-4">Data</th>
                 <th className="py-3 px-4">Status</th>
                 <th className="py-3 px-4 text-right">Valor</th>
-                {canManage && <th className="py-3 px-4 text-center">Ações</th>}
+                {(canEdit || canDelete) && <th className="py-3 px-4 text-center">Ações</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
@@ -352,13 +356,13 @@ export const TransactionsView: React.FC<Props> = ({
 
                     <td className="py-3.5 px-4">
                       <button
-                        onClick={() => canManage && onToggleStatus(t)}
+                        onClick={() => canEdit && onToggleStatus(t)}
                         className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition ${
                           isPaid
                             ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
                             : 'bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30'
                         }`}
-                        title="Clique para alterar status pago/pendente"
+                        title={canEdit ? "Clique para alterar status pago/pendente" : "Sem permissão para alterar status"}
                       >
                         {isPaid ? <CheckCircle2 className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
                         <span>{isPaid ? 'Pago' : 'Pendente'}</span>
@@ -371,9 +375,10 @@ export const TransactionsView: React.FC<Props> = ({
                       {t.type === 'income' ? '+' : t.type === 'expense' ? '-' : ''} {formatBRL(t.amount)}
                     </td>
 
-                    {canManage && (
+                    {(canEdit || canDelete) && (
                       <td className="py-3.5 px-4 text-center">
                         <div className="flex items-center justify-center space-x-1">
+                          {canEdit && (
                           <button
                             onClick={() => onEditTransaction(t)}
                             className="p-1.5 text-slate-400 hover:text-emerald-400 rounded-lg hover:bg-slate-800 transition"
@@ -381,6 +386,8 @@ export const TransactionsView: React.FC<Props> = ({
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
+                          )}
+                          {canDelete && (
                           <button
                             onClick={() => onDeleteTransaction(t.id)}
                             className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -388,6 +395,7 @@ export const TransactionsView: React.FC<Props> = ({
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
+                          )}
                         </div>
                       </td>
                     )}

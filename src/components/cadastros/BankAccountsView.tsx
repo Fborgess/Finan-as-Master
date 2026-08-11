@@ -3,6 +3,7 @@ import { BankAccount, AccountType, AccessProfile } from '../../types';
 import { Building2, Plus, Edit2, Trash2, X, Wallet, Shield, User as UserIcon, Users } from 'lucide-react';
 import { CurrencyInput } from '../common/CurrencyInput';
 import { getSystemPreferences, formatTextWithCasing } from '../../utils/preferences';
+import { can } from '../../utils/permissions';
 
 interface Props {
   accounts: BankAccount[];
@@ -31,7 +32,10 @@ export const BankAccountsView: React.FC<Props> = ({
   const [color, setColor] = useState(COLOR_PRESETS[0]);
   const [scope, setScope] = useState<'pessoal' | 'familia'>('pessoal');
 
-  const canManage = activeProfile?.permissions.canManageCadastros ?? true;
+  const canCreate = can(activeProfile, 'contas', 'create');
+  const canEdit = can(activeProfile, 'contas', 'edit');
+  const canDelete = can(activeProfile, 'contas', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const handleOpenModal = (acc?: BankAccount) => {
     if (acc) {
@@ -113,7 +117,7 @@ export const BankAccountsView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-1.5"
@@ -148,8 +152,9 @@ export const BankAccountsView: React.FC<Props> = ({
                   </div>
                 </div>
 
-                {canManage && (
+                {(canEdit || canDelete) && (
                   <div className="flex items-center space-x-1">
+                    {canEdit && (
                     <button
                       onClick={() => handleOpenModal(acc)}
                       className="p-1.5 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
@@ -157,6 +162,8 @@ export const BankAccountsView: React.FC<Props> = ({
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
+                    {canDelete && (
                     <button
                       onClick={() => onDeleteAccount(acc.id)}
                       className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -164,6 +171,7 @@ export const BankAccountsView: React.FC<Props> = ({
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
                   </div>
                 )}
               </div>

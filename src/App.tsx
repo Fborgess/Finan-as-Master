@@ -23,6 +23,7 @@ import { PWAInstallPrompt } from './components/common/PWAInstallPrompt';
 import { LoginView } from './components/auth/LoginView';
 import { LockScreenModal } from './components/auth/LockScreenModal';
 import { StorageService } from './utils/storage';
+import { can } from './utils/permissions';
 
 export default function App() {
   const {
@@ -43,19 +44,15 @@ export default function App() {
     handleUnlockSuccess,
 
     // Application Data
-    categories,
-    accounts,
-    cards,
     paymentMethods,
     beneficiaries,
-    budgets,
-    transactions,
     profiles,
     users,
     invoicePayments,
 
     // Scoped Data
     scopedTransactions,
+    scopedCategories,
     scopedAccounts,
     scopedCards,
     scopedBudgets,
@@ -99,7 +96,7 @@ export default function App() {
           <DashboardView
             accounts={scopedAccounts}
             cards={scopedCards}
-            categories={categories}
+            categories={scopedCategories}
             budgets={scopedBudgets}
             transactions={scopedTransactions}
             activeUser={activeUser}
@@ -118,28 +115,52 @@ export default function App() {
       case 'cadastros':
         switch (activeCadastro) {
           case 'categorias':
+            if (!can(activeProfile, 'categorias', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <CategoriesView
-                categories={categories}
+                categories={scopedCategories}
                 onSaveCategory={handleSaveCategory}
                 onDeleteCategory={handleDeleteCategory}
                 activeProfile={activeProfile}
               />
             );
           case 'contas':
+            if (!can(activeProfile, 'contas', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <BankAccountsView
-                accounts={accounts}
+                accounts={scopedAccounts}
                 onSaveAccount={handleSaveAccount}
                 onDeleteAccount={handleDeleteAccount}
                 activeProfile={activeProfile}
               />
             );
           case 'cartoes':
+            if (!can(activeProfile, 'cartoes', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <CreditCardsView
-                cards={cards}
-                accounts={accounts}
+                cards={scopedCards}
+                accounts={scopedAccounts}
                 transactions={scopedTransactions}
                 invoicePayments={invoicePayments}
                 onSaveCard={handleSaveCard}
@@ -149,6 +170,14 @@ export default function App() {
               />
             );
           case 'pagamentos':
+            if (!can(activeProfile, 'pagamentos', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <PaymentMethodsView
                 paymentMethods={paymentMethods}
@@ -158,10 +187,18 @@ export default function App() {
               />
             );
           case 'beneficiarios':
+            if (!can(activeProfile, 'beneficiarios', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <BeneficiariesView
                 beneficiaries={beneficiaries}
-                categories={categories}
+                categories={scopedCategories}
                 onSaveBeneficiary={handleSaveBeneficiary}
                 onDeleteBeneficiary={handleDeleteBeneficiary}
                 activeProfile={activeProfile}
@@ -173,10 +210,18 @@ export default function App() {
       case 'financeiro':
         switch (activeFinanceiro) {
           case 'orcamento':
+            if (!can(activeProfile, 'orcamento', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <BudgetsView
                 budgets={scopedBudgets}
-                categories={categories}
+                categories={scopedCategories}
                 transactions={scopedTransactions}
                 onSaveBudget={handleSaveBudget}
                 onDeleteBudget={handleDeleteBudget}
@@ -184,12 +229,20 @@ export default function App() {
               />
             );
           case 'transacoes':
+            if (!can(activeProfile, 'transacoes', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <TransactionsView
                 transactions={scopedTransactions}
-                categories={categories}
-                accounts={accounts}
-                cards={cards}
+                categories={scopedCategories}
+                accounts={scopedAccounts}
+                cards={scopedCards}
                 paymentMethods={paymentMethods}
                 beneficiaries={beneficiaries}
                 users={users}
@@ -209,7 +262,7 @@ export default function App() {
             activeSubMenu={activeRelatorios}
             onSelectSubMenu={setActiveRelatorios}
             transactions={scopedTransactions}
-            categories={categories}
+            categories={scopedCategories}
             accounts={scopedAccounts}
             cards={scopedCards}
             paymentMethods={paymentMethods}
@@ -221,6 +274,14 @@ export default function App() {
       case 'configuracoes':
         switch (activeConfiguracoes) {
           case 'perfis':
+            if (!can(activeProfile, 'perfis', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <AccessProfilesView
                 profiles={profiles}
@@ -231,6 +292,14 @@ export default function App() {
               />
             );
           case 'usuarios':
+            if (!can(activeProfile, 'usuarios', 'view')) {
+              return (
+                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400">
+                  <h3 className="font-bold text-base text-white mb-1">Acesso Restrito</h3>
+                  <p className="text-xs">Seu perfil não tem permissão para visualizar esta seção.</p>
+                </div>
+              );
+            }
             return (
               <UsersView
                 users={users}
@@ -249,7 +318,7 @@ export default function App() {
               />
             );
           case 'aparencia':
-            return <ThemeAndTextSettingsView />;
+            return <ThemeAndTextSettingsView activeProfile={activeProfile} />;
         }
         break;
     }
@@ -319,9 +388,9 @@ export default function App() {
         onClose={closeTransactionModal}
         onSave={handleSaveTransaction}
         editingTransaction={editingTx}
-        categories={categories}
-        accounts={accounts}
-        cards={cards}
+        categories={scopedCategories}
+        accounts={scopedAccounts}
+        cards={scopedCards}
         paymentMethods={paymentMethods}
         beneficiaries={beneficiaries}
         activeUser={activeUser}

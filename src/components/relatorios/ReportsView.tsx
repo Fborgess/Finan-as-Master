@@ -19,6 +19,7 @@ import {
   PieChart,
   ShieldAlert
 } from 'lucide-react';
+import { can } from '../../utils/permissions';
 
 interface Props {
   activeSubMenu: SubMenuRelatorios;
@@ -43,8 +44,11 @@ export const ReportsView: React.FC<Props> = ({
   beneficiaries,
   activeProfile,
 }) => {
-  // Check permission
-  const canViewReports = activeProfile ? activeProfile.permissions.canViewReports : true;
+  // Check permission per report submenu
+  const canPagarReceber = can(activeProfile, 'pagar_receber', 'view');
+  const canRealizadas = can(activeProfile, 'realizadas', 'view');
+  const canPorCategoria = can(activeProfile, 'por_categoria', 'view');
+  const canViewReports = canPagarReceber || canRealizadas || canPorCategoria;
 
   // Default date filter: First day of current month to last day of current month
   const now = new Date();
@@ -109,6 +113,7 @@ export const ReportsView: React.FC<Props> = ({
     <div className="space-y-6">
       {/* Sub-Navigation Tabs Bar for Reports */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 flex items-center overflow-x-auto gap-1 text-xs print:hidden">
+        {canPagarReceber && (
         <button
           onClick={() => onSelectSubMenu('pagar_receber')}
           className={`px-4 py-2.5 rounded-xl font-extrabold flex items-center space-x-2 whitespace-nowrap transition ${
@@ -120,7 +125,9 @@ export const ReportsView: React.FC<Props> = ({
           <Clock className="w-4 h-4 text-amber-400" />
           <span>1. Contas a Pagar e Receber</span>
         </button>
+        )}
 
+        {canRealizadas && (
         <button
           onClick={() => onSelectSubMenu('realizadas')}
           className={`px-4 py-2.5 rounded-xl font-extrabold flex items-center space-x-2 whitespace-nowrap transition ${
@@ -132,7 +139,9 @@ export const ReportsView: React.FC<Props> = ({
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>2. Contas e Receitas Realizadas</span>
         </button>
+        )}
 
+        {canPorCategoria && (
         <button
           onClick={() => onSelectSubMenu('por_categoria')}
           className={`px-4 py-2.5 rounded-xl font-extrabold flex items-center space-x-2 whitespace-nowrap transition ${
@@ -144,10 +153,11 @@ export const ReportsView: React.FC<Props> = ({
           <PieChart className="w-4 h-4 text-purple-400" />
           <span>3. Despesas e Receitas por Categoria</span>
         </button>
+        )}
       </div>
 
       {/* Render selected report */}
-      {activeSubMenu === 'pagar_receber' && (
+      {activeSubMenu === 'pagar_receber' && canPagarReceber && (
         <PayablesReceivablesReport
           transactions={transactions}
           categories={categories}
@@ -170,7 +180,7 @@ export const ReportsView: React.FC<Props> = ({
         />
       )}
 
-      {activeSubMenu === 'realizadas' && (
+      {activeSubMenu === 'realizadas' && canRealizadas && (
         <RealizedTransactionsReport
           transactions={transactions}
           categories={categories}
@@ -193,7 +203,7 @@ export const ReportsView: React.FC<Props> = ({
         />
       )}
 
-      {activeSubMenu === 'por_categoria' && (
+      {activeSubMenu === 'por_categoria' && canPorCategoria && (
         <CategoryReport
           transactions={transactions}
           categories={categories}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Budget, Category, Transaction, AccessProfile } from '../../types';
 import { Target, Plus, Edit2, Trash2, X, AlertTriangle, CheckCircle2, TrendingUp, User as UserIcon, Users } from 'lucide-react';
+import { can } from '../../utils/permissions';
 
 interface Props {
   budgets: Budget[];
@@ -29,7 +30,10 @@ export const BudgetsView: React.FC<Props> = ({
   const [alertThresholdPercent, setAlertThresholdPercent] = useState('80');
   const [scope, setScope] = useState<'pessoal' | 'familia'>('pessoal');
 
-  const canManage = activeProfile?.permissions.canManageBudgets ?? true;
+  const canCreate = can(activeProfile, 'orcamento', 'create');
+  const canEdit = can(activeProfile, 'orcamento', 'edit');
+  const canDelete = can(activeProfile, 'orcamento', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const expenseCategories = categories.filter((c) => c.type === 'expense' || c.type === 'both');
 
@@ -120,7 +124,7 @@ export const BudgetsView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-1.5"
@@ -172,8 +176,9 @@ export const BudgetsView: React.FC<Props> = ({
                   </p>
                 </div>
 
-                {canManage && (
+                {(canEdit || canDelete) && (
                   <div className="flex items-center space-x-1">
+                    {canEdit && (
                     <button
                       onClick={() => handleOpenModal(b)}
                       className="p-1.5 text-slate-400 hover:text-emerald-400 rounded-lg hover:bg-slate-800 transition"
@@ -181,6 +186,8 @@ export const BudgetsView: React.FC<Props> = ({
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
+                    {canDelete && (
                     <button
                       onClick={() => onDeleteBudget(b.id)}
                       className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -188,6 +195,7 @@ export const BudgetsView: React.FC<Props> = ({
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
+                    )}
                   </div>
                 )}
               </div>

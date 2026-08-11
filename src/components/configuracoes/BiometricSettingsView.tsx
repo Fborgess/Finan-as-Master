@@ -6,6 +6,7 @@ import {
 } from '../../types';
 import { StorageService } from '../../utils/storage';
 import { authenticateWithBiometrics, registerBiometricCredential } from '../../utils/biometrics';
+import { can } from '../../utils/permissions';
 import {
   Fingerprint,
   ScanFace,
@@ -34,7 +35,7 @@ export const BiometricSettingsView: React.FC<Props> = ({
   activeProfile,
   currentUser,
 }) => {
-  const canManageSettings = activeProfile ? activeProfile.permissions.canManageSettings : true;
+  const canManageSettings = can(activeProfile, 'biometria', 'edit') || can(activeProfile, 'biometria', 'create');
 
   const [settings, setSettings] = useState<BiometricSettings>(() => StorageService.getBiometricSettings());
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);

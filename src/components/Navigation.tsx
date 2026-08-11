@@ -47,6 +47,7 @@ import {
 } from 'lucide-react';
 import { ThemeMode } from '../types';
 import { getSystemPreferences, saveSystemPreferences } from '../utils/preferences';
+import { can } from '../utils/permissions';
 
 interface Props {
   activeMain: MainSection;
@@ -119,6 +120,35 @@ export const Navigation: React.FC<Props> = ({
   const canAccessFamilia = activeProfile?.permissions.canAccessFamiliaScope !== false;
   const canAccessBoth = canAccessPessoal && canAccessFamilia;
 
+  // Permission-based submenu visibility (sem "Ver" o item é escondido do menu)
+  const perm = {
+    dashboard: can(activeProfile, 'dashboard', 'view'),
+    beneficiarios: can(activeProfile, 'beneficiarios', 'view'),
+    cartoes: can(activeProfile, 'cartoes', 'view'),
+    categorias: can(activeProfile, 'categorias', 'view'),
+    contas: can(activeProfile, 'contas', 'view'),
+    pagamentos: can(activeProfile, 'pagamentos', 'view'),
+    orcamento: can(activeProfile, 'orcamento', 'view'),
+    transacoes: can(activeProfile, 'transacoes', 'view'),
+    pagar_receber: can(activeProfile, 'pagar_receber', 'view'),
+    realizadas: can(activeProfile, 'realizadas', 'view'),
+    por_categoria: can(activeProfile, 'por_categoria', 'view'),
+    perfis: can(activeProfile, 'perfis', 'view'),
+    usuarios: can(activeProfile, 'usuarios', 'view'),
+    biometria: can(activeProfile, 'biometria', 'view'),
+    aparencia: can(activeProfile, 'aparencia', 'view'),
+  };
+
+  const canCreateTransaction = can(activeProfile, 'transacoes', 'create');
+
+  const canViewCadastros = perm.beneficiarios || perm.cartoes || perm.categorias || perm.contas || perm.pagamentos;
+  const canViewFinanceiro = perm.orcamento || perm.transacoes;
+  const canViewRelatorios = perm.pagar_receber || perm.realizadas || perm.por_categoria;
+  const canViewConfiguracoes = perm.perfis || perm.usuarios || perm.biometria || perm.aparencia;
+
+  const firstViewableCadastro = perm.beneficiarios ? 'beneficiarios' : perm.cartoes ? 'cartoes' : perm.categorias ? 'categorias' : perm.contas ? 'contas' : perm.pagamentos ? 'pagamentos' : null;
+  const firstViewableRelatorio = perm.pagar_receber ? 'pagar_receber' : perm.realizadas ? 'realizadas' : perm.por_categoria ? 'por_categoria' : null;
+
   useEffect(() => {
     if (!canAccessPessoal && activeScope === 'pessoal' && canAccessFamilia) {
       onSelectScope('familia');
@@ -129,6 +159,63 @@ export const Navigation: React.FC<Props> = ({
       else if (canAccessFamilia) onSelectScope('familia');
     }
   }, [activeUser.id, activeProfile?.id, activeScope, canAccessPessoal, canAccessFamilia, canAccessBoth]);
+
+  // Corrige a seção/submenu ativo quando o usuário perde a permissão de visualização
+  useEffect(() => {
+    const hasDashboardView = can(activeProfile, 'dashboard', 'view');
+    const cadastroVisible = (['beneficiarios', 'cartoes', 'categorias', 'contas', 'pagamentos'] as const).some(
+      (k) => can(activeProfile, k, 'view')
+    );
+    const financeiroVisible = (['orcamento', 'transacoes'] as const).some((k) => can(activeProfile, k, 'view'));
+    const relatoriosVisible = (['pagar_receber', 'realizadas', 'por_categoria'] as const).some((k) => can(activeProfile, k, 'view'));
+    const configVisible = (['perfis', 'usuarios', 'biometria', 'aparencia'] as const).some((k) => can(activeProfile, k, 'view'));
+
+    // Corrige o submenu ativo caso a tela atual não seja acessível
+    if (activeMain === 'cadastros' && !cadastroVisible) {
+      setActiveMain('dashboard');
+    } else if (activeMain === 'financeiro' && !financeiroVisible) {
+      setActiveMain('dashboard');
+    } else if (activeMain === 'relatorios' && !relatoriosVisible) {
+      setActiveMain('dashboard');
+    } else if (activeMain === 'configuracoes' && !configVisible) {
+      setActiveMain('dashboard');
+    } else if (activeMain === 'dashboard' && !hasDashboardView) {
+      if (cadastroVisible) setActiveMain('cadastros');
+      else if (financeiroVisible) setActiveMain('financeiro');
+      else if (relatoriosVisible) setActiveMain('relatorios');
+      else if (configVisible) setActiveMain('configuracoes');
+    }
+  }, [activeUser.id, activeProfile?.id, activeMain, perm]);
+
+  useEffect(() => {
+    if (activeMain !== 'cadastros') return;
+    if (!can(activeProfile, activeCadastro, 'view')) {
+      setActiveCadastro(firstViewableCadastro as SubMenuCadastro);
+    }
+  }, [activeMain, activeCadastro, firstViewableCadastro]);
+
+  useEffect(() => {
+    if (activeMain !== 'financeiro') return;
+    if (!can(activeProfile, activeFinanceiro, 'view')) {
+      setActiveFinanceiro(perm.orcamento ? 'orcamento' : 'transacoes');
+    }
+  }, [activeMain, activeFinanceiro, perm.orcamento, perm.transacoes]);
+
+  useEffect(() => {
+    if (activeMain !== 'relatorios') return;
+    if (!can(activeProfile, activeRelatorios, 'view')) {
+      setActiveRelatorios(firstViewableRelatorio as SubMenuRelatorios);
+    }
+  }, [activeMain, activeRelatorios, firstViewableRelatorio]);
+
+  useEffect(() => {
+    if (activeMain !== 'configuracoes') return;
+    if (!can(activeProfile, activeConfiguracoes, 'view')) {
+      setActiveConfiguracoes(
+        perm.perfis ? 'perfis' : perm.usuarios ? 'usuarios' : perm.biometria ? 'biometria' : perm.aparencia ? 'aparencia' : (activeConfiguracoes as SubMenuConfiguracoes)
+      );
+    }
+  }, [activeMain, activeConfiguracoes, perm.perfis, perm.usuarios, perm.biometria, perm.aparencia]);
 
   // Handle Fullscreen Toggle
   const toggleFullscreen = () => {
@@ -351,13 +438,15 @@ export const Navigation: React.FC<Props> = ({
               )}
             </div>
 
-            <button
-              onClick={onOpenNewTransaction}
-              className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition transform active:scale-95"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>+ Nova Transação</span>
-            </button>
+            {canCreateTransaction && (
+              <button
+                onClick={onOpenNewTransaction}
+                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition transform active:scale-95"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>+ Nova Transação</span>
+              </button>
+            )}
 
             {/* Active User Switcher Menu */}
             <div className="relative">
@@ -537,6 +626,7 @@ export const Navigation: React.FC<Props> = ({
 
             <nav className="space-y-4 text-xs font-medium">
               {/* Dashboard */}
+              {perm.dashboard && (
               <button
                 onClick={() => handleNavClick('dashboard')}
                 className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition ${
@@ -548,8 +638,10 @@ export const Navigation: React.FC<Props> = ({
                 <LayoutDashboard className="w-4 h-4 text-blue-400" />
                 <span>Dashboard Geral</span>
               </button>
+              )}
 
               {/* 1. CADASTRO */}
+              {canViewCadastros && (
               <div>
                 <button
                   onClick={() => setOpenCadastro(!openCadastro)}
@@ -564,6 +656,7 @@ export const Navigation: React.FC<Props> = ({
 
                 {openCadastro && (
                   <div className="mt-1 space-y-1 pl-3 border-l border-slate-800">
+                    {perm.beneficiarios && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'beneficiarios')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -575,7 +668,9 @@ export const Navigation: React.FC<Props> = ({
                       <Users2 className="w-3.5 h-3.5" />
                       <span>Beneficiários</span>
                     </button>
+                    )}
 
+                    {perm.cartoes && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'cartoes')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -587,7 +682,9 @@ export const Navigation: React.FC<Props> = ({
                       <CreditCard className="w-3.5 h-3.5" />
                       <span>Cartão de Crédito</span>
                     </button>
+                    )}
 
+                    {perm.categorias && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'categorias')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -599,7 +696,9 @@ export const Navigation: React.FC<Props> = ({
                       <FolderTree className="w-3.5 h-3.5" />
                       <span>Categorias Financeiras</span>
                     </button>
+                    )}
 
+                    {perm.contas && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'contas')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -611,7 +710,9 @@ export const Navigation: React.FC<Props> = ({
                       <Building2 className="w-3.5 h-3.5" />
                       <span>Contas Bancárias</span>
                     </button>
+                    )}
 
+                    {perm.pagamentos && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'pagamentos')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -623,11 +724,14 @@ export const Navigation: React.FC<Props> = ({
                       <Receipt className="w-3.5 h-3.5" />
                       <span>Formas de Pagamento</span>
                     </button>
+                    )}
                   </div>
                 )}
               </div>
+              )}
 
               {/* 2. FINANCEIRO */}
+              {canViewFinanceiro && (
               <div>
                 <button
                   onClick={() => setOpenFinanceiro(!openFinanceiro)}
@@ -642,6 +746,7 @@ export const Navigation: React.FC<Props> = ({
 
                 {openFinanceiro && (
                   <div className="mt-1 space-y-1 pl-3 border-l border-slate-800">
+                    {perm.orcamento && (
                     <button
                       onClick={() => handleNavClick('financeiro', 'orcamento')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -653,7 +758,9 @@ export const Navigation: React.FC<Props> = ({
                       <Target className="w-3.5 h-3.5" />
                       <span>Orçamento Mensal</span>
                     </button>
+                    )}
 
+                    {perm.transacoes && (
                     <button
                       onClick={() => handleNavClick('financeiro', 'transacoes')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -665,11 +772,14 @@ export const Navigation: React.FC<Props> = ({
                       <ArrowRightLeft className="w-3.5 h-3.5" />
                       <span>Transações</span>
                     </button>
+                    )}
                   </div>
                 )}
               </div>
+              )}
 
               {/* 3. RELATÓRIOS */}
+              {canViewRelatorios && (
               <div>
                 <button
                   onClick={() => setOpenRelatorios(!openRelatorios)}
@@ -684,6 +794,7 @@ export const Navigation: React.FC<Props> = ({
 
                 {openRelatorios && (
                   <div className="mt-1 space-y-1 pl-3 border-l border-slate-800">
+                    {perm.pagar_receber && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'pagar_receber')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -695,7 +806,9 @@ export const Navigation: React.FC<Props> = ({
                       <Clock className="w-3.5 h-3.5 text-amber-400" />
                       <span>Contas a Pagar/Receber</span>
                     </button>
+                    )}
 
+                    {perm.realizadas && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'realizadas')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -707,7 +820,9 @@ export const Navigation: React.FC<Props> = ({
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                       <span>Contas/Receitas Realizadas</span>
                     </button>
+                    )}
 
+                    {perm.por_categoria && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'por_categoria')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -719,11 +834,14 @@ export const Navigation: React.FC<Props> = ({
                       <PieChart className="w-3.5 h-3.5 text-purple-400" />
                       <span>Relatório por Categoria</span>
                     </button>
+                    )}
                   </div>
                 )}
               </div>
+              )}
 
               {/* 4. CONFIGURAÇÕES */}
+              {canViewConfiguracoes && (
               <div>
                 <button
                   onClick={() => setOpenConfig(!openConfig)}
@@ -738,6 +856,7 @@ export const Navigation: React.FC<Props> = ({
 
                 {openConfig && (
                   <div className="mt-1 space-y-1 pl-3 border-l border-slate-800">
+                    {perm.perfis && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'perfis')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -749,7 +868,9 @@ export const Navigation: React.FC<Props> = ({
                       <ShieldAlert className="w-3.5 h-3.5" />
                       <span>Perfil de Acesso</span>
                     </button>
+                    )}
 
+                    {perm.usuarios && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'usuarios')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -761,7 +882,9 @@ export const Navigation: React.FC<Props> = ({
                       <UserCheck className="w-3.5 h-3.5" />
                       <span>Usuários</span>
                     </button>
+                    )}
 
+                    {perm.biometria && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'biometria')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -773,7 +896,9 @@ export const Navigation: React.FC<Props> = ({
                       <Fingerprint className="w-3.5 h-3.5 text-indigo-400" />
                       <span>Digital / Face ID (Móvel)</span>
                     </button>
+                    )}
 
+                    {perm.aparencia && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'aparencia')}
                       className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
@@ -785,9 +910,11 @@ export const Navigation: React.FC<Props> = ({
                       <Palette className="w-3.5 h-3.5 text-purple-400" />
                       <span>Tema & Formatação</span>
                     </button>
+                    )}
                   </div>
                 )}
               </div>
+              )}
             </nav>
 
             {/* Mobile Footer Badge */}
@@ -802,6 +929,7 @@ export const Navigation: React.FC<Props> = ({
             {/* Quick Sub-Navigation Bar for Cadastros */}
             {activeMain === 'cadastros' && (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 flex items-center overflow-x-auto gap-1 text-xs">
+                {perm.beneficiarios && (
                 <button
                   onClick={() => setActiveCadastro('beneficiarios')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -813,6 +941,8 @@ export const Navigation: React.FC<Props> = ({
                   <Users2 className="w-3.5 h-3.5" />
                   <span>Beneficiários</span>
                 </button>
+                )}
+                {perm.cartoes && (
                 <button
                   onClick={() => setActiveCadastro('cartoes')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -824,6 +954,8 @@ export const Navigation: React.FC<Props> = ({
                   <CreditCard className="w-3.5 h-3.5" />
                   <span>Cartão de Crédito</span>
                 </button>
+                )}
+                {perm.categorias && (
                 <button
                   onClick={() => setActiveCadastro('categorias')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -835,6 +967,8 @@ export const Navigation: React.FC<Props> = ({
                   <FolderTree className="w-3.5 h-3.5" />
                   <span>Categorias Financeiras</span>
                 </button>
+                )}
+                {perm.contas && (
                 <button
                   onClick={() => setActiveCadastro('contas')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -846,6 +980,8 @@ export const Navigation: React.FC<Props> = ({
                   <Building2 className="w-3.5 h-3.5" />
                   <span>Contas Bancárias</span>
                 </button>
+                )}
+                {perm.pagamentos && (
                 <button
                   onClick={() => setActiveCadastro('pagamentos')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -857,12 +993,14 @@ export const Navigation: React.FC<Props> = ({
                   <Receipt className="w-3.5 h-3.5" />
                   <span>Formas de Pagamento</span>
                 </button>
+                )}
               </div>
             )}
 
             {/* Quick Sub-Navigation Bar for Financeiro */}
             {activeMain === 'financeiro' && (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-1.5 flex items-center overflow-x-auto gap-1 text-xs">
+                {perm.transacoes && (
                 <button
                   onClick={() => setActiveFinanceiro('transacoes')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -874,6 +1012,8 @@ export const Navigation: React.FC<Props> = ({
                   <ArrowRightLeft className="w-3.5 h-3.5" />
                   <span>Lançamentos & Transações</span>
                 </button>
+                )}
+                {perm.orcamento && (
                 <button
                   onClick={() => setActiveFinanceiro('orcamento')}
                   className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
@@ -885,6 +1025,7 @@ export const Navigation: React.FC<Props> = ({
                   <Target className="w-3.5 h-3.5" />
                   <span>Orçamento & Teto de Gastos</span>
                 </button>
+                )}
               </div>
             )}
 
@@ -895,6 +1036,7 @@ export const Navigation: React.FC<Props> = ({
 
       {/* Floating Bottom Navigation Bar for Mobile */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-800 px-4 py-2 flex items-center justify-around md:hidden text-slate-400 ios-safe-bottom">
+        {perm.dashboard && (
         <button
           onClick={() => handleNavClick('dashboard')}
           className={`flex flex-col items-center space-y-0.5 text-[10px] font-bold ${
@@ -904,7 +1046,9 @@ export const Navigation: React.FC<Props> = ({
           <LayoutDashboard className="w-5 h-5" />
           <span>Inicio</span>
         </button>
+        )}
 
+        {perm.transacoes && (
         <button
           onClick={() => handleNavClick('financeiro', 'transacoes')}
           className={`flex flex-col items-center space-y-0.5 text-[10px] font-bold ${
@@ -914,17 +1058,21 @@ export const Navigation: React.FC<Props> = ({
           <ArrowRightLeft className="w-5 h-5" />
           <span>Transações</span>
         </button>
+        )}
 
         {/* Floating Quick Plus Button */}
+        {canCreateTransaction && (
         <button
           onClick={onOpenNewTransaction}
           className="w-12 h-12 -mt-5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/50 border-2 border-slate-900 active:scale-90 transition"
         >
           <PlusCircle className="w-7 h-7" />
         </button>
+        )}
 
+        {canViewCadastros && firstViewableCadastro && (
         <button
-          onClick={() => handleNavClick('cadastros', 'categorias')}
+          onClick={() => handleNavClick('cadastros', firstViewableCadastro)}
           className={`flex flex-col items-center space-y-0.5 text-[10px] font-bold ${
             activeMain === 'cadastros' ? 'text-amber-400' : 'hover:text-slate-200'
           }`}
@@ -932,6 +1080,7 @@ export const Navigation: React.FC<Props> = ({
           <FolderKanban className="w-5 h-5" />
           <span>Cadastros</span>
         </button>
+        )}
 
         <button
           onClick={() => setIsMenuOpen(true)}

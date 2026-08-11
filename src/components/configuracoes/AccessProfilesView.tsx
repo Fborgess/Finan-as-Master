@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { AccessProfile, User } from '../../types';
+import { AccessProfile, User, PermissionAction, PermissionKey, PermissionMatrix } from '../../types';
 import { ShieldAlert, Plus, Edit2, Trash2, X, Check, Lock, ShieldCheck } from 'lucide-react';
+import {
+  can,
+  createPermissionMatrix,
+  migrateProfilePermissions,
+  PERMISSION_ACTIONS,
+  PERMISSION_KEY_LABELS,
+} from '../../utils/permissions';
 
 interface Props {
   profiles: AccessProfile[];
@@ -9,6 +16,49 @@ interface Props {
   onDeleteProfile: (id: string) => void;
   activeProfile?: AccessProfile;
 }
+
+const ACTION_LABELS: Record<PermissionAction, string> = {
+  view: 'Ver',
+  create: 'Incluir',
+  edit: 'Editar',
+  delete: 'Excluir',
+};
+
+const SECTION_LABELS: Record<string, string> = {
+  dashboard: 'Dashboard',
+  cadastros: 'Cadastros',
+  financeiro: 'Financeiro',
+  relatorios: 'Relatórios',
+  configuracoes: 'Configurações',
+};
+
+// Agrupamento visual das chaves de permissão
+const SECTION_KEYS: { section: string; keys: PermissionKey[] }[] = [
+  { section: 'dashboard', keys: ['dashboard'] },
+  { section: 'cadastros', keys: ['categorias', 'contas', 'cartoes', 'pagamentos', 'beneficiarios'] },
+  { section: 'financeiro', keys: ['orcamento', 'transacoes'] },
+  { section: 'relatorios', keys: ['pagar_receber', 'realizadas', 'por_categoria'] },
+  { section: 'configuracoes', keys: ['perfis', 'usuarios', 'biometria', 'aparencia'] },
+];
+
+// Matriz padrão de novo perfil (herda o comportamento do modelo antigo)
+const defaultNewProfileMatrix = (): PermissionMatrix => {
+  const m = createPermissionMatrix(false);
+  m.dashboard.view = true;
+  ['categorias', 'contas', 'cartoes', 'pagamentos', 'beneficiarios'].forEach((k) => {
+    m[k as PermissionKey] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['orcamento', 'transacoes'].forEach((k) => {
+    m[k as PermissionKey] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['pagar_receber', 'realizadas', 'por_categoria'].forEach((k) => {
+    m[k as PermissionKey] = { view: true, create: false, edit: false, delete: false };
+  });
+  ['perfis', 'usuarios', 'biometria', 'aparencia'].forEach((k) => {
+    m[k as PermissionKey] = { view: false, create: false, edit: false, delete: false };
+  });
+  return m;
+};
 
 export const AccessProfilesView: React.FC<Props> = ({
   profiles,
@@ -23,17 +73,12 @@ export const AccessProfilesView: React.FC<Props> = ({
   // Form states
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [permissions, setPermissions] = useState({
-    canManageCadastros: true,
-    canManageTransactions: true,
-    canManageBudgets: true,
-    canManageSettings: false,
-    canViewReports: true,
-    canAccessPessoalScope: true,
-    canAccessFamiliaScope: true,
-  });
+  const [modules, setModules] = useState<PermissionMatrix>(() => defaultNewProfileMatrix());
+  const [canAccessPessoal, setCanAccessPessoal] = useState(true);
+  const [canAccessFamilia, setCanAccessFamilia] = useState(true);
 
-  const canManage = activeProfile?.permissions.canManageSettings ?? true;
+  // Quem gerencia perfis precisa de create/edit/delete em "perfis"
+  const canManage = can(activeProfile, 'perfis', 'create') || can(activeProfile, 'perfis', 'edit') || can(activeProfile, 'perfis', 'delete');
 
   const handleDelete = (p: AccessProfile) => {
     const userCount = users.filter((u) => u.profileId === p.id).length;
@@ -51,31 +96,20 @@ export const AccessProfilesView: React.FC<Props> = ({
 
   const handleOpenModal = (p?: AccessProfile) => {
     if (p) {
-      setEditingProfile(p);
-      setName(p.name);
-      setDescription(p.description);
-      setPermissions({
-        canManageCadastros: p.permissions.canManageCadastros ?? true,
-        canManageTransactions: p.permissions.canManageTransactions ?? true,
-        canManageBudgets: p.permissions.canManageBudgets ?? true,
-        canManageSettings: p.permissions.canManageSettings ?? false,
-        canViewReports: p.permissions.canViewReports ?? true,
-        canAccessPessoalScope: p.permissions.canAccessPessoalScope !== false,
-        canAccessFamiliaScope: p.permissions.canAccessFamiliaScope !== false,
-      });
+      const migrated = migrateProfilePermissions(p);
+      setEditingProfile(migrated);
+      setName(migrated.name);
+      setDescription(migrated.description);
+      setModules(migrated.permissions.modules);
+      setCanAccessPessoal(migrated.permissions.canAccessPessoalScope !== false);
+      setCanAccessFamilia(migrated.permissions.canAccessFamiliaScope !== false);
     } else {
       setEditingProfile(null);
       setName('');
       setDescription('');
-      setPermissions({
-        canManageCadastros: true,
-        canManageTransactions: true,
-        canManageBudgets: true,
-        canManageSettings: false,
-        canViewReports: true,
-        canAccessPessoalScope: true,
-        canAccessFamiliaScope: true,
-      });
+      setModules(defaultNewProfileMatrix());
+      setCanAccessPessoal(true);
+      setCanAccessFamilia(true);
     }
     setIsModalOpen(true);
   };
@@ -89,10 +123,36 @@ export const AccessProfilesView: React.FC<Props> = ({
       name: name.trim(),
       description: description.trim(),
       isSystemRole: editingProfile?.isSystemRole || false,
-      permissions,
+      permissions: {
+        modules,
+        canAccessPessoalScope: canAccessPessoal,
+        canAccessFamiliaScope: canAccessFamilia,
+      },
     });
 
     setIsModalOpen(false);
+  };
+
+  const setModuleAction = (key: PermissionKey, action: PermissionAction, value: boolean) => {
+    setModules((prev) => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        [action]: value,
+      },
+    }));
+  };
+
+  const summaryLabel = (p: AccessProfile) => {
+    const m = p.permissions.modules;
+    const parts: string[] = [];
+    SECTION_KEYS.forEach(({ section, keys }) => {
+      const anyView = keys.some((k) => m[k]?.view);
+      if (!anyView) return;
+      const canCrud = keys.some((k) => m[k]?.create || m[k]?.edit || m[k]?.delete);
+      parts.push(canCrud ? `${SECTION_LABELS[section]}: Gerência` : `${SECTION_LABELS[section]}: Leitura`);
+    });
+    return parts;
   };
 
   return (
@@ -106,7 +166,7 @@ export const AccessProfilesView: React.FC<Props> = ({
           </div>
           <h2 className="text-xl font-extrabold text-white">Níveis & Perfis de Permissão</h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Defina o grau de acesso e regras de privilégios para Administradores, Operadores e Dependentes.
+            Defina o grau de acesso por tela (Ver / Incluir / Editar / Excluir) para Administradores, Operadores e Dependentes.
           </p>
         </div>
 
@@ -125,6 +185,8 @@ export const AccessProfilesView: React.FC<Props> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {[...profiles].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR')).map((p) => {
           const userCount = users.filter((u) => u.profileId === p.id).length;
+          const migrated = migrateProfilePermissions(p);
+          const labels = summaryLabel(migrated);
 
           return (
             <div
@@ -171,45 +233,25 @@ export const AccessProfilesView: React.FC<Props> = ({
 
                 {/* Permissions matrix checklist */}
                 <div className="mt-4 pt-3 border-t border-slate-800 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">1. Cadastros MESTRE:</span>
-                    <span className={`font-bold ${p.permissions.canManageCadastros ? 'text-emerald-400' : 'text-slate-600'}`}>
-                      {p.permissions.canManageCadastros ? 'Permitido' : 'Bloqueado'}
+                  {labels.length === 0 && (
+                    <span className="text-slate-600 text-[11px]">Nenhum acesso liberado.</span>
+                  )}
+                  {labels.map((label) => (
+                    <div key={label} className="flex items-center justify-between">
+                      <span className="text-slate-400">{label.split(':')[0]}:</span>
+                      <span className="font-bold text-emerald-400">{label.split(':')[1]?.trim()}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-slate-400">Módulo Pessoal:</span>
+                    <span className={`font-bold ${migrated.permissions.canAccessPessoalScope !== false ? 'text-indigo-400' : 'text-slate-600'}`}>
+                      {migrated.permissions.canAccessPessoalScope !== false ? 'Liberado' : 'Bloqueado'}
                     </span>
                   </div>
-
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">2. Transações Financeiras:</span>
-                    <span className={`font-bold ${p.permissions.canManageTransactions ? 'text-emerald-400' : 'text-slate-600'}`}>
-                      {p.permissions.canManageTransactions ? 'Permitido' : 'Bloqueado'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">3. Orçamento Mensal:</span>
-                    <span className={`font-bold ${p.permissions.canManageBudgets ? 'text-emerald-400' : 'text-slate-600'}`}>
-                      {p.permissions.canManageBudgets ? 'Permitido' : 'Bloqueado'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">4. Configurações de Sistema:</span>
-                    <span className={`font-bold ${p.permissions.canManageSettings ? 'text-purple-400' : 'text-slate-600'}`}>
-                      {p.permissions.canManageSettings ? 'Permitido (Admin)' : 'Bloqueado'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">5. Módulo Pessoal:</span>
-                    <span className={`font-bold ${p.permissions.canAccessPessoalScope !== false ? 'text-indigo-400' : 'text-slate-600'}`}>
-                      {p.permissions.canAccessPessoalScope !== false ? 'Acesso Liberado' : 'Bloqueado'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-400">6. Módulo Família:</span>
-                    <span className={`font-bold ${p.permissions.canAccessFamiliaScope !== false ? 'text-purple-400' : 'text-slate-600'}`}>
-                      {p.permissions.canAccessFamiliaScope !== false ? 'Acesso Liberado' : 'Bloqueado'}
+                    <span className="text-slate-400">Módulo Família:</span>
+                    <span className={`font-bold ${migrated.permissions.canAccessFamiliaScope !== false ? 'text-purple-400' : 'text-slate-600'}`}>
+                      {migrated.permissions.canAccessFamiliaScope !== false ? 'Liberado' : 'Bloqueado'}
                     </span>
                   </div>
                 </div>
@@ -222,7 +264,7 @@ export const AccessProfilesView: React.FC<Props> = ({
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4 overflow-hidden">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md text-white shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[92vh]">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl text-white shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[92vh]">
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 shrink-0">
               <h3 className="font-extrabold text-sm sm:text-base">
                 {editingProfile ? 'Editar Perfil de Acesso' : 'Novo Perfil de Acesso'}
@@ -266,70 +308,111 @@ export const AccessProfilesView: React.FC<Props> = ({
                 />
               </div>
 
-              <div className="space-y-2 pt-2 border-t border-slate-800">
-                <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-                  Matriz de Permissões
+              <div className="space-y-4 pt-2 border-t border-slate-800">
+                <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">
+                  Matriz de Permissões por Tela
                 </p>
 
-                <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={permissions.canManageCadastros}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canManageCadastros: e.target.checked })
-                    }
-                    className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
-                  />
-                  <span>Gerenciar Cadastros (Contas, Cartões, Categorias)</span>
-                </label>
+                {SECTION_KEYS.map(({ section, keys }) => {
+                  const anyVisible = keys.some((k) => modules[k]?.view);
+                  const hasManageDefault = keys.some((k) => modules[k]?.create || modules[k]?.edit || modules[k]?.delete);
 
-                <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={permissions.canManageTransactions}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canManageTransactions: e.target.checked })
-                    }
-                    className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
-                  />
-                  <span>Lançar e Editar Transações Financeiras</span>
-                </label>
+                  const toggleAll = (action: PermissionAction, value: boolean) => {
+                    keys.forEach((k) => setModuleAction(k, action, value));
+                  };
 
-                <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={permissions.canManageBudgets}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canManageBudgets: e.target.checked })
-                    }
-                    className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
-                  />
-                  <span>Gerenciar Orçamentos Mensais</span>
-                </label>
+                  const setSectionAll = (value: boolean) => {
+                    keys.forEach((k) => {
+                      PERMISSION_ACTIONS.forEach((action) => {
+                        setModules((prev) => ({ ...prev, [k]: { ...prev[k], [action]: value } }));
+                      });
+                    });
+                  };
 
-                <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={permissions.canViewReports}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canViewReports: e.target.checked })
-                    }
-                    className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
-                  />
-                  <span>Visualizar Relatórios e Dashboards Analytics</span>
-                </label>
+                  return (
+                    <div key={section} className="bg-slate-800/40 border border-slate-700/80 rounded-xl p-3 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-extrabold uppercase tracking-wider text-white">
+                          {SECTION_LABELS[section]}
+                        </span>
+                        <label className="flex items-center space-x-2 text-[11px] text-slate-300 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={keys.every((k) => PERMISSION_ACTIONS.every((a) => modules[k]?.[a]))}
+                            onChange={(e) => setSectionAll(e.target.checked)}
+                            className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
+                          />
+                          <span>{anyVisible || hasManageDefault ? 'Liberar tudo' : 'Liberar seção'}</span>
+                        </label>
+                      </div>
 
-                <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={permissions.canManageSettings}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canManageSettings: e.target.checked })
-                    }
-                    className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
-                  />
-                  <span>Gerenciar Usuários e Configurações Globais</span>
-                </label>
+                      {/* Column headers */}
+                      <div className="grid grid-cols-[1fr_repeat(4,3.5rem)] items-center gap-1 text-[10px] font-bold text-slate-400 uppercase">
+                        <span className="px-1">Tela</span>
+                        {PERMISSION_ACTIONS.map((act) => (
+                          <span key={act} className="text-center" title={ACTION_LABELS[act]}>
+                            {ACTION_LABELS[act]}
+                          </span>
+                        ))}
+                      </div>
+
+                      {keys.map((key) => (
+                        <div
+                          key={key}
+                          className="grid grid-cols-[1fr_repeat(4,3.5rem)] items-center gap-1 text-xs text-slate-300"
+                        >
+                          <span className="px-1 truncate">{PERMISSION_KEY_LABELS[key]}</span>
+                          {PERMISSION_ACTIONS.map((act) => (
+                            <span key={act} className="flex items-center justify-center">
+                              <input
+                                type="checkbox"
+                                checked={!!modules[key]?.[act]}
+                                onChange={(e) => setModuleAction(key, act, e.target.checked)}
+                                className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
+                              />
+                            </span>
+                          ))}
+                        </div>
+                      ))}
+
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-800/60">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                          Aplicar a todas as telas acima
+                        </span>
+                        <div className="flex items-center space-x-1.5">
+                          <button
+                            type="button"
+                            onClick={() => toggleAll('view', true)}
+                            className="px-2 py-1 rounded-lg bg-slate-700/60 hover:bg-slate-600 text-slate-200 text-[10px] font-bold transition"
+                          >
+                            Ver
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleAll('create', true)}
+                            className="px-2 py-1 rounded-lg bg-slate-700/60 hover:bg-slate-600 text-slate-200 text-[10px] font-bold transition"
+                          >
+                            Incluir
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleAll('edit', true)}
+                            className="px-2 py-1 rounded-lg bg-slate-700/60 hover:bg-slate-600 text-slate-200 text-[10px] font-bold transition"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => toggleAll('delete', true)}
+                            className="px-2 py-1 rounded-lg bg-slate-700/60 hover:bg-slate-600 text-slate-200 text-[10px] font-bold transition"
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
 
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pt-2 border-t border-slate-800">
                   Permissão de Módulos (Escopo de Dados)
@@ -338,10 +421,8 @@ export const AccessProfilesView: React.FC<Props> = ({
                 <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={permissions.canAccessPessoalScope !== false}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canAccessPessoalScope: e.target.checked })
-                    }
+                    checked={canAccessPessoal}
+                    onChange={(e) => setCanAccessPessoal(e.target.checked)}
                     className="rounded text-indigo-600 focus:ring-indigo-500 bg-slate-800 border-slate-700"
                   />
                   <span>Permitir acesso ao Módulo Pessoal</span>
@@ -350,10 +431,8 @@ export const AccessProfilesView: React.FC<Props> = ({
                 <label className="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={permissions.canAccessFamiliaScope !== false}
-                    onChange={(e) =>
-                      setPermissions({ ...permissions, canAccessFamiliaScope: e.target.checked })
-                    }
+                    checked={canAccessFamilia}
+                    onChange={(e) => setCanAccessFamilia(e.target.checked)}
                     className="rounded text-purple-600 focus:ring-purple-500 bg-slate-800 border-slate-700"
                   />
                   <span>Permitir acesso ao Módulo Família</span>

@@ -241,6 +241,11 @@ export function useAppState() {
     return transactions.filter((t) => !t.scope || t.scope === activeScope);
   }, [transactions, activeScope]);
 
+  const scopedCategories = useMemo(() => {
+    if (activeScope === 'todos') return categories;
+    return categories.filter((c) => !c.scope || c.scope === activeScope);
+  }, [categories, activeScope]);
+
   const scopedAccounts = useMemo(() => {
     if (activeScope === 'todos') return accounts;
     return accounts.filter((a) => !a.scope || a.scope === activeScope);
@@ -479,6 +484,7 @@ export function useAppState() {
 
     // Scoped Data
     scopedTransactions,
+    scopedCategories,
     scopedAccounts,
     scopedCards,
     scopedBudgets,

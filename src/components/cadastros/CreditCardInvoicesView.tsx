@@ -27,6 +27,7 @@ import {
   CreditCardInvoiceSummary
 } from '../../utils/creditCardInvoices';
 import { CurrencyInput } from '../common/CurrencyInput';
+import { can } from '../../utils/permissions';
 
 interface Props {
   cards: CreditCard[];
@@ -62,6 +63,8 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
   const [payNotes, setPayNotes] = useState('');
 
   const selectedCard = cards.find((c) => c.id === selectedCardId) || cards[0];
+
+  const canPay = can(activeProfile, 'cartoes', 'create');
 
   const handlePrevMonth = () => {
     setSelectedYM((prev) => addMonthsToYearMonth(prev, -1));
@@ -250,7 +253,7 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
           </div>
 
           {/* Action Button: Pay Invoice */}
-          {invoiceSummary.remainingBalance > 0 && (
+          {invoiceSummary.remainingBalance > 0 && canPay && (
             <button
               onClick={handleOpenPayModal}
               className="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition flex items-center justify-center space-x-2 shrink-0"

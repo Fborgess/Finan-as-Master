@@ -9,10 +9,68 @@ import {
   AccessProfile,
   User,
   BiometricSettings,
-  CreditCardInvoicePayment
+  CreditCardInvoicePayment,
+  PermissionMatrix,
 } from '../types';
 import { safeLocalStorage } from './safeStorage';
 import { migrateUserCredentials } from './credentials';
+import { migrateProfilePermissions, nonePermissions } from './permissions';
+
+/** Matriz com tudo liberado (Administrador). */
+const adminPermissions: PermissionMatrix = (() => {
+  const m = nonePermissions();
+  m.dashboard.view = true;
+  ['categorias', 'contas', 'cartoes', 'pagamentos', 'beneficiarios'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['orcamento', 'transacoes'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['pagar_receber', 'realizadas', 'por_categoria'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: false, edit: false, delete: false };
+  });
+  ['perfis', 'usuarios', 'biometria', 'aparencia'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: true, edit: true, delete: true };
+  });
+  return m;
+})();
+
+/** Matriz para o Operador Financeiro: gerencia cadastros/financeiro, apenas visualiza relatórios. */
+const operadorPermissions: PermissionMatrix = (() => {
+  const m = nonePermissions();
+  m.dashboard.view = true;
+  ['categorias', 'contas', 'cartoes', 'pagamentos', 'beneficiarios'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['orcamento', 'transacoes'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: true, edit: true, delete: true };
+  });
+  ['pagar_receber', 'realizadas', 'por_categoria'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: false, edit: false, delete: false };
+  });
+  ['perfis', 'usuarios', 'biometria', 'aparencia'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: false, create: false, edit: false, delete: false };
+  });
+  return m;
+})();
+
+/** Matriz para o perfil Somente Leitura / Audit. */
+const leitorPermissions: PermissionMatrix = (() => {
+  const m = nonePermissions();
+  m.dashboard.view = true;
+  ['categorias', 'contas', 'cartoes', 'pagamentos', 'beneficiarios'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: false, edit: false, delete: false };
+  });
+  m.orcamento = { view: true, create: false, edit: false, delete: false };
+  m.transacoes = { view: true, create: false, edit: false, delete: false };
+  ['pagar_receber', 'realizadas', 'por_categoria'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: true, create: false, edit: false, delete: false };
+  });
+  ['perfis', 'usuarios', 'biometria', 'aparencia'].forEach((k) => {
+    m[k as keyof PermissionMatrix] = { view: false, create: false, edit: false, delete: false };
+  });
+  return m;
+})();
 
 const INITIAL_CATEGORIES: Category[] = [
   // Categorias Pai
@@ -66,11 +124,7 @@ const INITIAL_PROFILES: AccessProfile[] = [
     description: 'Acesso total a todas as funcionalidades e configurações do sistema.',
     isSystemRole: true,
     permissions: {
-      canManageCadastros: true,
-      canManageTransactions: true,
-      canManageBudgets: true,
-      canManageSettings: true,
-      canViewReports: true,
+      modules: adminPermissions,
       canAccessPessoalScope: true,
       canAccessFamiliaScope: true,
     },
@@ -81,11 +135,7 @@ const INITIAL_PROFILES: AccessProfile[] = [
     description: 'Pode gerenciar cadastros, lançar transações e orçamentos, mas sem acesso a configurações avançadas.',
     isSystemRole: false,
     permissions: {
-      canManageCadastros: true,
-      canManageTransactions: true,
-      canManageBudgets: true,
-      canManageSettings: false,
-      canViewReports: true,
+      modules: operadorPermissions,
       canAccessPessoalScope: true,
       canAccessFamiliaScope: true,
     },
@@ -96,11 +146,7 @@ const INITIAL_PROFILES: AccessProfile[] = [
     description: 'Pode apenas visualizar relatórios e movimentações sem alterar registros.',
     isSystemRole: false,
     permissions: {
-      canManageCadastros: false,
-      canManageTransactions: false,
-      canManageBudgets: false,
-      canManageSettings: false,
-      canViewReports: true,
+      modules: leitorPermissions,
       canAccessPessoalScope: true,
       canAccessFamiliaScope: true,
     },
@@ -276,7 +322,8 @@ export class StorageService {
   // Perfis
   static getProfiles(): AccessProfile[] {
     const raw = safeLocalStorage.getItem('fm_profiles');
-    return safeParse(raw, INITIAL_PROFILES);
+    const items = safeParse<AccessProfile[]>(raw, INITIAL_PROFILES);
+    return items.map((p) => migrateProfilePermissions(p));
   }
   static saveProfiles(data: AccessProfile[]): void {
     safeLocalStorage.setItem('fm_profiles', JSON.stringify(data));

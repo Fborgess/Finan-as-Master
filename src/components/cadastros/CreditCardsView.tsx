@@ -3,6 +3,7 @@ import { CreditCard, BankAccount, Transaction, CreditCardInvoicePayment, AccessP
 import { CreditCard as CardIcon, Plus, Edit2, Trash2, X, Calendar, Building2, User as UserIcon, Users, FileText, CheckCircle2 } from 'lucide-react';
 import { CurrencyInput } from '../common/CurrencyInput';
 import { getSystemPreferences, formatTextWithCasing } from '../../utils/preferences';
+import { can } from '../../utils/permissions';
 import { CreditCardInvoicesView } from './CreditCardInvoicesView';
 
 interface Props {
@@ -42,7 +43,10 @@ export const CreditCardsView: React.FC<Props> = ({
   const [color, setColor] = useState(COLOR_PRESETS[0]);
   const [scope, setScope] = useState<'pessoal' | 'familia'>('pessoal');
 
-  const canManage = activeProfile?.permissions.canManageCadastros ?? true;
+  const canCreate = can(activeProfile, 'cartoes', 'create');
+  const canEdit = can(activeProfile, 'cartoes', 'edit');
+  const canDelete = can(activeProfile, 'cartoes', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   const handleOpenModal = (card?: CreditCard) => {
     if (card) {
@@ -114,7 +118,7 @@ export const CreditCardsView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <button
             onClick={() => handleOpenModal()}
             className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-1.5"
@@ -197,8 +201,9 @@ export const CreditCardsView: React.FC<Props> = ({
                       <h3 className="font-extrabold text-lg text-white tracking-tight">{card.name}</h3>
                     </div>
 
-                    {canManage && (
+                    {(canEdit || canDelete) && (
                       <div className="flex items-center space-x-1 shrink-0 bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+                        {canEdit && (
                         <button
                           onClick={() => handleOpenModal(card)}
                           className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition"
@@ -206,6 +211,8 @@ export const CreditCardsView: React.FC<Props> = ({
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
+                        )}
+                        {canDelete && (
                         <button
                           onClick={() => onDeleteCard(card.id)}
                           className="p-1.5 text-slate-300 hover:text-rose-400 hover:bg-slate-700 rounded-lg transition"
@@ -213,6 +220,7 @@ export const CreditCardsView: React.FC<Props> = ({
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
+                        )}
                       </div>
                     )}
                   </div>

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Category, CategoryType, AccessProfile } from '../../types';
 import { getSystemPreferences, formatTextWithCasing } from '../../utils/preferences';
+import { can } from '../../utils/permissions';
 import {
   FolderTree,
   Plus,
@@ -49,7 +50,10 @@ export const CategoriesView: React.FC<Props> = ({
   const [color, setColor] = useState(COLOR_PRESETS[0]);
   const [description, setDescription] = useState('');
 
-  const canManage = activeProfile?.permissions.canManageCadastros ?? true;
+  const canCreate = can(activeProfile, 'categorias', 'create');
+  const canEdit = can(activeProfile, 'categorias', 'edit');
+  const canDelete = can(activeProfile, 'categorias', 'delete');
+  const canManage = canCreate || canEdit || canDelete;
 
   // Separate parent and child categories (sorted alphabetically)
   const parentCategories = useMemo(() => {
@@ -194,7 +198,7 @@ export const CategoriesView: React.FC<Props> = ({
           </p>
         </div>
 
-        {canManage && (
+        {canCreate && (
           <div className="flex items-center space-x-2">
             <button
               onClick={() => handleOpenModal()}
@@ -362,7 +366,7 @@ export const CategoriesView: React.FC<Props> = ({
                   {/* Actions & Expansion Button */}
                   <div className="flex items-center space-x-2 self-end sm:self-center">
                     {/* Button to add child directly to this parent */}
-                    {canManage && (
+                    {canCreate && (
                       <button
                         onClick={() => handleOpenModal(undefined, parent.id)}
                         className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 font-bold text-xs transition flex items-center space-x-1"
@@ -383,8 +387,9 @@ export const CategoriesView: React.FC<Props> = ({
                     </button>
 
                     {/* Edit / Delete Parent */}
-                    {canManage && (
+                    {(canEdit || canDelete) && (
                       <div className="flex items-center space-x-1 border-l border-slate-800 pl-2">
+                        {canEdit && (
                         <button
                           onClick={() => handleOpenModal(parent)}
                           className="p-1.5 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
@@ -392,6 +397,8 @@ export const CategoriesView: React.FC<Props> = ({
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
+                        )}
+                        {canDelete && (
                         <button
                           onClick={() => onDeleteCategory(parent.id)}
                           className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -399,6 +406,7 @@ export const CategoriesView: React.FC<Props> = ({
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -413,7 +421,7 @@ export const CategoriesView: React.FC<Props> = ({
                         <span>Subcategorias Filhas ({children.length})</span>
                       </span>
 
-                      {canManage && (
+                      {canCreate && (
                         <button
                           onClick={() => handleOpenModal(undefined, parent.id)}
                           className="text-[11px] font-bold text-amber-400 hover:underline flex items-center space-x-1"
@@ -427,7 +435,7 @@ export const CategoriesView: React.FC<Props> = ({
                     {children.length === 0 ? (
                       <div className="py-4 text-center text-slate-500 text-xs italic bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
                         Nenhuma subcategoria cadastrada para {parent.name}.
-                        {canManage && (
+                        {canCreate && (
                           <button
                             onClick={() => handleOpenModal(undefined, parent.id)}
                             className="ml-2 font-bold text-amber-400 hover:underline not-italic"
@@ -467,8 +475,9 @@ export const CategoriesView: React.FC<Props> = ({
                               </div>
                             </div>
 
-                            {canManage && (
+                            {(canEdit || canDelete) && (
                               <div className="flex items-center space-x-0.5 shrink-0">
+                                {canEdit && (
                                 <button
                                   onClick={() => handleOpenModal(child)}
                                   className="p-1 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
@@ -476,6 +485,8 @@ export const CategoriesView: React.FC<Props> = ({
                                 >
                                   <Edit2 className="w-3.5 h-3.5" />
                                 </button>
+                                )}
+                                {canDelete && (
                                 <button
                                   onClick={() => onDeleteCategory(child.id)}
                                   className="p-1 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800 transition"
@@ -483,6 +494,7 @@ export const CategoriesView: React.FC<Props> = ({
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>
+                                )}
                               </div>
                             )}
                           </div>
