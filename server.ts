@@ -3,8 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 
-// Cloud Run / hosting platforms inject $PORT (e.g. 8080) and probe that port
-// to consider the app "started". Bind to it when present, else default 3000.
+// Hosting platforms inject $PORT and probe that port to consider the app
+// "started". Bind to it when present, else default 3000.
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
 const DB_FILE = 'app_db.json';
