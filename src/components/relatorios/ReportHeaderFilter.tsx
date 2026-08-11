@@ -66,7 +66,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `FinançaMaster - ${title}`,
+          title: `Khrima - ${title}`,
           text: reportTextSummary,
         });
       } catch (err) {

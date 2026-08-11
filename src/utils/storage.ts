@@ -123,9 +123,9 @@ const SAMPLE_IDS = new Set([
 ]);
 
 const SAMPLE_EMAILS = new Set([
-  'carlos@financamaster.com',
-  'ana@financamaster.com',
-  'lucas@financamaster.com'
+  'carlos@khrima.com',
+  'ana@khrima.com',
+  'lucas@khrima.com'
 ]);
 
 // Clean up cached sample data unconditionally in all browsers (retaining categories, subcategories, payment methods, profiles and admin user)

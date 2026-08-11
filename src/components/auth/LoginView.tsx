@@ -277,19 +277,19 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
   const selectedProfile = profiles.find((p) => p.id === activeSelectedUser?.profileId);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden selection:bg-emerald-500 selection:text-white">
       {/* Background glow effects */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-teal-600/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10 space-y-6">
         {/* App Logo & Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 text-white shadow-xl shadow-purple-500/20 mb-2 ring-1 ring-white/20">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-cyan-600 text-white shadow-xl shadow-emerald-500/20 mb-2 ring-1 ring-white/20">
             <ShieldCheck className="w-9 h-9 text-white" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Finança<span className="text-blue-400">Master</span>
+            Khrima
           </h1>
           <p className="text-xs text-slate-400 font-medium">
             Acesse sua plataforma de gestão financeira com segurança
@@ -308,7 +308,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
               }}
               className={`py-2 rounded-xl transition flex items-center justify-center space-x-1.5 ${
                 loginMode === 'password'
-                  ? 'bg-purple-600 text-white shadow-md'
+                  ? 'bg-emerald-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -324,7 +324,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
               }}
               className={`py-2 rounded-xl transition flex items-center justify-center space-x-1.5 ${
                 loginMode === 'pin_select'
-                  ? 'bg-purple-600 text-white shadow-md'
+                  ? 'bg-emerald-600 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -369,7 +369,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                     placeholder="fsborgess@gmail.com"
                     value={emailOrUser}
                     onChange={(e) => setEmailOrUser(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
                   />
                 </div>
               </div>
@@ -388,7 +388,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                     placeholder="Digite sua senha ou PIN (ex: 1234)"
                     value={passwordOrPin}
                     onChange={(e) => setPasswordOrPin(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition font-mono"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition font-mono"
                   />
                   <button
                     type="button"
@@ -406,7 +406,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-slate-950 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4"
+                    className="rounded bg-slate-950 border-slate-700 text-emerald-600 focus:ring-emerald-500 w-4 h-4"
                   />
                   <span>Lembrar meu acesso</span>
                 </label>
@@ -415,7 +415,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
               <button
                 type="submit"
                 disabled={isLoading || lockRemaining > 0}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-purple-600/30 transition flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.98]"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 transition flex items-center justify-center space-x-2 disabled:opacity-50 active:scale-[0.98]"
               >
                 {isLoading ? (
                   <span>Validando Credenciais...</span>
@@ -502,12 +502,12 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                         }}
                         className={`flex items-center justify-between p-3 rounded-2xl border text-left transition ${
                           isSelected
-                            ? 'bg-purple-600/20 border-purple-500 text-white ring-1 ring-purple-500/50'
+                            ? 'bg-emerald-600/20 border-emerald-500 text-white ring-1 ring-emerald-500/50'
                             : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                         }`}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-9 h-9 rounded-full bg-purple-600/30 border border-purple-500/40 flex items-center justify-center font-extrabold text-purple-300 text-sm">
+                          <div className="w-9 h-9 rounded-full bg-emerald-600/30 border border-emerald-500/40 flex items-center justify-center font-extrabold text-emerald-300 text-sm">
                             {usr.name.charAt(0)}
                           </div>
                           <div>
@@ -515,7 +515,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                             <div className="text-[10px] text-slate-400">{prof?.name || 'Usuário'} &bull; {usr.email}</div>
                           </div>
                         </div>
-                        {isSelected && <CheckCircle2 className="w-4 h-4 text-purple-400" />}
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
                       </button>
                     );
                   })}
@@ -526,7 +526,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
               <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-center space-y-3">
                 <div className="flex items-center justify-between text-xs text-slate-300 px-1">
                   <span>
-                    PIN de <strong className="text-purple-300">{activeSelectedUser?.name}</strong>:
+                    PIN de <strong className="text-emerald-300">{activeSelectedUser?.name}</strong>:
                   </span>
                   <button
                     type="button"
@@ -534,7 +534,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                     className="flex items-center space-x-1.5 text-[11px] font-bold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-lg transition"
                     title={showPin ? 'Ocultar dígitos do PIN' : 'Visualizar números digitados'}
                   >
-                    {showPin ? <EyeOff className="w-3.5 h-3.5 text-purple-400" /> : <Eye className="w-3.5 h-3.5 text-slate-400" />}
+                    {showPin ? <EyeOff className="w-3.5 h-3.5 text-emerald-400" /> : <Eye className="w-3.5 h-3.5 text-slate-400" />}
                     <span>{showPin ? 'Ocultar' : 'Ver PIN'}</span>
                   </button>
                 </div>
@@ -551,7 +551,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                           errorMessage && pinInput.length === 4
                             ? 'border-rose-500 bg-rose-500/20 text-rose-300'
                             : isFilled
-                            ? 'border-purple-500 bg-purple-600/30 text-purple-100 shadow-lg shadow-purple-500/20 scale-105'
+                            ? 'border-emerald-500 bg-emerald-600/30 text-emerald-100 shadow-lg shadow-emerald-500/20 scale-105'
                             : 'border-slate-800 bg-slate-900/90 text-slate-600'
                         }`}
                       >
@@ -568,7 +568,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                       key={digit}
                       type="button"
                       onClick={() => handlePinDigitClick(digit)}
-                      className="h-11 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-purple-600 border border-slate-800 text-white font-extrabold text-base transition active:scale-95 flex items-center justify-center"
+                      className="h-11 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-emerald-600 border border-slate-800 text-white font-extrabold text-base transition active:scale-95 flex items-center justify-center"
                     >
                       {digit}
                     </button>
@@ -587,7 +587,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                   <button
                     type="button"
                     onClick={() => handlePinDigitClick('0')}
-                    className="h-11 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-purple-600 border border-slate-800 text-white font-extrabold text-base transition active:scale-95 flex items-center justify-center"
+                    className="h-11 rounded-xl bg-slate-900 hover:bg-slate-800 active:bg-emerald-600 border border-slate-800 text-white font-extrabold text-base transition active:scale-95 flex items-center justify-center"
                   >
                     0
                   </button>
@@ -612,7 +612,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
           <div className="border-t border-slate-800/80 pt-4 space-y-2">
             <div className="text-[10px] uppercase font-extrabold text-slate-400 tracking-wider flex items-center justify-between">
               <span>Usuários Cadastrados no Sistema:</span>
-              <span className="text-purple-400">Selecionar</span>
+              <span className="text-emerald-400">Selecionar</span>
             </div>
             <div className="grid grid-cols-1 gap-1.5">
               {users.map((u) => (
@@ -623,7 +623,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                   className="w-full flex items-center justify-between p-2 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800/60 text-left text-xs transition group"
                 >
                   <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-purple-300">
+                    <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-emerald-300">
                       {u.name.charAt(0)}
                     </div>
                     <div>
@@ -631,7 +631,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
                       <span className="text-[10px] text-slate-400 ml-1.5">Toque para selecionar e digitar o PIN</span>
                     </div>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-purple-400 transition" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400 transition" />
                 </button>
               ))}
             </div>
@@ -641,7 +641,7 @@ export const LoginView: React.FC<Props> = ({ users, profiles, onLoginSuccess }) 
         {/* Security Footer Note */}
         <div className="text-center text-[11px] text-slate-400 flex items-center justify-center space-x-1.5">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Finança Master &bull; Ambiente Seguro e Criptografado</span>
+          <span>Khrima &bull; Ambiente Seguro e Criptografado</span>
         </div>
       </div>
     </div>

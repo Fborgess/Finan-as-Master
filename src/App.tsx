@@ -297,7 +297,7 @@ export default function App() {
           <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center mb-4 text-amber-400">
             <Lock className="w-8 h-8" />
           </div>
-          <h3 className="text-xl font-black text-white">Finança Master</h3>
+          <h3 className="text-xl font-black text-white">Khrima</h3>
           <p className="text-xs text-slate-400 mt-1">Sessão protegida por segurança e biometria</p>
         </div>
       )}

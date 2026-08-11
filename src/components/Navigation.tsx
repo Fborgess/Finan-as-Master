@@ -187,11 +187,11 @@ export const Navigation: React.FC<Props> = ({
 
             <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('dashboard')}>
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 font-black text-lg sm:text-xl">
-                F
+                K
               </div>
               <div>
                 <span className="font-extrabold text-sm sm:text-base tracking-tight text-white block leading-tight">
-                  Finança<span className="text-blue-400">Master</span>
+                  Khrima
                 </span>
                 <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium block flex items-center space-x-1">
                   {typeof window !== 'undefined' && (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) ? (

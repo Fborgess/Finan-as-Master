@@ -184,7 +184,7 @@ ${displayTransactions.slice(0, 10).map((t) => {
 }).join('\n')}
 ${displayTransactions.length > 10 ? `\n... e mais ${displayTransactions.length - 10} item(ns).` : ''}
 
-Gerado via FinançaMaster Web App`;
+Gerado via Khrima Web App`;
 
   // CSV Generation
   const csvData = useMemo(() => {
@@ -225,7 +225,7 @@ Gerado via FinançaMaster Web App`;
       <div className="hidden print:block mb-6 pb-4 border-b border-slate-300 text-slate-900">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">FinançaMaster - Relatório Financeiro</h1>
+            <h1 className="text-2xl font-bold">Khrima - Relatório Financeiro</h1>
             <h2 className="text-lg font-semibold text-slate-700">Contas a Pagar e Receber</h2>
             <p className="text-xs text-slate-500 mt-1">
               Período de referência: {startDate ? formatDate(startDate) : 'Início'} até {endDate ? formatDate(endDate) : 'Fim'}
@@ -500,7 +500,7 @@ Gerado via FinançaMaster Web App`;
 
       {/* Print Footer Notice */}
       <div className="hidden print:block text-center text-xs text-slate-500 pt-6 border-t border-slate-300">
-        <p>FinançaMaster - Documento impresso para conferência e auditoria de contas.</p>
+        <p>Khrima - Documento impresso para conferência e auditoria de contas.</p>
       </div>
     </div>
   );

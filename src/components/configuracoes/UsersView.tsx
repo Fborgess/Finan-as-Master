@@ -257,7 +257,7 @@ export const UsersView: React.FC<Props> = ({
                 <input
                   type="email"
                   required
-                  placeholder="usuario@financamaster.com"
+                  placeholder="usuario@khrima.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-purple-500"

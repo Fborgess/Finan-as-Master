@@ -82,7 +82,7 @@ export const PWAInstallPrompt: React.FC = () => {
           </div>
           <div>
             <div className="font-extrabold text-sm flex items-center space-x-2">
-              <span>Instalar Finança Master</span>
+              <span>Instalar Khrima</span>
               <span className="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-purple-500/30">
                 App Standalone
               </span>
@@ -238,7 +238,7 @@ export const PWAInstallPrompt: React.FC = () => {
                     </span>
                     <div>
                       <p className="font-bold text-white">Toque em (⋮) &gt; "Instalar e criar atalho"</p>
-                      <p className="text-slate-400 text-[11px]">Isso criará o primeiro ícone do Finança Master na sua tela inicial.</p>
+                      <p className="text-slate-400 text-[11px]">Isso criará o primeiro ícone do Khrima na sua tela inicial.</p>
                     </div>
                   </li>
 
@@ -258,7 +258,7 @@ export const PWAInstallPrompt: React.FC = () => {
                     </span>
                     <div>
                       <p className="font-bold text-emerald-400">Confirme "Instalar aplicativo"</p>
-                      <p className="text-slate-400 text-[11px]">Pronto! O Android compila o WebAPK nativo e o Finança Master passa a rodar em tela cheia sem nenhuma barra do navegador!</p>
+                      <p className="text-slate-400 text-[11px]">Pronto! O Android compila o WebAPK nativo e o Khrima passa a rodar em tela cheia sem nenhuma barra do navegador!</p>
                     </div>
                   </li>
                 </ol>

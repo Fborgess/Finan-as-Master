@@ -1,8 +1,8 @@
 {
-  "id": "financa-master-app",
-  "short_name": "Finança Master",
-  "name": "Finança Master - Gestão Financeira",
-  "description": "Aplicativo de Gestão Financeira Pessoal Finança Master",
+  "id": "khrima-app",
+  "short_name": "Khrima",
+  "name": "Khrima - Gestão Financeira",
+  "description": "Aplicativo de Gestão Financeira Pessoal Khrima",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
