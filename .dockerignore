@@ -1,7 +1,0 @@
-node_modules
-dist
-data
-.git
-*un-resolved-conflicts.txt
-*.log
-npm-debug.log*

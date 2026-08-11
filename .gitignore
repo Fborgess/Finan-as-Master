@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Dados de sincronização em runtime (não versionar)
+data/
