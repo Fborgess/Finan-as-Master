@@ -125,7 +125,20 @@ export const TransactionModal: React.FC<Props> = ({
     }
   };
 
+  // Rastreia a última inicialização para evitar resetar o formulário quando
+  // categorias/contas mudam de referência (ex: auto-sync a cada 10s)
+  const initKeyRef = React.useRef<string | null>(null);
+
   useEffect(() => {
+    if (!isOpen) {
+      initKeyRef.current = null;
+      return;
+    }
+
+    const initKey = editingTransaction ? editingTransaction.id : 'new';
+    if (initKeyRef.current === initKey) return;
+    initKeyRef.current = initKey;
+
     if (editingTransaction) {
       setType(editingTransaction.type);
       setDescription(editingTransaction.description);
@@ -186,7 +199,7 @@ export const TransactionModal: React.FC<Props> = ({
       setRecurrenceEndType('indefinite');
       setRecurrenceCount(12);
     }
-  }, [editingTransaction, isOpen, categories, accounts, paymentMethods]);
+  }, [editingTransaction, isOpen]);
 
   if (!isOpen) return null;
 
