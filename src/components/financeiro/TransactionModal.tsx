@@ -180,11 +180,11 @@ export const TransactionModal: React.FC<Props> = ({
       setDate(today);
       setDueDate(today);
       setStatus('paid');
-      setCategoryId(categories[0]?.id || '');
-      setAccountId(accounts[0]?.id || '');
+      setCategoryId('');
+      setAccountId('');
       setDestinationAccountId('');
       setCreditCardId('');
-      setPaymentMethodId(paymentMethods[0]?.id || '');
+      setPaymentMethodId('');
       setBeneficiaryId('');
       setNotes('');
       setScope('pessoal');
@@ -662,7 +662,7 @@ export const TransactionModal: React.FC<Props> = ({
                   value={categoryId}
                   onChange={(val) => setCategoryId(val)}
                   searchPlaceholder="Pesquisar categoria..."
-                  placeholder="Selecione Categoria"
+                  placeholder="Selecionar uma Opção"
                 />
               </div>
 
@@ -676,7 +676,7 @@ export const TransactionModal: React.FC<Props> = ({
                   value={beneficiaryId}
                   onChange={(val) => handleBeneficiaryChange(val)}
                   searchPlaceholder="Pesquisar beneficiário..."
-                  placeholder="Nenhum selecionado"
+                  placeholder="Selecionar uma Opção"
                 />
               </div>
             </div>
@@ -694,6 +694,7 @@ export const TransactionModal: React.FC<Props> = ({
                     value={paymentMethodId}
                     onChange={(val) => setPaymentMethodId(val)}
                     searchPlaceholder="Pesquisar forma..."
+                    placeholder="Selecionar uma Opção"
                   />
                 </div>
 
@@ -714,6 +715,7 @@ export const TransactionModal: React.FC<Props> = ({
                       }
                     }}
                     searchPlaceholder="Pesquisar conta ou cartão..."
+                    placeholder="Selecionar uma Opção"
                   />
                 </div>
               </div>
@@ -755,6 +757,7 @@ export const TransactionModal: React.FC<Props> = ({
                     value={accountId}
                     onChange={(val) => setAccountId(val)}
                     searchPlaceholder="Pesquisar conta origem..."
+                    placeholder="Selecionar uma Opção"
                   />
                 </div>
 
@@ -767,6 +770,7 @@ export const TransactionModal: React.FC<Props> = ({
                     value={destinationAccountId}
                     onChange={(val) => setDestinationAccountId(val)}
                     searchPlaceholder="Pesquisar conta destino..."
+                    placeholder="Selecionar uma Opção"
                   />
                 </div>
               </div>
