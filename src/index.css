@@ -550,9 +550,13 @@ html.mint .hover\:bg-slate-800:hover {
 
 /* Mint gradients */
 html.mint .from-slate-950 { --tw-gradient-from: #ffffff !important; }
-html.mint .from-slate-900 { --tw-gradient-from: #ffffff !important; }
-html.mint .to-slate-900 { --tw-gradient-to: #f0fdf4 !important; }
-html.mint .to-slate-800 { --tw-gradient-to: #f0fdf4 !important; }
+html.mint .from-slate-900 { --tw-gradient-from: #ecfdf5 !important; }
+html.mint .via-slate-800 { --tw-gradient-via: #f0fdf4 !important; }
+html.mint .to-slate-900 { --tw-gradient-to: #d1fae5 !important; }
+html.mint .to-slate-800 { --tw-gradient-to: #d1fae5 !important; }
+html.mint .to-blue-950 { --tw-gradient-to: #a7f3d0 !important; }
+html.mint .from-blue-600 { --tw-gradient-from: #059669 !important; }
+html.mint .to-indigo-500 { --tw-gradient-to: #34d399 !important; }
 
 /* Mint form inputs */
 html.mint input,
@@ -566,6 +570,15 @@ html.mint textarea {
 html.mint input::placeholder,
 html.mint textarea::placeholder {
   color: #6b7280 !important;
+}
+
+/* Mint shadow overrides */
+html.mint .shadow-xl {
+  box-shadow: 0 4px 20px rgba(5,150,105,0.08) !important;
+}
+
+html.mint .shadow-md {
+  box-shadow: 0 2px 10px rgba(5,150,105,0.06) !important;
 }
 
 
