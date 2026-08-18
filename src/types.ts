@@ -195,7 +195,7 @@ export interface BiometricSettings {
   lastAuthenticatedAt?: string;
 }
 
-export type ThemeMode = 'dark' | 'light' | 'midnight';
+export type ThemeMode = 'dark' | 'light' | 'mint';
 export type TextCasingMode = 'uppercase' | 'titlecase' | 'none';
 
 export interface SystemPreferences {

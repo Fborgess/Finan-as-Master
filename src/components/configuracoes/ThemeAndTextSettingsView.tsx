@@ -23,6 +23,7 @@ import {
   BookmarkCheck,
   Trash2,
   Clock,
+  Leaf,
 } from 'lucide-react';
 import { AccessProfile } from '../../types';
 import { can } from '../../utils/permissions';
@@ -168,22 +169,22 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               </div>
             </button>
 
-            {/* Tema Midnight */}
+            {/* Tema Verde Claro / Mint */}
             <button
               type="button"
-              onClick={() => handleSelectTheme('midnight')}
+              onClick={() => handleSelectTheme('mint')}
               disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
-                preferences.theme === 'midnight'
-                  ? 'bg-[#0a0e1a] border-emerald-500 ring-2 ring-emerald-500/40 text-white'
+                preferences.theme === 'mint'
+                  ? 'bg-[#f0fdf4] border-emerald-500 ring-2 ring-emerald-500/40 text-[#1e293b]'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
               } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-xl bg-[#0f1629] border border-emerald-700/50 flex items-center justify-center text-emerald-400">
-                  <Moon className="w-5 h-5" />
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                  <Leaf className="w-5 h-5" />
                 </div>
-                {preferences.theme === 'midnight' && (
+                {preferences.theme === 'mint' && (
                   <span className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-white">
                     <Check className="w-3.5 h-3.5" />
                   </span>
@@ -191,15 +192,15 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               </div>
 
               <div>
-                <div className="font-extrabold text-sm text-white">Midnight</div>
-                <div className="text-[11px] text-slate-400 mt-1">
-                  Navy profissional com acentos verde.
+                <div className="font-extrabold text-sm text-[#1e293b]">Verde Claro</div>
+                <div className="text-[11px] text-emerald-700 mt-1">
+                  Fundo claro com acentos em verde menta.
                 </div>
               </div>
 
-              <div className="w-full bg-[#0f1629] rounded-xl p-2.5 border border-emerald-900/40 flex items-center justify-between text-[10px]">
-                <span className="text-slate-300 font-bold">Preview</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-300 font-bold">R$ 1.500</span>
+              <div className="w-full bg-emerald-50 rounded-xl p-2.5 border border-emerald-200 flex items-center justify-between text-[10px]">
+                <span className="text-emerald-800 font-bold">Preview</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 font-bold">R$ 1.500</span>
               </div>
             </button>
 
@@ -210,7 +211,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
                 preferences.theme === 'light'
-                  ? 'bg-white text-slate-900 border-purple-600 ring-2 ring-purple-500/40'
+                  ? 'bg-white text-slate-900 border-emerald-600 ring-2 ring-emerald-500/40'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
               } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
@@ -219,7 +220,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
                   <Sun className="w-5 h-5" />
                 </div>
                 {preferences.theme === 'light' && (
-                  <span className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white">
+                  <span className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-white">
                     <Check className="w-3.5 h-3.5" />
                   </span>
                 )}
@@ -236,7 +237,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
 
               <div className="w-full bg-slate-100 rounded-xl p-2.5 border border-slate-200 flex items-center justify-between text-[10px]">
                 <span className="text-slate-800 font-bold">Preview</span>
-                <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">R$ 1.500</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">R$ 1.500</span>
               </div>
             </button>
           </div>

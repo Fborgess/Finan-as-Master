@@ -33,11 +33,11 @@ export function saveSystemPreferences(prefs: SystemPreferences): void {
 export function applyThemeToDocument(theme: ThemeMode): void {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
-  root.classList.remove('light-theme', 'dark', 'midnight');
+  root.classList.remove('light-theme', 'dark', 'mint');
   if (theme === 'light') {
     root.classList.add('light-theme');
-  } else if (theme === 'midnight') {
-    root.classList.add('midnight');
+  } else if (theme === 'mint') {
+    root.classList.add('mint');
   } else {
     root.classList.add('dark');
   }

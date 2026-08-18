@@ -442,81 +442,130 @@ html.light-theme .recharts-text {
 }
 
 /* ==========================================================================
-   MIDNIGHT THEME - Deep Navy/Indigo with Blue Accents
+   MINT THEME - Light Green with Emerald Accents
    ========================================================================== */
 
-html.midnight,
-body.midnight {
-  background-color: #0a0e1a !important;
-  color: #e2e8f0 !important;
+html.mint,
+body.mint {
+  background-color: #f0fdf4 !important;
+  color: #1e293b !important;
 }
 
-html.midnight .bg-slate-950 {
-  background-color: #0a0e1a !important;
+html.mint .bg-slate-950 {
+  background-color: #ffffff !important;
 }
 
-html.midnight .bg-slate-900 {
-  background-color: #0f1629 !important;
-  border-color: #1e293b !important;
+html.mint .bg-slate-900 {
+  background-color: #ffffff !important;
+  border-color: #bbf7d0 !important;
+  color: #1e293b !important;
 }
 
-html.midnight .bg-slate-800 {
-  background-color: #151d33 !important;
-  border-color: #1e293b !important;
+html.mint .bg-slate-800 {
+  background-color: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
 }
 
-html.midnight .bg-slate-800\/90,
-html.midnight .bg-slate-800\/80,
-html.midnight .bg-slate-800\/60,
-html.midnight .bg-slate-800\/50,
-html.midnight .bg-slate-800\/40 {
-  background-color: #151d33 !important;
+html.mint .bg-slate-800\/90,
+html.mint .bg-slate-800\/80,
+html.mint .bg-slate-800\/60,
+html.mint .bg-slate-800\/50,
+html.mint .bg-slate-800\/40 {
+  background-color: #f0fdf4 !important;
 }
 
-html.midnight .bg-slate-900\/90,
-html.midnight .bg-slate-900\/80,
-html.midnight .bg-slate-900\/70,
-html.midnight .bg-slate-900\/60,
-html.midnight .bg-slate-900\/50 {
-  background-color: #0f1629 !important;
+html.mint .bg-slate-900\/90,
+html.mint .bg-slate-900\/80,
+html.mint .bg-slate-900\/70,
+html.mint .bg-slate-900\/60,
+html.mint .bg-slate-900\/50 {
+  background-color: #ffffff !important;
 }
 
-html.midnight .bg-slate-950\/90,
-html.midnight .bg-slate-950\/80,
-html.midnight .bg-slate-950\/60,
-html.midnight .bg-slate-950\/50 {
-  background-color: #0a0e1a !important;
+html.mint .bg-slate-950\/90,
+html.mint .bg-slate-950\/80,
+html.mint .bg-slate-950\/60,
+html.mint .bg-slate-950\/50 {
+  background-color: #ffffff !important;
 }
 
-html.midnight .border-slate-800,
-html.midnight .border-slate-700 {
-  border-color: #1e293b !important;
+html.mint .border-slate-800,
+html.mint .border-slate-700 {
+  border-color: #bbf7d0 !important;
 }
 
-html.midnight .text-slate-400 {
-  color: #94a3b8 !important;
+html.mint .text-white {
+  color: #1e293b !important;
 }
 
-html.midnight .text-slate-300 {
-  color: #cbd5e1 !important;
+html.mint .text-slate-400 {
+  color: #047857 !important;
 }
 
-/* Midnight accent: replace purple with green/teal */
-html.midnight .bg-purple-600 { background-color: #059669 !important; }
-html.midnight .bg-purple-500 { background-color: #10b981 !important; }
-html.midnight .text-purple-400 { color: #34d399 !important; }
-html.midnight .text-purple-300 { color: #6ee7b7 !important; }
-html.midnight .border-purple-500 { border-color: #10b981 !important; }
-html.midnight .border-purple-600 { border-color: #059669 !important; }
-html.midnight .ring-purple-500 { --tw-ring-color: #10b981 !important; }
-html.midnight .bg-purple-600\/20 { background-color: rgba(5,150,105,0.2) !important; }
-html.midnight .bg-purple-500\/10 { background-color: rgba(16,185,129,0.1) !important; }
-html.midnight .bg-purple-500\/30 { background-color: rgba(16,185,129,0.3) !important; }
+html.mint .text-slate-300 {
+  color: #334155 !important;
+}
 
-/* Midnight gradients */
-html.midnight .from-slate-950 { --tw-gradient-from: #0a0e1a !important; }
-html.midnight .from-slate-900 { --tw-gradient-from: #0f1629 !important; }
-html.midnight .to-slate-900 { --tw-gradient-to: #0f1629 !important; }
-html.midnight .to-slate-800 { --tw-gradient-to: #151d33 !important; }
+html.mint .text-slate-200 {
+  color: #1e293b !important;
+}
+
+/* Mint accent: purple → emerald/green */
+html.mint .bg-purple-600 { background-color: #059669 !important; }
+html.mint .bg-purple-500 { background-color: #10b981 !important; }
+html.mint .text-purple-400 { color: #059669 !important; }
+html.mint .text-purple-300 { color: #10b981 !important; }
+html.mint .border-purple-500 { border-color: #10b981 !important; }
+html.mint .border-purple-600 { border-color: #059669 !important; }
+html.mint .ring-purple-500 { --tw-ring-color: #10b981 !important; }
+html.mint .bg-purple-600\/20 { background-color: rgba(5,150,105,0.15) !important; }
+html.mint .bg-purple-500\/10 { background-color: rgba(16,185,129,0.1) !important; }
+html.mint .bg-purple-500\/30 { background-color: rgba(16,185,129,0.2) !important; }
+
+/* Mint blue accent: blue → green */
+html.mint .bg-blue-600 { background-color: #059669 !important; }
+html.mint .bg-blue-500 { background-color: #10b981 !important; }
+html.mint .text-blue-400 { color: #059669 !important; }
+html.mint .text-blue-300 { color: #10b981 !important; }
+html.mint .border-blue-500 { border-color: #10b981 !important; }
+
+/* Mint sidebar (navigation) - light green background */
+html.mint .bg-slate-950 {
+  background-color: #f0fdf4 !important;
+  color: #1e293b !important;
+}
+
+html.mint .text-slate-100,
+html.mint .text-white {
+  color: #1e293b !important;
+}
+
+html.mint .hover\:text-white:hover {
+  color: #1e293b !important;
+}
+
+html.mint .hover\:bg-slate-800:hover {
+  background-color: #ecfdf5 !important;
+}
+
+/* Mint gradients */
+html.mint .from-slate-950 { --tw-gradient-from: #ffffff !important; }
+html.mint .from-slate-900 { --tw-gradient-from: #ffffff !important; }
+html.mint .to-slate-900 { --tw-gradient-to: #f0fdf4 !important; }
+html.mint .to-slate-800 { --tw-gradient-to: #f0fdf4 !important; }
+
+/* Mint form inputs */
+html.mint input,
+html.mint select,
+html.mint textarea {
+  background-color: #ffffff !important;
+  border-color: #bbf7d0 !important;
+  color: #1e293b !important;
+}
+
+html.mint input::placeholder,
+html.mint textarea::placeholder {
+  color: #6b7280 !important;
+}
 
 

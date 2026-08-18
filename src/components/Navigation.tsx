@@ -103,7 +103,7 @@ export const Navigation: React.FC<Props> = ({
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => getSystemPreferences().theme);
 
   const toggleTheme = () => {
-    const cycle: ThemeMode[] = ['dark', 'midnight', 'light'];
+    const cycle: ThemeMode[] = ['dark', 'mint', 'light'];
     const idx = cycle.indexOf(currentTheme);
     const nextTheme = cycle[(idx + 1) % cycle.length];
     setCurrentTheme(nextTheme);
