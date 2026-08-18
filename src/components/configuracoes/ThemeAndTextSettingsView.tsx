@@ -175,16 +175,16 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
                 preferences.theme === 'midnight'
-                  ? 'bg-[#0a0e1a] border-indigo-500 ring-2 ring-indigo-500/40 text-white'
+                  ? 'bg-[#0a0e1a] border-emerald-500 ring-2 ring-emerald-500/40 text-white'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
               } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-xl bg-[#0f1629] border border-indigo-700/50 flex items-center justify-center text-indigo-400">
+                <div className="w-9 h-9 rounded-xl bg-[#0f1629] border border-emerald-700/50 flex items-center justify-center text-emerald-400">
                   <Moon className="w-5 h-5" />
                 </div>
                 {preferences.theme === 'midnight' && (
-                  <span className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                  <span className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-white">
                     <Check className="w-3.5 h-3.5" />
                   </span>
                 )}
@@ -193,13 +193,13 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               <div>
                 <div className="font-extrabold text-sm text-white">Midnight</div>
                 <div className="text-[11px] text-slate-400 mt-1">
-                  Navy profissional com acentos indigo.
+                  Navy profissional com acentos verde.
                 </div>
               </div>
 
-              <div className="w-full bg-[#0f1629] rounded-xl p-2.5 border border-indigo-900/40 flex items-center justify-between text-[10px]">
+              <div className="w-full bg-[#0f1629] rounded-xl p-2.5 border border-emerald-900/40 flex items-center justify-between text-[10px]">
                 <span className="text-slate-300 font-bold">Preview</span>
-                <span className="px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-300 font-bold">R$ 1.500</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-300 font-bold">R$ 1.500</span>
               </div>
             </button>
 
@@ -271,7 +271,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
                 />
                 <button
                   onClick={handleSavePreset}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition"
+                  className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white text-xs font-bold transition"
                 >
                   Salvar
                 </button>

@@ -321,7 +321,7 @@ Gerado via Khrima Web App`;
               onClick={() => setStatusFilter('pending')}
               className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition ${
                 statusFilter === 'pending'
-                  ? 'bg-amber-500 text-slate-950 shadow-sm'
+                  ? 'bg-orange-500 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -483,7 +483,7 @@ Gerado via Khrima Web App`;
                             <span>Atrasada</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-amber-500/20 text-amber-300 print:text-amber-800">
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-orange-500/20 text-orange-300 print:text-orange-800">
                             <Clock className="w-3 h-3" />
                             <span>Pendente</span>
                           </span>

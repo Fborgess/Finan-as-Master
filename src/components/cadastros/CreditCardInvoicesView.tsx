@@ -500,7 +500,7 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md transition"
+                  className="flex-1 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-black text-xs shadow-md transition"
                 >
                   Confirmar Pagamento
                 </button>

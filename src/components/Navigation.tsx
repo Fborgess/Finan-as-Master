@@ -103,7 +103,9 @@ export const Navigation: React.FC<Props> = ({
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>(() => getSystemPreferences().theme);
 
   const toggleTheme = () => {
-    const nextTheme: ThemeMode = currentTheme === 'light' ? 'dark' : 'light';
+    const cycle: ThemeMode[] = ['dark', 'midnight', 'light'];
+    const idx = cycle.indexOf(currentTheme);
+    const nextTheme = cycle[(idx + 1) % cycle.length];
     setCurrentTheme(nextTheme);
     const prefs = getSystemPreferences();
     saveSystemPreferences({ ...prefs, theme: nextTheme });
@@ -329,12 +331,17 @@ export const Navigation: React.FC<Props> = ({
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
-              title={currentTheme === 'light' ? "Mudar para Tema Escuro (Dark Mode)" : "Mudar para Tema Claro (Light Mode)"}
+              title={currentTheme === 'dark' ? 'Tema Midnight' : currentTheme === 'midnight' ? 'Tema Claro' : 'Tema Escuro'}
             >
               {currentTheme === 'light' ? (
                 <>
                   <Sun className="w-4 h-4 text-amber-500" />
                   <span className="hidden sm:inline text-amber-600 font-extrabold">Claro</span>
+                </>
+              ) : currentTheme === 'midnight' ? (
+                <>
+                  <Moon className="w-4 h-4 text-emerald-400" />
+                  <span className="hidden sm:inline text-emerald-300 font-extrabold">Midnight</span>
                 </>
               ) : (
                 <>

@@ -501,17 +501,17 @@ html.midnight .text-slate-300 {
   color: #cbd5e1 !important;
 }
 
-/* Midnight accent: replace purple with indigo/blue */
-html.midnight .bg-purple-600 { background-color: #4f46e5 !important; }
-html.midnight .bg-purple-500 { background-color: #6366f1 !important; }
-html.midnight .text-purple-400 { color: #818cf8 !important; }
-html.midnight .text-purple-300 { color: #a5b4fc !important; }
-html.midnight .border-purple-500 { border-color: #6366f1 !important; }
-html.midnight .border-purple-600 { border-color: #4f46e5 !important; }
-html.midnight .ring-purple-500 { --tw-ring-color: #6366f1 !important; }
-html.midnight .bg-purple-600\/20 { background-color: rgba(79,70,229,0.2) !important; }
-html.midnight .bg-purple-500\/10 { background-color: rgba(99,102,241,0.1) !important; }
-html.midnight .bg-purple-500\/30 { background-color: rgba(99,102,241,0.3) !important; }
+/* Midnight accent: replace purple with green/teal */
+html.midnight .bg-purple-600 { background-color: #059669 !important; }
+html.midnight .bg-purple-500 { background-color: #10b981 !important; }
+html.midnight .text-purple-400 { color: #34d399 !important; }
+html.midnight .text-purple-300 { color: #6ee7b7 !important; }
+html.midnight .border-purple-500 { border-color: #10b981 !important; }
+html.midnight .border-purple-600 { border-color: #059669 !important; }
+html.midnight .ring-purple-500 { --tw-ring-color: #10b981 !important; }
+html.midnight .bg-purple-600\/20 { background-color: rgba(5,150,105,0.2) !important; }
+html.midnight .bg-purple-500\/10 { background-color: rgba(16,185,129,0.1) !important; }
+html.midnight .bg-purple-500\/30 { background-color: rgba(16,185,129,0.3) !important; }
 
 /* Midnight gradients */
 html.midnight .from-slate-950 { --tw-gradient-from: #0a0e1a !important; }

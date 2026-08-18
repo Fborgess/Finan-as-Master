@@ -381,7 +381,7 @@ export const TransactionsView: React.FC<Props> = ({
                           {canEdit && (
                           <button
                             onClick={() => onEditTransaction(t)}
-                            className="p-1.5 text-slate-400 hover:text-emerald-400 rounded-lg hover:bg-slate-800 transition"
+                            className="p-1.5 text-slate-400 hover:text-blue-400 rounded-lg hover:bg-slate-800 transition"
                             title="Editar"
                           >
                             <Edit2 className="w-3.5 h-3.5" />

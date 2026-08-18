@@ -211,7 +211,7 @@ export const AccessProfilesView: React.FC<Props> = ({
                     <div className="flex items-center space-x-1">
                       <button
                         onClick={() => handleOpenModal(p)}
-                        className="p-1.5 text-slate-400 hover:text-purple-400 rounded-lg hover:bg-slate-800 transition"
+                        className="p-1.5 text-slate-400 hover:text-blue-400 rounded-lg hover:bg-slate-800 transition"
                         title="Editar"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
@@ -449,7 +449,7 @@ export const AccessProfilesView: React.FC<Props> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs shadow-md transition"
+                  className="flex-1 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs shadow-md transition"
                 >
                   Salvar Perfil
                 </button>

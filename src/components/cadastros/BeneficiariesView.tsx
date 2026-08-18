@@ -194,7 +194,7 @@ export const BeneficiariesView: React.FC<Props> = ({
                       {canEdit && (
                       <button
                         onClick={() => handleOpenModal(b)}
-                        className="p-1.5 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-slate-800 transition"
+                        className="p-1.5 text-slate-400 hover:text-blue-400 rounded-lg hover:bg-slate-800 transition"
                         title="Editar"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
@@ -368,7 +368,7 @@ export const BeneficiariesView: React.FC<Props> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md transition"
+                  className="flex-1 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-extrabold text-xs shadow-md transition"
                 >
                   Salvar Beneficiário
                 </button>

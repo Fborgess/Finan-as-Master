@@ -215,7 +215,7 @@ export const CreditCardsView: React.FC<Props> = ({
                         {canDelete && (
                         <button
                           onClick={() => onDeleteCard(card.id)}
-                          className="p-1.5 text-slate-300 hover:text-rose-400 hover:bg-slate-700 rounded-lg transition"
+                          className="p-1.5 text-slate-300 hover:text-red-400 hover:bg-slate-700 rounded-lg transition"
                           title="Excluir Cartão"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -430,7 +430,7 @@ export const CreditCardsView: React.FC<Props> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md transition"
+                  className="flex-1 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-extrabold text-xs shadow-md transition"
                 >
                   Salvar
                 </button>

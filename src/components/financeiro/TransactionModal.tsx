@@ -1276,7 +1276,7 @@ export const TransactionModal: React.FC<Props> = ({
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/30 transition flex items-center justify-center space-x-1.5"
+              className="flex-1 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs shadow-lg shadow-green-600/30 transition flex items-center justify-center space-x-1.5"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>
