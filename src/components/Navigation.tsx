@@ -917,10 +917,10 @@ export const Navigation: React.FC<Props> = ({
               )}
             </nav>
 
-            {/* Mobile Footer Badge */}
-            <div className="mt-6 pt-4 border-t border-slate-800 flex items-center space-x-2 text-[11px] text-slate-400">
-              <Smartphone className="w-4 h-4 text-blue-400 shrink-0" />
-              <span>PWA Mobile Ready (iOS/Android)</span>
+            {/* App Version Badge */}
+            <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[10px] text-slate-500 space-y-0.5">
+              <div className="font-bold tracking-wider">Khrima v1.0.0</div>
+              <div>{new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
             </div>
           </aside>
 
@@ -1035,7 +1035,9 @@ export const Navigation: React.FC<Props> = ({
       </div>
 
       {/* Floating Bottom Navigation Bar for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-800 px-4 py-2 flex items-center justify-around md:hidden text-slate-400 ios-safe-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-800 px-4 pt-2 pb-1 flex flex-col md:hidden text-slate-400 ios-safe-bottom">
+        <div className="text-center text-[9px] text-slate-600 font-bold mb-1">Khrima v1.0.0 — {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
+        <div className="flex items-center justify-around">
         {perm.dashboard && (
         <button
           onClick={() => handleNavClick('dashboard')}
@@ -1089,6 +1091,7 @@ export const Navigation: React.FC<Props> = ({
           <Menu className="w-5 h-5" />
           <span>Mais</span>
         </button>
+        </div>
       </div>
     </div>
   );

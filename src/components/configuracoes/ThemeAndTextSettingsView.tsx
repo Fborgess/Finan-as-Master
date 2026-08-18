@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SystemPreferences, ThemeMode, TextCasingMode } from '../../types';
+import { SystemPreferences, ThemeMode, TextCasingMode, ThemePreset } from '../../types';
 import {
   getSystemPreferences,
   saveSystemPreferences,
   formatTextWithCasing,
+  getThemePresets,
+  saveThemePreset,
+  deleteThemePreset,
 } from '../../utils/preferences';
 import {
   Palette,
@@ -15,7 +18,11 @@ import {
   Info,
   Check,
   Zap,
-  Sliders
+  Sliders,
+  Bookmark,
+  BookmarkCheck,
+  Trash2,
+  Clock,
 } from 'lucide-react';
 import { AccessProfile } from '../../types';
 import { can } from '../../utils/permissions';
@@ -28,6 +35,9 @@ interface Props {
 export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange, activeProfile }) => {
   const [preferences, setPreferences] = useState<SystemPreferences>(() => getSystemPreferences());
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [presets, setPresets] = useState<ThemePreset[]>(() => getThemePresets());
+  const [presetName, setPresetName] = useState('');
+  const [showPresetInput, setShowPresetInput] = useState(false);
 
   const canEdit = can(activeProfile, 'aparencia', 'edit') || can(activeProfile, 'aparencia', 'create');
 
@@ -54,6 +64,29 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
 
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2000);
+  };
+
+  const handleSavePreset = () => {
+    if (!presetName.trim()) return;
+    const updated = saveThemePreset(presetName.trim(), preferences);
+    setPresets(updated);
+    setPresetName('');
+    setShowPresetInput(false);
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2000);
+  };
+
+  const handleRestorePreset = (preset: ThemePreset) => {
+    setPreferences(preset.preferences);
+    saveSystemPreferences(preset.preferences);
+    if (onPreferencesChange) onPreferencesChange(preset.preferences);
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2000);
+  };
+
+  const handleDeletePreset = (name: string) => {
+    const updated = deleteThemePreset(name);
+    setPresets(updated);
   };
 
   return (
@@ -99,7 +132,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
             Escolha o estilo de exibição de cores da plataforma:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Tema Escuro */}
             <button
               type="button"
@@ -123,16 +156,50 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               </div>
 
               <div>
-                <div className="font-extrabold text-sm text-white">Escuro (Dark Mode)</div>
+                <div className="font-extrabold text-sm text-white">Escuro</div>
                 <div className="text-[11px] text-slate-400 mt-1">
-                  Tema padrão slate/purple de alto contraste e descanso visual.
+                  Slate/purple de alto contraste.
                 </div>
               </div>
 
-              {/* Preview Box */}
               <div className="w-full bg-slate-900 rounded-xl p-2.5 border border-slate-800 flex items-center justify-between text-[10px]">
-                <span className="text-slate-300 font-bold">Preview Dashboard</span>
-                <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 font-bold">R$ 1.500,00</span>
+                <span className="text-slate-300 font-bold">Preview</span>
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 font-bold">R$ 1.500</span>
+              </div>
+            </button>
+
+            {/* Tema Midnight */}
+            <button
+              type="button"
+              onClick={() => handleSelectTheme('midnight')}
+              disabled={!canEdit}
+              className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
+                preferences.theme === 'midnight'
+                  ? 'bg-[#0a0e1a] border-indigo-500 ring-2 ring-indigo-500/40 text-white'
+                  : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+              } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-xl bg-[#0f1629] border border-indigo-700/50 flex items-center justify-center text-indigo-400">
+                  <Moon className="w-5 h-5" />
+                </div>
+                {preferences.theme === 'midnight' && (
+                  <span className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                    <Check className="w-3.5 h-3.5" />
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <div className="font-extrabold text-sm text-white">Midnight</div>
+                <div className="text-[11px] text-slate-400 mt-1">
+                  Navy profissional com acentos indigo.
+                </div>
+              </div>
+
+              <div className="w-full bg-[#0f1629] rounded-xl p-2.5 border border-indigo-900/40 flex items-center justify-between text-[10px]">
+                <span className="text-slate-300 font-bold">Preview</span>
+                <span className="px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-300 font-bold">R$ 1.500</span>
               </div>
             </button>
 
@@ -160,19 +227,93 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
 
               <div>
                 <div className={`font-extrabold text-sm ${preferences.theme === 'light' ? 'text-slate-900' : 'text-white'}`}>
-                  Claro (Light Mode)
+                  Claro
                 </div>
                 <div className={`text-[11px] ${preferences.theme === 'light' ? 'text-slate-600' : 'text-slate-400'} mt-1`}>
-                  Fundo claro e limpo para ambientes com alta luminosidade.
+                  Fundo claro para ambientes com alta luminosidade.
                 </div>
               </div>
 
-              {/* Preview Box */}
               <div className="w-full bg-slate-100 rounded-xl p-2.5 border border-slate-200 flex items-center justify-between text-[10px]">
-                <span className="text-slate-800 font-bold">Preview Dashboard</span>
-                <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">R$ 1.500,00</span>
+                <span className="text-slate-800 font-bold">Preview</span>
+                <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">R$ 1.500</span>
               </div>
             </button>
+          </div>
+
+          {/* Theme Presets */}
+          <div className="border-t border-slate-800 pt-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <Bookmark className="w-4 h-4 text-amber-400" />
+                <span className="text-xs font-extrabold">Presets Salvos</span>
+              </div>
+              {canEdit && (
+                <button
+                  onClick={() => setShowPresetInput(!showPresetInput)}
+                  className="text-[11px] font-bold text-blue-400 hover:text-blue-300 transition"
+                >
+                  {showPresetInput ? 'Cancelar' : '+ Salvar Atual'}
+                </button>
+              )}
+            </div>
+
+            {showPresetInput && (
+              <div className="flex gap-2 animate-in fade-in zoom-in-95 duration-150">
+                <input
+                  autoFocus
+                  type="text"
+                  placeholder="Nome do preset..."
+                  value={presetName}
+                  onChange={(e) => setPresetName(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSavePreset(); }}
+                  className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={handleSavePreset}
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition"
+                >
+                  Salvar
+                </button>
+              </div>
+            )}
+
+            {presets.length === 0 && !showPresetInput && (
+              <p className="text-[11px] text-slate-500 italic">Nenhum preset salvo. Clique "Salvar Atual" para criar um.</p>
+            )}
+
+            {presets.map((p) => (
+              <div
+                key={p.name}
+                className="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5"
+              >
+                <button
+                  onClick={() => handleRestorePreset(p)}
+                  disabled={!canEdit}
+                  className="flex items-center space-x-2.5 flex-1 text-left"
+                >
+                  <BookmarkCheck className={`w-4 h-4 shrink-0 ${p.preferences.theme === preferences.theme ? 'text-amber-400' : 'text-slate-500'}`} />
+                  <div>
+                    <span className="text-xs font-bold text-slate-200">{p.name}</span>
+                    <div className="flex items-center space-x-2 text-[10px] text-slate-500 mt-0.5">
+                      <span className="capitalize">{p.preferences.theme}</span>
+                      <span>·</span>
+                      <Clock className="w-3 h-3" />
+                      <span>{new Date(p.savedAt).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                  </div>
+                </button>
+                {canEdit && (
+                  <button
+                    onClick={() => handleDeletePreset(p.name)}
+                    className="text-slate-600 hover:text-red-400 transition p-1"
+                    title="Excluir preset"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 

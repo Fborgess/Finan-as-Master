@@ -195,12 +195,18 @@ export interface BiometricSettings {
   lastAuthenticatedAt?: string;
 }
 
-export type ThemeMode = 'dark' | 'light';
+export type ThemeMode = 'dark' | 'light' | 'midnight';
 export type TextCasingMode = 'uppercase' | 'titlecase' | 'none';
 
 export interface SystemPreferences {
   theme: ThemeMode;
   textCasing: TextCasingMode;
+}
+
+export interface ThemePreset {
+  name: string;
+  preferences: SystemPreferences;
+  savedAt: string;
 }
 
 export type MainSection = 'dashboard' | 'cadastros' | 'financeiro' | 'relatorios' | 'configuracoes';

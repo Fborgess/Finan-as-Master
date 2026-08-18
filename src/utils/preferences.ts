@@ -1,7 +1,8 @@
-import { ThemeMode, TextCasingMode, SystemPreferences } from '../types';
+import { ThemeMode, TextCasingMode, SystemPreferences, ThemePreset } from '../types';
 import { safeLocalStorage } from './safeStorage';
 
 const PREFERENCES_KEY = 'fm_system_preferences';
+const PRESETS_KEY = 'fm_theme_presets';
 
 export const DEFAULT_PREFERENCES: SystemPreferences = {
   theme: 'dark',
@@ -32,13 +33,44 @@ export function saveSystemPreferences(prefs: SystemPreferences): void {
 export function applyThemeToDocument(theme: ThemeMode): void {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
+  root.classList.remove('light-theme', 'dark', 'midnight');
   if (theme === 'light') {
     root.classList.add('light-theme');
-    root.classList.remove('dark');
+  } else if (theme === 'midnight') {
+    root.classList.add('midnight');
   } else {
-    root.classList.remove('light-theme');
     root.classList.add('dark');
   }
+}
+
+// Theme Presets
+export function getThemePresets(): ThemePreset[] {
+  try {
+    const saved = safeLocalStorage.getItem(PRESETS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.error('Failed to load theme presets:', e);
+  }
+  return [];
+}
+
+export function saveThemePreset(name: string, prefs: SystemPreferences): ThemePreset[] {
+  const presets = getThemePresets();
+  const existing = presets.findIndex((p) => p.name === name);
+  const preset: ThemePreset = { name, preferences: { ...prefs }, savedAt: new Date().toISOString() };
+  if (existing >= 0) {
+    presets[existing] = preset;
+  } else {
+    presets.push(preset);
+  }
+  safeLocalStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+  return presets;
+}
+
+export function deleteThemePreset(name: string): ThemePreset[] {
+  const presets = getThemePresets().filter((p) => p.name !== name);
+  safeLocalStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+  return presets;
 }
 
 // Prepositions and conjunctions in Portuguese that stay lowercase in title case
