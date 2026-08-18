@@ -178,6 +178,12 @@ html.light-theme .bg-rose-600,
 html.light-theme .bg-rose-700,
 html.light-theme .bg-amber-600,
 html.light-theme .bg-indigo-600,
+html.light-theme .bg-green-600,
+html.light-theme .bg-green-500,
+html.light-theme .bg-red-600,
+html.light-theme .bg-red-500,
+html.light-theme .bg-orange-500,
+html.light-theme .bg-orange-600,
 html.light-theme .bg-purple-600 *,
 html.light-theme .bg-purple-700 *,
 html.light-theme .bg-blue-600 *,
@@ -187,21 +193,41 @@ html.light-theme .bg-emerald-700 *,
 html.light-theme .bg-rose-600 *,
 html.light-theme .bg-rose-700 *,
 html.light-theme .bg-amber-600 *,
-html.light-theme .bg-indigo-600 * {
+html.light-theme .bg-indigo-600 *,
+html.light-theme .bg-green-600 *,
+html.light-theme .bg-green-500 *,
+html.light-theme .bg-red-600 *,
+html.light-theme .bg-red-500 *,
+html.light-theme .bg-orange-500 *,
+html.light-theme .bg-orange-600 * {
   color: #ffffff !important;
 }
 
-/* Solid Button Styling in Light Theme */
+/* Solid Button Styling in Light Theme - bright colors with shadows */
 html.light-theme button.bg-purple-600,
 html.light-theme button.bg-blue-600,
 html.light-theme button.bg-emerald-600,
 html.light-theme button.bg-rose-600,
 html.light-theme button.bg-amber-600,
+html.light-theme button.bg-green-600,
+html.light-theme button.bg-green-500,
+html.light-theme button.bg-red-600,
+html.light-theme button.bg-red-500,
+html.light-theme button.bg-orange-500,
+html.light-theme button.bg-orange-600,
 html.light-theme a.bg-purple-600,
 html.light-theme a.bg-blue-600 {
   color: #ffffff !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
+
+/* Light theme: bright button backgrounds */
+html.light-theme .bg-green-600 { background-color: #16a34a !important; }
+html.light-theme .bg-green-500 { background-color: #22c55e !important; }
+html.light-theme .bg-red-600 { background-color: #dc2626 !important; }
+html.light-theme .bg-red-500 { background-color: #ef4444 !important; }
+html.light-theme .bg-orange-500 { background-color: #f97316 !important; }
+html.light-theme .bg-orange-600 { background-color: #ea580c !important; }
 
 /* Secondary Button Hovers in Light Theme */
 html.light-theme .hover\:bg-slate-800:hover,
@@ -213,65 +239,83 @@ html.light-theme .hover\:bg-slate-900:hover {
   color: #0f172a !important;
 }
 
-/* 6. COLORED ACCENTS, ICONS & BADGES (DEEP TONES IN LIGHT THEME) */
+/* Light theme: bright hover states */
+html.light-theme .hover\:bg-green-500:hover { background-color: #16a34a !important; }
+html.light-theme .hover\:bg-green-600:hover { background-color: #15803d !important; }
+html.light-theme .hover\:bg-red-500:hover { background-color: #dc2626 !important; }
+html.light-theme .hover\:bg-red-600:hover { background-color: #b91c1c !important; }
+html.light-theme .hover\:bg-orange-500:hover { background-color: #ea580c !important; }
+html.light-theme .hover\:bg-orange-600:hover { background-color: #c2410c !important; }
+html.light-theme .hover\:bg-blue-500:hover { background-color: #2563eb !important; }
+html.light-theme .hover\:bg-blue-600:hover { background-color: #1d4ed8 !important; }
+html.light-theme .hover\:bg-emerald-500:hover { background-color: #059669 !important; }
+
+/* Light theme: icon button hover colors - bright and vibrant */
+html.light-theme .hover\:text-blue-400:hover { color: #2563eb !important; }
+html.light-theme .hover\:text-red-400:hover { color: #dc2626 !important; }
+html.light-theme .hover\:text-emerald-400:hover { color: #059669 !important; }
+html.light-theme .hover\:text-amber-400:hover { color: #d97706 !important; }
+html.light-theme .hover\:text-orange-400:hover { color: #ea580c !important; }
+
+/* 6. COLORED ACCENTS, ICONS & BADGES - bright and vibrant in light theme */
 html.light-theme .text-purple-400 {
-  color: #7e22ce !important; /* purple-700 */
+  color: #9333ea !important; /* purple-600 */
 }
 html.light-theme .text-purple-300,
 html.light-theme .text-purple-200 {
-  color: #581c87 !important; /* purple-900 */
+  color: #7e22ce !important; /* purple-700 */
 }
 
 html.light-theme .text-emerald-400 {
-  color: #047857 !important; /* emerald-700 */
+  color: #10b981 !important; /* emerald-500 */
 }
 html.light-theme .text-emerald-300,
 html.light-theme .text-emerald-200 {
-  color: #064e3b !important; /* emerald-900 */
+  color: #059669 !important; /* emerald-600 */
 }
 
 html.light-theme .text-rose-400 {
-  color: #be123c !important; /* rose-700 */
+  color: #f43f5e !important; /* rose-500 */
 }
 html.light-theme .text-rose-300,
 html.light-theme .text-rose-200 {
-  color: #881337 !important; /* rose-900 */
+  color: #e11d48 !important; /* rose-600 */
 }
 
 html.light-theme .text-blue-400 {
-  color: #1d4ed8 !important; /* blue-700 */
+  color: #3b82f6 !important; /* blue-500 */
 }
 html.light-theme .text-blue-300,
 html.light-theme .text-blue-200 {
-  color: #1e3a8a !important; /* blue-900 */
+  color: #2563eb !important; /* blue-600 */
 }
 
 html.light-theme .text-amber-400 {
-  color: #b45309 !important; /* amber-700 */
+  color: #f59e0b !important; /* amber-500 */
 }
 html.light-theme .text-amber-300,
 html.light-theme .text-amber-200 {
-  color: #78350f !important; /* amber-900 */
+  color: #d97706 !important; /* amber-600 */
 }
 
 html.light-theme .text-indigo-400 {
-  color: #4338ca !important; /* indigo-700 */
+  color: #6366f1 !important; /* indigo-500 */
 }
 html.light-theme .text-indigo-300,
 html.light-theme .text-indigo-200 {
-  color: #312e81 !important; /* indigo-900 */
+  color: #4f46e5 !important; /* indigo-600 */
 }
 
 html.light-theme .text-cyan-400 {
-  color: #0e7490 !important; /* cyan-700 */
+  color: #06b6d4 !important; /* cyan-500 */
 }
 html.light-theme .text-cyan-300,
 html.light-theme .text-cyan-200 {
-  color: #164e63 !important; /* cyan-900 */
+  color: #0891b2 !important; /* cyan-600 */
 }
 
 html.light-theme .text-sky-400 {
-  color: #0369a1 !important; /* sky-700 */
+  color: #0ea5e9 !important; /* sky-500 */
 }
 html.light-theme .text-sky-300,
 html.light-theme .text-sky-200 {
@@ -510,7 +554,7 @@ html.mint .text-slate-200 {
   color: #1e293b !important;
 }
 
-/* Mint accent: purple → emerald/green */
+/* Mint accent: purple → emerald/green (save buttons) */
 html.mint .bg-purple-600 { background-color: #059669 !important; }
 html.mint .bg-purple-500 { background-color: #10b981 !important; }
 html.mint .text-purple-400 { color: #059669 !important; }
@@ -522,12 +566,57 @@ html.mint .bg-purple-600\/20 { background-color: rgba(5,150,105,0.15) !important
 html.mint .bg-purple-500\/10 { background-color: rgba(16,185,129,0.1) !important; }
 html.mint .bg-purple-500\/30 { background-color: rgba(16,185,129,0.2) !important; }
 
-/* Mint blue accent: blue → green */
-html.mint .bg-blue-600 { background-color: #059669 !important; }
-html.mint .bg-blue-500 { background-color: #10b981 !important; }
-html.mint .text-blue-400 { color: #059669 !important; }
-html.mint .text-blue-300 { color: #10b981 !important; }
-html.mint .border-blue-500 { border-color: #10b981 !important; }
+/* Mint blue accent: keep blue bright for edit buttons + primary actions */
+html.mint .bg-blue-600 { background-color: #2563eb !important; }
+html.mint .bg-blue-500 { background-color: #3b82f6 !important; }
+html.mint .bg-blue-400 { background-color: #60a5fa !important; }
+html.mint .text-blue-400 { color: #2563eb !important; }
+html.mint .text-blue-300 { color: #60a5fa !important; }
+html.mint .border-blue-500 { border-color: #3b82f6 !important; }
+html.mint .hover\:bg-blue-500:hover { background-color: #2563eb !important; }
+html.mint .hover\:bg-blue-600:hover { background-color: #1d4ed8 !important; }
+html.mint .hover\:text-blue-400:hover { color: #2563eb !important; }
+html.mint .shadow-blue-600\/30 { --tw-shadow-color: rgba(37,99,235,0.3) !important; }
+
+/* Mint green: bright emerald for save buttons */
+html.mint .bg-green-600 { background-color: #16a34a !important; }
+html.mint .bg-green-500 { background-color: #22c55e !important; }
+html.mint .bg-green-400 { background-color: #4ade80 !important; }
+html.mint .hover\:bg-green-500:hover { background-color: #16a34a !important; }
+html.mint .hover\:bg-green-600:hover { background-color: #15803d !important; }
+html.mint .shadow-green-600\/30 { --tw-shadow-color: rgba(22,163,74,0.3) !important; }
+
+/* Mint red: bright red for delete buttons */
+html.mint .bg-red-600 { background-color: #dc2626 !important; }
+html.mint .bg-red-500 { background-color: #ef4444 !important; }
+html.mint .text-red-400 { color: #dc2626 !important; }
+html.mint .text-red-300 { color: #f87171 !important; }
+html.mint .hover\:text-red-400:hover { color: #dc2626 !important; }
+html.mint .hover\:text-red-500:hover { background-color: #dc2626 !important; }
+
+/* Mint orange: bright orange for contas-a-pagar */
+html.mint .bg-orange-500 { background-color: #f97316 !important; }
+html.mint .bg-orange-600 { background-color: #ea580c !important; }
+html.mint .text-orange-400 { color: #ea580c !important; }
+html.mint .text-orange-300 { color: #fb923c !important; }
+html.mint .hover\:text-orange-400:hover { color: #ea580c !important; }
+
+/* Mint emerald: bright emerald for accents */
+html.mint .bg-emerald-500 { background-color: #10b981 !important; }
+html.mint .bg-emerald-600 { background-color: #059669 !important; }
+html.mint .text-emerald-400 { color: #10b981 !important; }
+html.mint .text-emerald-300 { color: #34d399 !important; }
+html.mint .hover\:bg-emerald-500:hover { background-color: #059669 !important; }
+html.mint .shadow-emerald-600\/30 { --tw-shadow-color: rgba(5,150,105,0.3) !important; }
+
+/* Mint amber: bright amber for warnings */
+html.mint .bg-amber-500 { background-color: #f59e0b !important; }
+html.mint .text-amber-400 { color: #d97706 !important; }
+html.mint .hover\:bg-amber-500:hover { background-color: #d97706 !important; }
+
+/* Mint indigo: bright indigo for info */
+html.mint .bg-indigo-600 { background-color: #4f46e5 !important; }
+html.mint .text-indigo-400 { color: #6366f1 !important; }
 
 /* Mint sidebar (navigation) - light green background */
 html.mint .bg-slate-950 {
