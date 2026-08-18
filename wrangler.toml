@@ -1,0 +1,8 @@
+name = "financa-master"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "financa-sync"
+database_id = "ab2611ac-4cae-45ad-887a-7087bf20ec1f"

@@ -73,7 +73,10 @@ class SyncServiceManager {
     this.notifyListeners('syncing');
 
     try {
-      const response = await fetch('/api/sync/pull', { method: 'GET' });
+      const response = await fetch('/api/sync/pull', {
+        method: 'GET',
+        headers: { 'x-api-key': import.meta.env.VITE_SYNC_API_KEY || '' },
+      });
       if (!response.ok) {
         throw new Error(`Sync pull failed with status ${response.status}`);
       }
@@ -179,7 +182,10 @@ class SyncServiceManager {
     try {
       const response = await fetch('/api/sync/push', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': import.meta.env.VITE_SYNC_API_KEY || '',
+        },
         body: JSON.stringify(payload),
       });
 
