@@ -9,3 +9,6 @@ coverage/
 
 # Dados de sincronização em runtime (não versionar)
 data/
+
+# Wrangler temp
+.wrangler/

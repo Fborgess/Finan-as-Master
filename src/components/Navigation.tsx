@@ -840,7 +840,7 @@ export const Navigation: React.FC<Props> = ({
               </div>
               )}
 
-              {/* 4. CONFIGURAÇÕES */}
+              {/* 7. CONFIGURAÇÕES */}
               {canViewConfiguracoes && (
               <div>
                 <button
@@ -849,7 +849,7 @@ export const Navigation: React.FC<Props> = ({
                 >
                   <span className="flex items-center space-x-1.5">
                     <Settings className="w-3.5 h-3.5 text-purple-400" />
-                    <span>4. CONFIGURAÇÕES</span>
+                    <span>7. CONFIGURAÇÕES</span>
                   </span>
                   {openConfig ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
                 </button>
