@@ -394,6 +394,10 @@ export default function App() {
         paymentMethods={paymentMethods}
         beneficiaries={beneficiaries}
         activeUser={activeUser}
+        onSaveCategory={handleSaveCategory}
+        onSaveAccount={handleSaveAccount}
+        onSavePaymentMethod={handleSavePaymentMethod}
+        onSaveBeneficiary={handleSaveBeneficiary}
       />
     </Navigation>
   );

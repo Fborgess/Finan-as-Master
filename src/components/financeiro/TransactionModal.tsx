@@ -28,7 +28,8 @@ import {
   CheckCircle2,
   Clock,
   Building2,
-  FileText
+  FileText,
+  Plus
 } from 'lucide-react';
 import { SearchableSelect, SelectOption } from '../common/SearchableSelect';
 import { CurrencyInput } from '../common/CurrencyInput';
@@ -55,6 +56,10 @@ interface Props {
   paymentMethods: PaymentMethod[];
   beneficiaries: Beneficiary[];
   activeUser: User;
+  onSaveCategory: (category: Category) => void;
+  onSaveAccount: (account: BankAccount) => void;
+  onSavePaymentMethod: (pm: PaymentMethod) => void;
+  onSaveBeneficiary: (beneficiary: Beneficiary) => void;
 }
 
 export const TransactionModal: React.FC<Props> = ({
@@ -68,6 +73,10 @@ export const TransactionModal: React.FC<Props> = ({
   paymentMethods,
   beneficiaries,
   activeUser,
+  onSaveCategory,
+  onSaveAccount,
+  onSavePaymentMethod,
+  onSaveBeneficiary,
 }) => {
   const [type, setType] = useState<TransactionType>('expense');
   const [description, setDescription] = useState('');
@@ -82,6 +91,11 @@ export const TransactionModal: React.FC<Props> = ({
   const [paymentMethodId, setPaymentMethodId] = useState('');
   const [beneficiaryId, setBeneficiaryId] = useState('');
   const [notes, setNotes] = useState('');
+
+  // Quick-add state
+  const [quickAddTarget, setQuickAddTarget] = useState<'category' | 'account' | 'paymentMethod' | 'beneficiary' | null>(null);
+  const [quickAddName, setQuickAddName] = useState('');
+  const [quickAddExtra, setQuickAddExtra] = useState('');
 
   // Âmbito do Lançamento
   const [scope, setScope] = useState<'pessoal' | 'familia'>('pessoal');
@@ -218,6 +232,142 @@ export const TransactionModal: React.FC<Props> = ({
       setCategoryId(ben.defaultCategoryId);
     }
   };
+
+  const resetQuickAdd = () => {
+    setQuickAddTarget(null);
+    setQuickAddName('');
+    setQuickAddExtra('');
+  };
+
+  const handleQuickAddSave = () => {
+    if (!quickAddName.trim()) return;
+    const id = `qa-${Date.now()}`;
+
+    if (quickAddTarget === 'category') {
+      const newCat: Category = {
+        id,
+        name: quickAddName.trim(),
+        type: type === 'transfer' ? 'both' : (type as 'expense' | 'income'),
+        color: '#6366f1',
+        scope,
+      };
+      onSaveCategory(newCat);
+      setCategoryId(id);
+    } else if (quickAddTarget === 'account') {
+      const newAcc: BankAccount = {
+        id,
+        name: quickAddName.trim(),
+        bankName: quickAddExtra.trim() || 'N/A',
+        accountType: 'checking',
+        initialBalance: 0,
+        currentBalance: 0,
+        scope,
+      };
+      onSaveAccount(newAcc);
+      setAccountId(id);
+    } else if (quickAddTarget === 'paymentMethod') {
+      const newPm: PaymentMethod = {
+        id,
+        name: quickAddName.trim(),
+        code: 'other',
+        active: true,
+        allowInstallments: quickAddExtra === 'true',
+      };
+      onSavePaymentMethod(newPm);
+      setPaymentMethodId(id);
+    } else if (quickAddTarget === 'beneficiary') {
+      const newBen: Beneficiary = {
+        id,
+        name: quickAddName.trim(),
+        type: (quickAddExtra as 'supplier' | 'customer' | 'both') || 'both',
+      };
+      onSaveBeneficiary(newBen);
+      setBeneficiaryId(id);
+    }
+
+    resetQuickAdd();
+  };
+
+  const quickAddOverlay = quickAddTarget && (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+      <div className="bg-slate-800 border border-slate-700 rounded-xl p-4 w-80 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">
+            {quickAddTarget === 'category' && 'Nova Categoria'}
+            {quickAddTarget === 'account' && 'Nova Conta Bancária'}
+            {quickAddTarget === 'paymentMethod' && 'Nova Forma de Pagamento'}
+            {quickAddTarget === 'beneficiary' && 'Novo Beneficiário'}
+          </h4>
+          <button onClick={resetQuickAdd} className="text-slate-400 hover:text-white p-1">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="space-y-2.5">
+          <input
+            autoFocus
+            type="text"
+            placeholder={
+              quickAddTarget === 'category' ? 'Nome da categoria...'
+              : quickAddTarget === 'account' ? 'Nome da conta...'
+              : quickAddTarget === 'paymentMethod' ? 'Nome da forma...'
+              : 'Nome do beneficiário...'
+            }
+            value={quickAddName}
+            onChange={(e) => setQuickAddName(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleQuickAddSave(); } }}
+            className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {quickAddTarget === 'account' && (
+            <input
+              type="text"
+              placeholder="Nome do banco (ex: Nubank, Itaú...)"
+              value={quickAddExtra}
+              onChange={(e) => setQuickAddExtra(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleQuickAddSave(); } }}
+              className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          )}
+
+          {quickAddTarget === 'paymentMethod' && (
+            <div className="grid grid-cols-2 gap-1.5">
+              <button type="button" onClick={() => setQuickAddExtra('false')}
+                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra !== 'true' ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                À Vista
+              </button>
+              <button type="button" onClick={() => setQuickAddExtra('true')}
+                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === 'true' ? 'bg-purple-600 text-white border-purple-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                Permite Parcelar
+              </button>
+            </div>
+          )}
+
+          {quickAddTarget === 'beneficiary' && (
+            <div className="grid grid-cols-3 gap-1.5">
+              {(['supplier', 'customer', 'both'] as const).map((t) => (
+                <button key={t} type="button" onClick={() => setQuickAddExtra(t)}
+                  className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === t ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                  {t === 'supplier' ? 'Fornecedor' : t === 'customer' ? 'Cliente' : 'Ambos'}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="flex space-x-2 mt-3">
+          <button type="button" onClick={resetQuickAdd}
+            className="flex-1 py-2 rounded-lg border border-slate-600 text-slate-300 text-xs font-bold hover:bg-slate-700 transition">
+            Cancelar
+          </button>
+          <button type="button" onClick={handleQuickAddSave}
+            className="flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold transition">
+            Criar e Selecionar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   // Build Options for SearchableSelects
   const categoryOptions: SelectOption[] = [];
@@ -657,13 +807,21 @@ export const TransactionModal: React.FC<Props> = ({
                 <label className="block text-[10px] font-extrabold text-slate-300 uppercase tracking-wider mb-1">
                   Categoria *
                 </label>
-                <SearchableSelect
-                  options={categoryOptions}
-                  value={categoryId}
-                  onChange={(val) => setCategoryId(val)}
-                  searchPlaceholder="Pesquisar categoria..."
-                  placeholder="Selecionar uma Opção"
-                />
+                <div className="flex gap-1.5">
+                  <div className="flex-1">
+                    <SearchableSelect
+                      options={categoryOptions}
+                      value={categoryId}
+                      onChange={(val) => setCategoryId(val)}
+                      searchPlaceholder="Pesquisar categoria..."
+                      placeholder="Selecionar uma Opção"
+                    />
+                  </div>
+                  <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('category'); setQuickAddExtra(type === 'transfer' ? 'both' : type); }}
+                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de categoria">
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
               {/* Beneficiário / Fornecedor */}
@@ -671,13 +829,21 @@ export const TransactionModal: React.FC<Props> = ({
                 <label className="block text-[10px] font-extrabold text-slate-300 uppercase tracking-wider mb-1">
                   Beneficiário / Fornecedor
                 </label>
-                <SearchableSelect
-                  options={beneficiaryOptions}
-                  value={beneficiaryId}
-                  onChange={(val) => handleBeneficiaryChange(val)}
-                  searchPlaceholder="Pesquisar beneficiário..."
-                  placeholder="Selecionar uma Opção"
-                />
+                <div className="flex gap-1.5">
+                  <div className="flex-1">
+                    <SearchableSelect
+                      options={beneficiaryOptions}
+                      value={beneficiaryId}
+                      onChange={(val) => handleBeneficiaryChange(val)}
+                      searchPlaceholder="Pesquisar beneficiário..."
+                      placeholder="Selecionar uma Opção"
+                    />
+                  </div>
+                  <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('beneficiary'); setQuickAddExtra('both'); }}
+                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de beneficiário">
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -689,34 +855,50 @@ export const TransactionModal: React.FC<Props> = ({
                   <label className="block text-[10px] font-extrabold text-slate-300 uppercase tracking-wider mb-1">
                     Forma de Pagamento *
                   </label>
-                  <SearchableSelect
-                    options={paymentMethodOptions}
-                    value={paymentMethodId}
-                    onChange={(val) => setPaymentMethodId(val)}
-                    searchPlaceholder="Pesquisar forma..."
-                    placeholder="Selecionar uma Opção"
-                  />
+                  <div className="flex gap-1.5">
+                    <div className="flex-1">
+                      <SearchableSelect
+                        options={paymentMethodOptions}
+                        value={paymentMethodId}
+                        onChange={(val) => setPaymentMethodId(val)}
+                        searchPlaceholder="Pesquisar forma..."
+                        placeholder="Selecionar uma Opção"
+                      />
+                    </div>
+                    <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('paymentMethod'); setQuickAddExtra('false'); }}
+                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de forma de pagamento">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-[10px] font-extrabold text-slate-300 uppercase tracking-wider mb-1">
                     Conta Bancária ou Cartão *
                   </label>
-                  <SearchableSelect
-                    options={accountOrCardOptions}
-                    value={creditCardId ? `card:${creditCardId}` : accountId ? `acc:${accountId}` : ''}
-                    onChange={(val) => {
-                      if (val.startsWith('card:')) {
-                        setCreditCardId(val.replace('card:', ''));
-                        setAccountId('');
-                      } else {
-                        setAccountId(val.replace('acc:', ''));
-                        setCreditCardId('');
-                      }
-                    }}
-                    searchPlaceholder="Pesquisar conta ou cartão..."
-                    placeholder="Selecionar uma Opção"
-                  />
+                  <div className="flex gap-1.5">
+                    <div className="flex-1">
+                      <SearchableSelect
+                        options={accountOrCardOptions}
+                        value={creditCardId ? `card:${creditCardId}` : accountId ? `acc:${accountId}` : ''}
+                        onChange={(val) => {
+                          if (val.startsWith('card:')) {
+                            setCreditCardId(val.replace('card:', ''));
+                            setAccountId('');
+                          } else {
+                            setAccountId(val.replace('acc:', ''));
+                            setCreditCardId('');
+                          }
+                        }}
+                        searchPlaceholder="Pesquisar conta ou cartão..."
+                        placeholder="Selecionar uma Opção"
+                      />
+                    </div>
+                    <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('account'); setQuickAddExtra(''); }}
+                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de conta bancária">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1108,6 +1290,7 @@ export const TransactionModal: React.FC<Props> = ({
           </div>
         </form>
       </div>
+      {quickAddOverlay}
     </div>
   );
 };
