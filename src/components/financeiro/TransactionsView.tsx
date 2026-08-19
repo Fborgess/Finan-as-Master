@@ -120,7 +120,7 @@ export const TransactionsView: React.FC<Props> = ({
         {canCreate && (
           <button
             onClick={onOpenNewTransaction}
-            className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-1.5"
+            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>+ Nova Transação</span>

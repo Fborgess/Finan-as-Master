@@ -448,7 +448,7 @@ export const Navigation: React.FC<Props> = ({
             {canCreateTransaction && (
               <button
                 onClick={onOpenNewTransaction}
-                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition transform active:scale-95"
+                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition transform active:scale-95"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>+ Nova Transação</span>
@@ -939,9 +939,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.beneficiarios && (
                 <button
                   onClick={() => setActiveCadastro('beneficiarios')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'beneficiarios'
-                      ? 'bg-amber-500 text-slate-950 shadow'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -952,9 +952,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.cartoes && (
                 <button
                   onClick={() => setActiveCadastro('cartoes')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'cartoes'
-                      ? 'bg-amber-500 text-slate-950 shadow'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -965,9 +965,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.categorias && (
                 <button
                   onClick={() => setActiveCadastro('categorias')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'categorias'
-                      ? 'bg-amber-500 text-slate-950 shadow'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -978,9 +978,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.contas && (
                 <button
                   onClick={() => setActiveCadastro('contas')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'contas'
-                      ? 'bg-amber-500 text-slate-950 shadow'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -991,9 +991,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.pagamentos && (
                 <button
                   onClick={() => setActiveCadastro('pagamentos')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'pagamentos'
-                      ? 'bg-amber-500 text-slate-950 shadow'
+                      ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -1010,9 +1010,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.transacoes && (
                 <button
                   onClick={() => setActiveFinanceiro('transacoes')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeFinanceiro === 'transacoes'
-                      ? 'bg-blue-600 text-white shadow'
+                      ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -1023,9 +1023,9 @@ export const Navigation: React.FC<Props> = ({
                 {perm.orcamento && (
                 <button
                   onClick={() => setActiveFinanceiro('orcamento')}
-                  className={`px-3 py-2 rounded-xl font-bold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeFinanceiro === 'orcamento'
-                      ? 'bg-blue-600 text-white shadow'
+                      ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >

@@ -38,36 +38,100 @@ html, body {
 }
 
 /* ==========================================================================
-   GLOBAL TRANSITIONS
+   GLOBAL BUTTON SYSTEM - Inter-like clean style
+   Compact, rounded-xl, solid colors, subtle shadow, no gradient/glow/lift.
    ========================================================================== */
 
 button, a[role="button"] {
   transition: all 0.15s ease !important;
 }
 
+/* Active press: slight scale */
+button:active:not(:disabled) {
+  transform: scale(0.97) !important;
+}
+
+/* Colored solid buttons: subtle flat shadow */
+.bg-green-600,
+.bg-green-500,
+.bg-red-600,
+.bg-red-500,
+.bg-blue-600,
+.bg-blue-500,
+.bg-amber-600,
+.bg-amber-500,
+.bg-purple-600,
+.bg-purple-500,
+.bg-emerald-600,
+.bg-emerald-500,
+.bg-orange-600,
+.bg-orange-500,
+.bg-indigo-600,
+.bg-indigo-500 {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+}
+
+/* Hover: darken slightly, keep shadow flat */
+.bg-green-600:hover,
+.bg-green-500:hover,
+.bg-red-600:hover,
+.bg-red-500:hover,
+.bg-blue-600:hover,
+.bg-blue-500:hover,
+.bg-amber-600:hover,
+.bg-amber-500:hover,
+.bg-purple-600:hover,
+.bg-purple-500:hover,
+.bg-emerald-600:hover,
+.bg-emerald-500:hover,
+.bg-orange-600:hover,
+.bg-orange-500:hover,
+.bg-indigo-600:hover,
+.bg-indigo-500:hover {
+  filter: brightness(0.92) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+
+/* White text on colored button children */
+.bg-green-600 *, .bg-green-500 *,
+.bg-red-600 *, .bg-red-500 *,
+.bg-blue-600 *, .bg-blue-500 *,
+.bg-amber-600 *, .bg-amber-500 *,
+.bg-purple-600 *, .bg-purple-500 *,
+.bg-emerald-600 *, .bg-emerald-500 *,
+.bg-orange-600 *, .bg-orange-500 *,
+.bg-indigo-600 *, .bg-indigo-500 * {
+  color: #ffffff !important;
+}
+
+/* Dark text on amber buttons (yellow bg) */
+.bg-amber-500, .bg-amber-600 {
+  color: #1e293b !important;
+}
+
 /* ==========================================================================
    LIGHT THEME
-   Clean, professional. Soft slate palette. No gradients, no glow.
+   White canvas, soft shadows, dark text. Clean & professional.
    ========================================================================== */
 
 html.light-theme,
 body.light-theme {
-  background-color: #f1f5f9 !important;
+  background-color: #f8fafc !important;
   color: #0f172a !important;
 }
 
 /* === Surfaces === */
-html.light-theme .bg-slate-950 { background-color: #f1f5f9 !important; }
+html.light-theme .bg-slate-950 { background-color: #f8fafc !important; }
 
 html.light-theme .bg-slate-900 {
   background-color: #ffffff !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
 }
 
 html.light-theme .bg-slate-800 {
-  background-color: #f8fafc !important;
+  background-color: #f1f5f9 !important;
   color: #0f172a !important;
   border-color: #e2e8f0 !important;
 }
@@ -80,7 +144,7 @@ html.light-theme .bg-slate-800\/40,
 html.light-theme .bg-slate-800\/30,
 html.light-theme .bg-slate-800\/20,
 html.light-theme .bg-slate-800\/10 {
-  background-color: #f8fafc !important;
+  background-color: #f1f5f9 !important;
   border-color: #e2e8f0 !important;
 }
 
@@ -144,31 +208,40 @@ html.light-theme .text-slate-400 { color: #64748b !important; }
 html.light-theme .text-slate-500 { color: #94a3b8 !important; }
 html.light-theme .hover\:text-white:hover { color: #0f172a !important; }
 
-/* === Solid buttons: subtle shadow, no gradient === */
-html.light-theme .bg-red-600,
-html.light-theme .bg-emerald-600,
-html.light-theme .bg-green-600,
-html.light-theme .bg-blue-600,
-html.light-theme .bg-purple-600,
-html.light-theme .bg-amber-600,
-html.light-theme .bg-orange-500,
-html.light-theme .bg-orange-600,
-html.light-theme .bg-indigo-600 {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-}
+/* === Solid button overrides === */
+html.light-theme .bg-green-600 { background-color: #16a34a !important; }
+html.light-theme .bg-green-500 { background-color: #22c55e !important; }
+html.light-theme .bg-red-600 { background-color: #dc2626 !important; }
+html.light-theme .bg-red-500 { background-color: #ef4444 !important; }
+html.light-theme .bg-blue-600 { background-color: #2563eb !important; }
+html.light-theme .bg-blue-500 { background-color: #3b82f6 !important; }
+html.light-theme .bg-amber-500 { background-color: #f59e0b !important; }
+html.light-theme .bg-amber-600 { background-color: #d97706 !important; }
+html.light-theme .bg-purple-600 { background-color: #7c3aed !important; }
+html.light-theme .bg-purple-500 { background-color: #8b5cf6 !important; }
+html.light-theme .bg-emerald-600 { background-color: #059669 !important; }
+html.light-theme .bg-emerald-500 { background-color: #10b981 !important; }
+html.light-theme .bg-orange-600 { background-color: #ea580c !important; }
+html.light-theme .bg-orange-500 { background-color: #f97316 !important; }
+html.light-theme .bg-indigo-600 { background-color: #4f46e5 !important; }
 
-html.light-theme .bg-red-600 *,
-html.light-theme .bg-emerald-600 *,
-html.light-theme .bg-green-600 *,
-html.light-theme .bg-blue-600 *,
-html.light-theme .bg-purple-600 *,
-html.light-theme .bg-amber-600 *,
-html.light-theme .bg-orange-500 *,
-html.light-theme .bg-orange-600 *,
-html.light-theme .bg-indigo-600 *,
-html.light-theme .bg-red-500 *,
-html.light-theme .bg-green-500 * {
-  color: #ffffff !important;
+/* Colored button shadow in light */
+html.light-theme .bg-green-600,
+html.light-theme .bg-green-500,
+html.light-theme .bg-red-600,
+html.light-theme .bg-red-500,
+html.light-theme .bg-blue-600,
+html.light-theme .bg-blue-500,
+html.light-theme .bg-amber-500,
+html.light-theme .bg-amber-600,
+html.light-theme .bg-purple-600,
+html.light-theme .bg-purple-500,
+html.light-theme .bg-emerald-600,
+html.light-theme .bg-emerald-500,
+html.light-theme .bg-orange-600,
+html.light-theme .bg-orange-500,
+html.light-theme .bg-indigo-600 {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important;
 }
 
 /* === Icon accents === */
@@ -273,7 +346,7 @@ html.light-theme tbody tr { border-bottom-color: #f1f5f9 !important; }
 html.light-theme tbody tr:hover { background-color: #f8fafc !important; }
 
 /* === Header === */
-html.light-theme header { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important; }
+html.light-theme header { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; }
 html.light-theme header .text-white { color: #0f172a !important; }
 
 /* === Modals === */
@@ -281,7 +354,7 @@ html.light-theme .absolute.z-50,
 html.light-theme .fixed.z-50 { color: #0f172a !important; }
 html.light-theme .bg-slate-950\/80,
 html.light-theme .bg-black\/60,
-html.light-theme .bg-slate-900\/80 { background-color: rgba(15,23,42,0.35) !important; backdrop-filter: blur(6px); }
+html.light-theme .bg-slate-900\/80 { background-color: rgba(15,23,42,0.3) !important; backdrop-filter: blur(6px); }
 
 /* === Charts === */
 html.light-theme .recharts-default-tooltip { background-color: #ffffff !important; color: #0f172a !important; border-color: #e2e8f0 !important; border-radius: 10px !important; }
@@ -324,6 +397,12 @@ html.mint .bg-slate-950\/60,
 html.mint .bg-slate-950\/50,
 html.mint .bg-slate-950\/40 { background-color: rgba(255,255,255,0.95) !important; }
 
+/* === Kill dark gradients === */
+html.mint .bg-gradient-to-r,
+html.mint .bg-gradient-to-b,
+html.mint .bg-gradient-to-br,
+html.mint .bg-gradient-to-tr { background-image: none !important; }
+
 /* === Borders === */
 html.mint .border-slate-800,
 html.mint .border-slate-700,
@@ -354,7 +433,7 @@ html.mint .bg-purple-600\/20 { background-color: rgba(5,150,105,0.12) !important
 html.mint .bg-purple-500\/10 { background-color: rgba(16,185,129,0.08) !important; }
 html.mint .bg-purple-500\/30 { background-color: rgba(16,185,129,0.16) !important; }
 
-/* === Solid button colors (flat, no gradient) === */
+/* === Solid button colors === */
 html.mint .bg-blue-600 { background-color: #2563eb !important; }
 html.mint .bg-blue-500 { background-color: #3b82f6 !important; }
 html.mint .bg-blue-400 { background-color: #60a5fa !important; }
@@ -403,34 +482,23 @@ html.mint .hover\:bg-amber-500:hover { background-color: #d97706 !important; }
 html.mint .bg-indigo-600 { background-color: #4f46e5 !important; }
 html.mint .text-indigo-400 { color: #6366f1 !important; }
 
-/* === Solid button shadow (subtle, clean) === */
+/* === Solid button shadow === */
 html.mint .bg-red-600,
+html.mint .bg-red-500,
 html.mint .bg-blue-600,
+html.mint .bg-blue-500,
 html.mint .bg-green-600,
+html.mint .bg-green-500,
 html.mint .bg-emerald-600,
+html.mint .bg-emerald-500,
 html.mint .bg-amber-600,
+html.mint .bg-amber-500,
 html.mint .bg-purple-600,
+html.mint .bg-purple-500,
 html.mint .bg-orange-500,
 html.mint .bg-orange-600 {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
 }
-
-/* === White text on colored buttons (children) === */
-html.mint .bg-red-600 *,
-html.mint .bg-blue-600 *,
-html.mint .bg-green-600 *,
-html.mint .bg-emerald-600 *,
-html.mint .bg-amber-600 *,
-html.mint .bg-purple-600 * {
-  color: #ffffff !important;
-}
-
-/* === Icon accents === */
-html.mint .text-amber-400 { color: #f59e0b !important; }
-html.mint .text-red-400 { color: #ef4444 !important; }
-html.mint .text-emerald-400 { color: #10b981 !important; }
-html.mint .text-blue-400 { color: #3b82f6 !important; }
-html.mint .text-purple-400 { color: #8b5cf6 !important; }
 
 /* === Forms === */
 html.mint input,

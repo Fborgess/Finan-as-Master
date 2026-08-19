@@ -494,7 +494,7 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setIsPayModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-700 text-slate-300 font-bold text-xs hover:bg-slate-800 transition"
+                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
                 >
                   Cancelar
                 </button>

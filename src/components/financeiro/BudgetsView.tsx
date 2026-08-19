@@ -127,7 +127,7 @@ export const BudgetsView: React.FC<Props> = ({
         {canCreate && (
           <button
             onClick={() => handleOpenModal()}
-            className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/20 transition flex items-center justify-center space-x-1.5"
+            className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>+ Definir Novo Orçamento</span>
@@ -406,13 +406,13 @@ export const BudgetsView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-300 font-bold text-xs hover:bg-slate-800 transition"
+                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-extrabold text-xs shadow-md transition"
+                  className="flex-1 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition"
                 >
                   Salvar
                 </button>

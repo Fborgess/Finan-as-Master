@@ -238,7 +238,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
 
                 <button
                   onClick={handleNativeShare}
-                  className="flex items-center justify-center space-x-2 p-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition"
+                  className="flex items-center justify-center space-x-2 p-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition"
                 >
                   <Share2 className="w-4 h-4" />
                   <span>Enviar via Aplicativo</span>

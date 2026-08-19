@@ -121,7 +121,7 @@ export const CreditCardsView: React.FC<Props> = ({
         {canCreate && (
           <button
             onClick={() => handleOpenModal()}
-            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center space-x-1.5"
+            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>+ Novo Cartão</span>
@@ -133,10 +133,10 @@ export const CreditCardsView: React.FC<Props> = ({
       <div className="flex items-center space-x-2 border-b border-slate-800 pb-2">
         <button
           onClick={() => setActiveTab('cards')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center space-x-2 transition ${
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition ${
             activeTab === 'cards'
-              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-              : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+              ? 'bg-amber-500 text-slate-950 shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 hover:bg-slate-800'
           }`}
         >
           <CardIcon className="w-4 h-4" />
@@ -145,10 +145,10 @@ export const CreditCardsView: React.FC<Props> = ({
 
         <button
           onClick={() => setActiveTab('invoices')}
-          className={`px-4 py-2 rounded-xl text-xs font-extrabold flex items-center space-x-2 transition ${
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition ${
             activeTab === 'invoices'
-              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-              : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800'
+              ? 'bg-amber-500 text-slate-950 shadow-sm'
+              : 'bg-slate-800/80 text-slate-400 hover:bg-slate-800'
           }`}
         >
           <FileText className="w-4 h-4" />
@@ -424,13 +424,13 @@ export const CreditCardsView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-300 font-bold text-xs hover:bg-slate-800 transition"
+                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-extrabold text-xs shadow-md transition"
+                  className="flex-1 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition"
                 >
                   Salvar
                 </button>
