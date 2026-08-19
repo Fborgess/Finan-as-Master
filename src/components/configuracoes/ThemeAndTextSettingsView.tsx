@@ -192,7 +192,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               </div>
 
               <div>
-                <div className="font-extrabold text-sm text-[#1e293b]">Verde Claro</div>
+                <div className="font-extrabold text-sm text-[#1e293b]">Menta</div>
                 <div className="text-[11px] text-emerald-700 mt-1">
                   Fundo claro com acentos em verde menta.
                 </div>
