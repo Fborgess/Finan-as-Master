@@ -927,7 +927,7 @@ export const Navigation: React.FC<Props> = ({
             {/* App Version Badge */}
             <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[10px] text-slate-500 space-y-0.5">
               <div className="font-bold tracking-wider">Khrima v1.0.0</div>
-              <div className="opacity-70">ca1d48f — 18/08/2026</div>
+              <div className="opacity-70">b9c2276 — 18/08/2026</div>
             </div>
           </aside>
 
@@ -1043,7 +1043,7 @@ export const Navigation: React.FC<Props> = ({
 
       {/* Floating Bottom Navigation Bar for Mobile */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-800 px-4 pt-2 pb-1 flex flex-col md:hidden text-slate-400 ios-safe-bottom">
-        <div className="text-center text-[9px] text-slate-600 font-bold mb-1">Khrima v1.0.0 — ca1d48f — 18/08/2026</div>
+        <div className="text-center text-[9px] text-slate-600 font-bold mb-1">Khrima v1.0.0 — b9c2276 — 18/08/2026</div>
         <div className="flex items-center justify-around">
         {perm.dashboard && (
         <button
