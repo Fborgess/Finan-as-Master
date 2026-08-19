@@ -333,11 +333,13 @@ export const TransactionModal: React.FC<Props> = ({
           {quickAddTarget === 'paymentMethod' && (
             <div className="grid grid-cols-2 gap-1.5">
               <button type="button" onClick={() => setQuickAddExtra('false')}
-                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra !== 'true' ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra !== 'true' ? 'bg-blue-600 border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}
+                style={quickAddExtra !== 'true' ? { color: '#ffffff' } : undefined}>
                 À Vista
               </button>
               <button type="button" onClick={() => setQuickAddExtra('true')}
-                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === 'true' ? 'bg-purple-600 text-white border-purple-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === 'true' ? 'bg-purple-600 border-purple-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}
+                style={quickAddExtra === 'true' ? { color: '#ffffff' } : undefined}>
                 Permite Parcelar
               </button>
             </div>
@@ -347,7 +349,8 @@ export const TransactionModal: React.FC<Props> = ({
             <div className="grid grid-cols-3 gap-1.5">
               {(['supplier', 'customer', 'both'] as const).map((t) => (
                 <button key={t} type="button" onClick={() => setQuickAddExtra(t)}
-                  className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === t ? 'bg-blue-600 text-white border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}>
+                  className={`py-1.5 rounded-lg text-[11px] font-bold transition border ${quickAddExtra === t ? 'bg-blue-600 border-blue-500' : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-800'}`}
+                  style={quickAddExtra === t ? { color: '#ffffff' } : undefined}>
                   {t === 'supplier' ? 'Fornecedor' : t === 'customer' ? 'Cliente' : 'Ambos'}
                 </button>
               ))}
@@ -361,7 +364,8 @@ export const TransactionModal: React.FC<Props> = ({
             Cancelar
           </button>
           <button type="button" onClick={handleQuickAddSave}
-            className="flex-1 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-extrabold transition">
+            className="flex-1 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-extrabold transition"
+            style={{ color: '#ffffff' }}>
             Criar e Selecionar
           </button>
         </div>
@@ -650,11 +654,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setType('expense')}
                   className={`py-2 rounded-lg flex items-center justify-center space-x-1 transition ${
                     type === 'expense'
-                      ? 'bg-red-600 text-white font-extrabold shadow-md border border-red-500'
+                      ? 'bg-red-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={type === 'expense' ? { color: '#ffffff', borderColor: '#ef4444', borderWidth: 1 } : undefined}
                 >
-                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+                  <ArrowUpRight className="w-3.5 h-3.5 shrink-0" style={type === 'expense' ? { color: '#ffffff' } : undefined} />
                   <span>Despesa</span>
                 </button>
 
@@ -663,11 +668,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setType('income')}
                   className={`py-2 rounded-lg flex items-center justify-center space-x-1 transition ${
                     type === 'income'
-                      ? 'bg-emerald-600 text-white font-extrabold shadow-md border border-emerald-500'
+                      ? 'bg-emerald-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={type === 'income' ? { color: '#ffffff', borderColor: '#10b981', borderWidth: 1 } : undefined}
                 >
-                  <ArrowDownLeft className="w-3.5 h-3.5 shrink-0" />
+                  <ArrowDownLeft className="w-3.5 h-3.5 shrink-0" style={type === 'income' ? { color: '#ffffff' } : undefined} />
                   <span>Receita</span>
                 </button>
 
@@ -679,11 +685,12 @@ export const TransactionModal: React.FC<Props> = ({
                   }}
                   className={`py-2 rounded-lg flex items-center justify-center space-x-1 transition ${
                     type === 'transfer'
-                      ? 'bg-blue-600 text-white font-extrabold shadow-md border border-blue-500'
+                      ? 'bg-blue-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={type === 'transfer' ? { color: '#ffffff', borderColor: '#3b82f6', borderWidth: 1 } : undefined}
                 >
-                  <ArrowRightLeft className="w-3.5 h-3.5 shrink-0" />
+                  <ArrowRightLeft className="w-3.5 h-3.5 shrink-0" style={type === 'transfer' ? { color: '#ffffff' } : undefined} />
                   <span>Transf.</span>
                 </button>
               </div>
@@ -700,11 +707,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setScope('pessoal')}
                   className={`py-2 px-2 rounded-lg flex items-center justify-center space-x-1.5 transition ${
                     scope === 'pessoal'
-                      ? 'bg-blue-600 text-white font-extrabold shadow-md border border-blue-500'
+                      ? 'bg-blue-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={scope === 'pessoal' ? { color: '#ffffff', borderColor: '#3b82f6', borderWidth: 1 } : undefined}
                 >
-                  <UserIcon className={`w-3.5 h-3.5 shrink-0 ${scope === 'pessoal' ? 'text-white' : 'text-blue-400'}`} />
+                  <UserIcon className="w-3.5 h-3.5 shrink-0" style={scope === 'pessoal' ? { color: '#ffffff' } : { color: '#3b82f6' }} />
                   <span>Pessoal</span>
                 </button>
                 <button
@@ -712,11 +720,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setScope('familia')}
                   className={`py-2 px-2 rounded-lg flex items-center justify-center space-x-1.5 transition ${
                     scope === 'familia'
-                      ? 'bg-purple-600 text-white font-extrabold shadow-md border border-purple-500'
+                      ? 'bg-purple-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={scope === 'familia' ? { color: '#ffffff', borderColor: '#8b5cf6', borderWidth: 1 } : undefined}
                 >
-                  <Users className={`w-3.5 h-3.5 shrink-0 ${scope === 'familia' ? 'text-white' : 'text-purple-400'}`} />
+                  <Users className="w-3.5 h-3.5 shrink-0" style={scope === 'familia' ? { color: '#ffffff' } : { color: '#8b5cf6' }} />
                   <span>Família</span>
                 </button>
               </div>
@@ -818,7 +827,7 @@ export const TransactionModal: React.FC<Props> = ({
                     />
                   </div>
                   <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('category'); setQuickAddExtra(type === 'transfer' ? 'both' : type); }}
-                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de categoria">
+                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-md" style={{ color: '#ffffff' }} title="Cadastro rápido de categoria">
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
@@ -840,7 +849,7 @@ export const TransactionModal: React.FC<Props> = ({
                     />
                   </div>
                   <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('beneficiary'); setQuickAddExtra('both'); }}
-                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de beneficiário">
+                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-md" style={{ color: '#ffffff' }} title="Cadastro rápido de beneficiário">
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
@@ -866,7 +875,7 @@ export const TransactionModal: React.FC<Props> = ({
                       />
                     </div>
                     <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('paymentMethod'); setQuickAddExtra('false'); }}
-                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de forma de pagamento">
+                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-md" style={{ color: '#ffffff' }} title="Cadastro rápido de forma de pagamento">
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
@@ -895,7 +904,7 @@ export const TransactionModal: React.FC<Props> = ({
                       />
                     </div>
                     <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('account'); setQuickAddExtra(''); }}
-                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition border border-blue-500 shadow-md" title="Cadastro rápido de conta bancária">
+                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-md" style={{ color: '#ffffff' }} title="Cadastro rápido de conta bancária">
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
@@ -971,11 +980,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setModality('single')}
                   className={`py-2 px-2 rounded-lg flex items-center justify-center space-x-1.5 transition ${
                     modality === 'single'
-                      ? 'bg-amber-600 text-white font-extrabold shadow-md border border-amber-500'
+                      ? 'bg-amber-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={modality === 'single' ? { color: '#ffffff', borderColor: '#f59e0b', borderWidth: 1 } : undefined}
                 >
-                  <Zap className={`w-3.5 h-3.5 shrink-0 ${modality === 'single' ? 'text-white' : 'text-amber-400'}`} />
+                  <Zap className="w-3.5 h-3.5 shrink-0" style={modality === 'single' ? { color: '#ffffff' } : { color: '#f59e0b' }} />
                   <span>À Vista</span>
                 </button>
 
@@ -984,11 +994,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setModality('installment')}
                   className={`py-2 px-2 rounded-lg flex items-center justify-center space-x-1.5 transition ${
                     modality === 'installment'
-                      ? 'bg-purple-600 text-white font-extrabold shadow-md border border-purple-500'
+                      ? 'bg-purple-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={modality === 'installment' ? { color: '#ffffff', borderColor: '#8b5cf6', borderWidth: 1 } : undefined}
                 >
-                  <CardIcon className={`w-3.5 h-3.5 shrink-0 ${modality === 'installment' ? 'text-white' : 'text-purple-400'}`} />
+                  <CardIcon className="w-3.5 h-3.5 shrink-0" style={modality === 'installment' ? { color: '#ffffff' } : { color: '#8b5cf6' }} />
                   <span>Parcelado</span>
                 </button>
 
@@ -997,11 +1008,12 @@ export const TransactionModal: React.FC<Props> = ({
                   onClick={() => setModality('recurring')}
                   className={`py-2 px-2 rounded-lg flex items-center justify-center space-x-1.5 transition ${
                     modality === 'recurring'
-                      ? 'bg-blue-600 text-white font-extrabold shadow-md border border-blue-500'
+                      ? 'bg-blue-600 font-extrabold shadow-md'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800'
                   }`}
+                  style={modality === 'recurring' ? { color: '#ffffff', borderColor: '#3b82f6', borderWidth: 1 } : undefined}
                 >
-                  <Repeat className={`w-3.5 h-3.5 shrink-0 ${modality === 'recurring' ? 'text-white' : 'text-blue-400'}`} />
+                  <Repeat className="w-3.5 h-3.5 shrink-0" style={modality === 'recurring' ? { color: '#ffffff' } : { color: '#3b82f6' }} />
                   <span>Recorrente</span>
                 </button>
               </div>
@@ -1072,9 +1084,10 @@ export const TransactionModal: React.FC<Props> = ({
                           onClick={() => setInstallmentMode('total')}
                           className={`py-1.5 rounded-lg transition ${
                             installmentMode === 'total'
-                              ? 'bg-blue-600 text-white font-extrabold shadow-sm border border-blue-500'
+                              ? 'bg-blue-600 font-extrabold shadow-sm'
                               : 'text-slate-300 hover:text-white hover:bg-slate-800'
                           }`}
+                          style={installmentMode === 'total' ? { color: '#ffffff', borderColor: '#3b82f6', borderWidth: 1 } : undefined}
                         >
                           Dividir Total
                         </button>
@@ -1083,9 +1096,10 @@ export const TransactionModal: React.FC<Props> = ({
                           onClick={() => setInstallmentMode('per_installment')}
                           className={`py-1.5 rounded-lg transition ${
                             installmentMode === 'per_installment'
-                              ? 'bg-blue-600 text-white font-extrabold shadow-sm border border-blue-500'
+                              ? 'bg-blue-600 font-extrabold shadow-sm'
                               : 'text-slate-300 hover:text-white hover:bg-slate-800'
                           }`}
+                          style={installmentMode === 'per_installment' ? { color: '#ffffff', borderColor: '#3b82f6', borderWidth: 1 } : undefined}
                         >
                           Por Parcela
                         </button>
@@ -1276,7 +1290,8 @@ export const TransactionModal: React.FC<Props> = ({
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-extrabold text-xs shadow-lg shadow-green-600/30 transition flex items-center justify-center space-x-1.5"
+              className="flex-1 py-3 rounded-xl bg-green-600 hover:bg-green-500 font-extrabold text-xs shadow-lg shadow-green-600/30 transition flex items-center justify-center space-x-1.5"
+              style={{ color: '#ffffff' }}
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>

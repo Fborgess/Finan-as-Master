@@ -331,17 +331,17 @@ export const Navigation: React.FC<Props> = ({
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
-              title={currentTheme === 'dark' ? 'Tema Midnight' : currentTheme === 'midnight' ? 'Tema Claro' : 'Tema Escuro'}
+              title={currentTheme === 'dark' ? 'Tema Escuro' : currentTheme === 'mint' ? 'Tema Menta' : 'Tema Claro'}
             >
               {currentTheme === 'light' ? (
                 <>
                   <Sun className="w-4 h-4 text-amber-500" />
                   <span className="hidden sm:inline text-amber-600 font-extrabold">Claro</span>
                 </>
-              ) : currentTheme === 'midnight' ? (
+              ) : currentTheme === 'mint' ? (
                 <>
                   <Moon className="w-4 h-4 text-emerald-400" />
-                  <span className="hidden sm:inline text-emerald-300 font-extrabold">Midnight</span>
+                  <span className="hidden sm:inline text-emerald-300 font-extrabold">Menta</span>
                 </>
               ) : (
                 <>
@@ -927,7 +927,7 @@ export const Navigation: React.FC<Props> = ({
             {/* App Version Badge */}
             <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[10px] text-slate-500 space-y-0.5">
               <div className="font-bold tracking-wider">Khrima v1.0.0</div>
-              <div className="opacity-70">8fad11e — 18/08/2026</div>
+              <div className="opacity-70">{__COMMIT_HASH__} — {__BUILD_DATE__}</div>
             </div>
           </aside>
 
@@ -1043,7 +1043,7 @@ export const Navigation: React.FC<Props> = ({
 
       {/* Floating Bottom Navigation Bar for Mobile */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900 border-t border-slate-800 px-4 pt-2 pb-1 flex flex-col md:hidden text-slate-400 ios-safe-bottom">
-        <div className="text-center text-[9px] text-slate-600 font-bold mb-1">Khrima v1.0.0 — 8fad11e — 18/08/2026</div>
+        <div className="text-center text-[9px] text-slate-600 font-bold mb-1">Khrima v1.0.0 — {__COMMIT_HASH__} — {__BUILD_DATE__}</div>
         <div className="flex items-center justify-around">
         {perm.dashboard && (
         <button
