@@ -176,7 +176,7 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
               disabled={!canEdit}
               className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-3 relative group ${
                 preferences.theme === 'mint'
-                  ? 'bg-[#e2f8ef] border-emerald-500 ring-2 ring-emerald-500/40 text-[#1e293b]'
+                  ? 'bg-[#e8f5ef] border-emerald-500 ring-2 ring-emerald-500/40 text-[#1e293b]'
                   : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
               } ${!canEdit ? 'opacity-70 cursor-not-allowed hover:border-slate-800' : ''}`}
             >
@@ -193,14 +193,14 @@ export const ThemeAndTextSettingsView: React.FC<Props> = ({ onPreferencesChange,
 
               <div>
                 <div className="font-extrabold text-sm text-[#1e293b]">Menta</div>
-                <div className="text-[11px] text-emerald-700 mt-1">
+                <div className="text-[11px] text-[#64748b] mt-1">
                   Fundo verde suave com cards brancos e acentos emerald.
                 </div>
               </div>
 
-              <div className="w-full bg-white rounded-xl p-2.5 border border-emerald-200 flex items-center justify-between text-[10px] shadow-sm">
-                <span className="text-emerald-800 font-bold">Preview</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 font-bold">R$ 1.500</span>
+              <div className="w-full bg-white rounded-xl p-2.5 border border-[#e2e8f0] flex items-center justify-between text-[10px] shadow-sm">
+                <span className="text-[#334155] font-bold">Preview</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 font-bold">R$ 1.500</span>
               </div>
             </button>
 

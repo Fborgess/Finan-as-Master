@@ -378,21 +378,21 @@ html.light-theme .recharts-text { fill: #475569 !important; }
 
 html.mint,
 body.mint {
-  background-color: #e2f5ea !important;
+  background-color: #e8f5ef !important;
   color: #1e293b !important;
 }
 
 /* === Surfaces — 3 levels of depth === */
-/* Level 1: Page bg #e2f5ea | Level 2: Cards #ffffff | Level 3: Inner panels #f0fdf4 */
-html.mint .bg-slate-950 { background-color: #f0fdf4 !important; }
-html.mint .bg-slate-900 { background-color: #ffffff !important; border-color: #bbf7d0 !important; color: #1e293b !important; box-shadow: 0 1px 3px rgba(0,80,40,0.07), 0 4px 12px rgba(0,80,40,0.04) !important; }
-html.mint .bg-slate-800 { background-color: #ecfdf5 !important; border-color: #d1fae5 !important; }
+/* Level 1: Page bg #e8f5ef | Level 2: Cards #ffffff | Level 3: Inner panels #f8faf9 */
+html.mint .bg-slate-950 { background-color: #f8faf9 !important; }
+html.mint .bg-slate-900 { background-color: #ffffff !important; border-color: #d1fae5 !important; color: #1e293b !important; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03) !important; }
+html.mint .bg-slate-800 { background-color: #f1f5f9 !important; border-color: #e2e8f0 !important; }
 
 html.mint .bg-slate-800\/90,
 html.mint .bg-slate-800\/80,
 html.mint .bg-slate-800\/60,
 html.mint .bg-slate-800\/50,
-html.mint .bg-slate-800\/40 { background-color: #ecfdf5 !important; }
+html.mint .bg-slate-800\/40 { background-color: #f1f5f9 !important; }
 
 html.mint .bg-slate-900\/90,
 html.mint .bg-slate-900\/80,
@@ -405,11 +405,11 @@ html.mint .bg-slate-950\/80,
 html.mint .bg-slate-950\/85,
 html.mint .bg-slate-950\/60,
 html.mint .bg-slate-950\/50,
-html.mint .bg-slate-950\/40 { background-color: rgba(236,253,245,0.9) !important; }
+html.mint .bg-slate-950\/40 { background-color: rgba(241,245,249,0.9) !important; }
 
-/* Inner panels: slightly tinted green to contrast with white cards */
+/* Inner panels: neutral light gray to contrast with white cards */
 html.mint .bg-slate-950\/60,
-html.mint [class*="bg-slate-950/60"] { background-color: #ecfdf5 !important; }
+html.mint [class*="bg-slate-950/60"] { background-color: #f1f5f9 !important; }
 
 /* === Kill dark gradients === */
 html.mint .bg-gradient-to-r,
@@ -417,23 +417,27 @@ html.mint .bg-gradient-to-b,
 html.mint .bg-gradient-to-br,
 html.mint .bg-gradient-to-tr { background-image: none !important; }
 
-/* === Borders — emerald-tinted === */
+/* === Borders — subtle emerald, not overwhelming === */
 html.mint .border-slate-800,
 html.mint .border-slate-700,
 html.mint .border-slate-700\/50,
 html.mint .border-slate-800\/80,
 html.mint .border-slate-800\/60,
-html.mint .border-slate-800\/40 { border-color: #bbf7d0 !important; }
+html.mint .border-slate-800\/40 { border-color: #e2e8f0 !important; }
 
-/* === Text === */
+/* Emerald borders ONLY for cards and key containers */
+html.mint .bg-slate-900.border { border-color: #d1fae5 !important; }
+html.mint .bg-slate-800.border { border-color: #e2e8f0 !important; }
+
+/* === Text — neutral gray, emerald ONLY for accents === */
 html.mint .text-white { color: #1e293b !important; }
 html.mint .text-slate-100,
 html.mint .text-slate-200 { color: #1e293b !important; }
 html.mint .text-slate-300 { color: #475569 !important; }
-html.mint .text-slate-400 { color: #047857 !important; }
+html.mint .text-slate-400 { color: #64748b !important; }
 html.mint .text-slate-500 { color: #64748b !important; }
 html.mint .hover\:text-white:hover { color: #1e293b !important; }
-html.mint .hover\:bg-slate-800:hover { background-color: #dcfce7 !important; }
+html.mint .hover\:bg-slate-800:hover { background-color: #f1f5f9 !important; }
 
 /* === Purple → Emerald remaps === */
 html.mint .bg-purple-600 { background-color: #059669 !important; }
@@ -519,41 +523,40 @@ html.mint input,
 html.mint select,
 html.mint textarea {
   background-color: #ffffff !important;
-  border-color: #86efac !important;
+  border-color: #d1d5db !important;
   color: #1e293b !important;
 }
 html.mint input:focus,
 html.mint select:focus,
-html.mint textarea:focus { border-color: #10b981 !important; box-shadow: 0 0 0 2px rgba(16,185,129,0.18) !important; }
+html.mint textarea:focus { border-color: #10b981 !important; box-shadow: 0 0 0 2px rgba(16,185,129,0.12) !important; }
 html.mint input::placeholder,
 html.mint textarea::placeholder { color: #9ca3af !important; }
 
 /* === Header === */
-html.mint header { background-color: #ffffff !important; border-color: #bbf7d0 !important; box-shadow: 0 1px 4px rgba(0,80,40,0.06) !important; }
+html.mint header { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; }
 
 /* === Sidebar === */
 html.mint aside {
   background-color: #ffffff !important;
-  border-color: #bbf7d0 !important;
-  box-shadow: 4px 0 24px rgba(0,80,40,0.06) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 4px 0 24px rgba(0,0,0,0.04) !important;
 }
-
-/* === Modals === */
-html.mint .bg-slate-950\/80,
-html.mint .bg-black\/60,
-html.mint .bg-slate-900\/80 { background-color: rgba(0,50,25,0.35) !important; backdrop-filter: blur(6px); }
 
 /* === Tables === */
 html.mint thead,
-html.mint thead th { background-color: #ecfdf5 !important; color: #334155 !important; border-bottom-color: #bbf7d0 !important; }
-html.mint tbody tr { border-bottom-color: #ecfdf5 !important; }
-html.mint tbody tr:hover { background-color: #f0fdf4 !important; }
+html.mint thead th { background-color: #f8faf9 !important; color: #334155 !important; border-bottom-color: #e2e8f0 !important; }
+html.mint tbody tr { border-bottom-color: #f1f5f9 !important; }
+html.mint tbody tr:hover { background-color: #f8faf9 !important; }
 
 /* === Sidebar menu selection — emerald accent on light bg === */
 html.mint aside button.bg-blue-600 { background-color: #2563eb !important; color: #ffffff !important; }
 html.mint aside button.bg-indigo-600 { background-color: #4f46e5 !important; color: #ffffff !important; }
 html.mint aside button.bg-purple-600 { background-color: #059669 !important; color: #ffffff !important; }
 html.mint aside button.bg-amber-600 { background-color: #f59e0b !important; color: #1e293b !important; }
+
+/* Sidebar section headers (1. CADASTRO, etc.) — neutral gray */
+html.mint aside .uppercase.tracking-wider.text-slate-400 { color: #94a3b8 !important; }
+html.mint aside .uppercase.tracking-wider.hover\:text-white:hover { color: #475569 !important; }
 
 /* Sidebar nav active items: stronger contrast */
 html.mint aside .bg-amber-500\/20 { background-color: rgba(245,158,11,0.15) !important; color: #b45309 !important; border-color: rgba(245,158,11,0.3) !important; }
@@ -563,13 +566,14 @@ html.mint aside .bg-purple-500\/20 { background-color: rgba(5,150,105,0.12) !imp
 html.mint aside .bg-indigo-600\/20 { background-color: rgba(79,70,229,0.12) !important; color: #4338ca !important; border-color: rgba(79,70,229,0.3) !important; }
 
 /* Sidebar hover on light */
-html.mint aside .hover\:bg-slate-800:hover { background-color: #f0fdf4 !important; }
+html.mint aside .hover\:bg-slate-800:hover { background-color: #f1f5f9 !important; }
 html.mint aside .text-slate-300 { color: #475569 !important; }
-html.mint aside .text-slate-400 { color: #047857 !important; }
+html.mint aside .text-slate-400 { color: #64748b !important; }
 
-/* Sub-nav tabs: active state stronger on light bg */
+/* Sub-nav tabs: active state stronger on light bg, inactive neutral */
 html.mint .bg-amber-500 { background-color: #f59e0b !important; color: #1e293b !important; }
 html.mint .bg-blue-600 { background-color: #2563eb !important; color: #ffffff !important; }
+html.mint .text-slate-400.hover\:text-white:hover { color: #334155 !important; }
 
 /* Gradient source overrides === */
 html.mint .from-slate-950 { --tw-gradient-from: #ffffff !important; }
@@ -582,16 +586,21 @@ html.mint .from-blue-600 { --tw-gradient-from: #059669 !important; }
 html.mint .to-indigo-500 { --tw-gradient-to: #34d399 !important; }
 
 /* === Shadows === */
-html.mint .shadow-xl { box-shadow: 0 4px 16px rgba(0,80,40,0.08) !important; }
-html.mint .shadow-2xl { box-shadow: 0 8px 24px rgba(0,80,40,0.10) !important; }
-html.mint .shadow-md { box-shadow: 0 2px 8px rgba(0,80,40,0.06) !important; }
-html.mint .shadow-sm { box-shadow: 0 1px 3px rgba(0,80,40,0.06) !important; }
+html.mint .shadow-xl { box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; }
+html.mint .shadow-2xl { box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important; }
+html.mint .shadow-md { box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important; }
+html.mint .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; }
 
 /* === Charts === */
-html.mint .recharts-default-tooltip { background-color: #ffffff !important; color: #1e293b !important; border-color: #bbf7d0 !important; border-radius: 10px !important; }
+html.mint .recharts-default-tooltip { background-color: #ffffff !important; color: #1e293b !important; border-color: #e2e8f0 !important; border-radius: 10px !important; }
 html.mint .recharts-tooltip-item { color: #1e293b !important; }
-html.mint .recharts-cartesian-grid-line { stroke: #d1fae5 !important; }
+html.mint .recharts-cartesian-grid-line { stroke: #e2e8f0 !important; }
 html.mint .recharts-text { fill: #475569 !important; }
 
 /* === Selection highlight === */
-html.mint ::selection { background-color: rgba(16,185,129,0.25) !important; color: #1e293b !important; }
+html.mint ::selection { background-color: rgba(16,185,129,0.2) !important; color: #1e293b !important; }
+
+/* === Modals === */
+html.mint .bg-slate-950\/80,
+html.mint .bg-black\/60,
+html.mint .bg-slate-900\/80 { background-color: rgba(15,23,42,0.3) !important; backdrop-filter: blur(6px); }
