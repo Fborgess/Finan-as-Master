@@ -116,7 +116,7 @@ export const ReportsView: React.FC<Props> = ({
         {canPagarReceber && (
         <button
           onClick={() => onSelectSubMenu('pagar_receber')}
-          className={`px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
+          className={`px-4 py-1.5 px-3.5 font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
             activeSubMenu === 'pagar_receber'
               ? 'bg-blue-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -130,7 +130,7 @@ export const ReportsView: React.FC<Props> = ({
         {canRealizadas && (
         <button
           onClick={() => onSelectSubMenu('realizadas')}
-          className={`px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
+          className={`px-4 py-1.5 px-3.5 font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
             activeSubMenu === 'realizadas'
               ? 'bg-blue-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -144,7 +144,7 @@ export const ReportsView: React.FC<Props> = ({
         {canPorCategoria && (
         <button
           onClick={() => onSelectSubMenu('por_categoria')}
-          className={`px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
+          className={`px-4 py-1.5 px-3.5 font-semibold flex items-center space-x-2 whitespace-nowrap transition ${
             activeSubMenu === 'por_categoria'
               ? 'bg-blue-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-800'

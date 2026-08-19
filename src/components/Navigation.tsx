@@ -262,7 +262,7 @@ export const Navigation: React.FC<Props> = ({
           <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 focus:outline-none transition flex items-center space-x-1.5"
+              className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 focus:outline-none transition flex items-center space-x-1.5"
               aria-label="Menu Navegação"
               title="Abrir Menu de Navegação"
             >
@@ -301,7 +301,7 @@ export const Navigation: React.FC<Props> = ({
             {/* Cloud Sync Status Button */}
             <button
               onClick={onManualSync}
-              className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-extrabold flex items-center space-x-1.5 text-slate-300 transition active:scale-95"
+              className="px-2.5 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-extrabold flex items-center space-x-1.5 text-slate-300 transition active:scale-95"
               title="Sincronizar lançamentos e cadastros com a Nuvem agora"
             >
               <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${isSyncing ? 'animate-spin' : ''}`} />
@@ -311,7 +311,7 @@ export const Navigation: React.FC<Props> = ({
             {/* Fullscreen Toggle Button */}
             <button
               onClick={toggleFullscreen}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
+              className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
               title={isFullscreen ? "Sair da Tela Cheia" : "Modo Tela Cheia (Fullscreen)"}
             >
               {isFullscreen ? (
@@ -330,7 +330,7 @@ export const Navigation: React.FC<Props> = ({
             {/* Quick Theme Switcher Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
+              className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-bold"
               title={currentTheme === 'dark' ? 'Tema Escuro' : currentTheme === 'mint' ? 'Tema Menta' : 'Tema Claro'}
             >
               {currentTheme === 'light' ? (
@@ -355,7 +355,7 @@ export const Navigation: React.FC<Props> = ({
             <div className="relative">
               <button
                 onClick={() => setIsScopeMenuOpen(!isScopeMenuOpen)}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-xl border text-xs font-extrabold transition shadow-sm ${
+                className={`flex items-center space-x-2 px-3 py-2 rounded-full border text-xs font-extrabold transition shadow-sm ${
                   activeScope === 'pessoal'
                     ? 'bg-indigo-950/80 border-indigo-500/60 text-indigo-300'
                     : activeScope === 'familia'
@@ -387,7 +387,7 @@ export const Navigation: React.FC<Props> = ({
                           onSelectScope('pessoal');
                           setIsScopeMenuOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-full text-xs font-bold transition ${
                           activeScope === 'pessoal'
                             ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 font-extrabold'
                             : 'text-slate-300 hover:bg-slate-800'
@@ -407,7 +407,7 @@ export const Navigation: React.FC<Props> = ({
                           onSelectScope('familia');
                           setIsScopeMenuOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-full text-xs font-bold transition ${
                           activeScope === 'familia'
                             ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30 font-extrabold'
                             : 'text-slate-300 hover:bg-slate-800'
@@ -427,7 +427,7 @@ export const Navigation: React.FC<Props> = ({
                           onSelectScope('todos');
                           setIsScopeMenuOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-full text-xs font-bold transition ${
                           activeScope === 'todos'
                             ? 'bg-amber-600/20 text-amber-300 border border-amber-500/30 font-extrabold'
                             : 'text-slate-300 hover:bg-slate-800'
@@ -448,7 +448,7 @@ export const Navigation: React.FC<Props> = ({
             {canCreateTransaction && (
               <button
                 onClick={onOpenNewTransaction}
-                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition transform active:scale-95"
+                className="hidden sm:flex items-center space-x-1.5 px-3.5 py-1.5 px-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition transform active:scale-95"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>+ Nova Transação</span>
@@ -459,7 +459,7 @@ export const Navigation: React.FC<Props> = ({
             <div className="relative">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center space-x-2 p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-xs text-white transition"
+                className="flex items-center space-x-2 p-1.5 rounded-full bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-xs text-white transition"
               >
                 <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white text-xs">
                   {activeUser.name.charAt(0)}
@@ -497,7 +497,7 @@ export const Navigation: React.FC<Props> = ({
                             onSelectUser(u);
                             setIsUserMenuOpen(false);
                           }}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition ${
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-full text-xs text-left transition ${
                             u.id === activeUser.id
                               ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30 font-bold'
                               : 'text-slate-300 hover:bg-slate-800'
@@ -527,7 +527,7 @@ export const Navigation: React.FC<Props> = ({
                           setIsUserMenuOpen(false);
                           onLogout();
                         }}
-                        className="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold text-xs transition"
+                        className="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-full bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold text-xs transition"
                       >
                         <LogOut className="w-3.5 h-3.5" />
                         <span>Sair / Bloquear App</span>
@@ -636,7 +636,7 @@ export const Navigation: React.FC<Props> = ({
               {perm.dashboard && (
               <button
                 onClick={() => handleNavClick('dashboard')}
-                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl font-bold transition ${
+                className={`w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-full font-bold transition ${
                   activeMain === 'dashboard'
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
                     : 'text-slate-300 hover:bg-slate-800 hover:text-white'
@@ -666,7 +666,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.beneficiarios && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'beneficiarios')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'cadastros' && activeCadastro === 'beneficiarios'
                           ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -680,7 +680,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.cartoes && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'cartoes')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'cadastros' && activeCadastro === 'cartoes'
                           ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -694,7 +694,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.categorias && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'categorias')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'cadastros' && activeCadastro === 'categorias'
                           ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -708,7 +708,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.contas && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'contas')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'cadastros' && activeCadastro === 'contas'
                           ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -722,7 +722,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.pagamentos && (
                     <button
                       onClick={() => handleNavClick('cadastros', 'pagamentos')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'cadastros' && activeCadastro === 'pagamentos'
                           ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -756,7 +756,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.orcamento && (
                     <button
                       onClick={() => handleNavClick('financeiro', 'orcamento')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'financeiro' && activeFinanceiro === 'orcamento'
                           ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -770,7 +770,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.transacoes && (
                     <button
                       onClick={() => handleNavClick('financeiro', 'transacoes')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'financeiro' && activeFinanceiro === 'transacoes'
                           ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -804,7 +804,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.pagar_receber && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'pagar_receber')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'relatorios' && activeRelatorios === 'pagar_receber'
                           ? 'bg-blue-500/20 text-blue-300 font-bold border border-blue-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -818,7 +818,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.realizadas && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'realizadas')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'relatorios' && activeRelatorios === 'realizadas'
                           ? 'bg-blue-500/20 text-blue-300 font-bold border border-blue-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -832,7 +832,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.por_categoria && (
                     <button
                       onClick={() => handleNavClick('relatorios', 'por_categoria')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'relatorios' && activeRelatorios === 'por_categoria'
                           ? 'bg-blue-500/20 text-blue-300 font-bold border border-blue-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -866,7 +866,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.perfis && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'perfis')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'configuracoes' && activeConfiguracoes === 'perfis'
                           ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -880,7 +880,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.usuarios && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'usuarios')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'configuracoes' && activeConfiguracoes === 'usuarios'
                           ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -894,7 +894,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.biometria && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'biometria')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'configuracoes' && activeConfiguracoes === 'biometria'
                           ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -908,7 +908,7 @@ export const Navigation: React.FC<Props> = ({
                     {perm.aparencia && (
                     <button
                       onClick={() => handleNavClick('configuracoes', 'aparencia')}
-                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-xl transition ${
+                      className={`w-full flex items-center space-x-2 px-3 py-2 rounded-full transition ${
                         activeMain === 'configuracoes' && activeConfiguracoes === 'aparencia'
                           ? 'bg-purple-500/20 text-purple-300 font-bold border border-purple-500/30'
                           : 'text-slate-300 hover:bg-slate-800'
@@ -939,7 +939,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.beneficiarios && (
                 <button
                   onClick={() => setActiveCadastro('beneficiarios')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'beneficiarios'
                       ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -952,7 +952,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.cartoes && (
                 <button
                   onClick={() => setActiveCadastro('cartoes')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'cartoes'
                       ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -965,7 +965,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.categorias && (
                 <button
                   onClick={() => setActiveCadastro('categorias')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'categorias'
                       ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -978,7 +978,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.contas && (
                 <button
                   onClick={() => setActiveCadastro('contas')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'contas'
                       ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -991,7 +991,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.pagamentos && (
                 <button
                   onClick={() => setActiveCadastro('pagamentos')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeCadastro === 'pagamentos'
                       ? 'bg-amber-500 text-slate-950 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -1010,7 +1010,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.transacoes && (
                 <button
                   onClick={() => setActiveFinanceiro('transacoes')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeFinanceiro === 'transacoes'
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -1023,7 +1023,7 @@ export const Navigation: React.FC<Props> = ({
                 {perm.orcamento && (
                 <button
                   onClick={() => setActiveFinanceiro('orcamento')}
-                  className={`px-3 py-2 rounded-xl font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
+                  className={`px-3 py-2 rounded-full font-semibold flex items-center space-x-1.5 whitespace-nowrap transition ${
                     activeFinanceiro === 'orcamento'
                       ? 'bg-blue-600 text-white shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'

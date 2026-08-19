@@ -333,11 +333,11 @@ export const TransactionModal: React.FC<Props> = ({
           {quickAddTarget === 'paymentMethod' && (
             <div className="grid grid-cols-2 gap-1.5">
               <button type="button" onClick={() => setQuickAddExtra('false')}
-                className={`py-1.5 rounded-xl text-[11px] font-semibold transition border ${quickAddExtra !== 'true' ? 'bg-blue-600 border-blue-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
+                className={`py-1.5 rounded-full text-[11px] font-semibold transition border ${quickAddExtra !== 'true' ? 'bg-blue-600 border-blue-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
                 À Vista
               </button>
               <button type="button" onClick={() => setQuickAddExtra('true')}
-                className={`py-1.5 rounded-xl text-[11px] font-semibold transition border ${quickAddExtra === 'true' ? 'bg-purple-600 border-purple-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
+                className={`py-1.5 rounded-full text-[11px] font-semibold transition border ${quickAddExtra === 'true' ? 'bg-purple-600 border-purple-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
                 Permite Parcelar
               </button>
             </div>
@@ -347,7 +347,7 @@ export const TransactionModal: React.FC<Props> = ({
             <div className="grid grid-cols-3 gap-1.5">
               {(['supplier', 'customer', 'both'] as const).map((t) => (
                 <button key={t} type="button" onClick={() => setQuickAddExtra(t)}
-                  className={`py-1.5 rounded-xl text-[11px] font-semibold transition border ${quickAddExtra === t ? 'bg-blue-600 border-blue-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
+                  className={`py-1.5 rounded-full text-[11px] font-semibold transition border ${quickAddExtra === t ? 'bg-blue-600 border-blue-500 text-white shadow-sm' : 'bg-slate-900 text-slate-400 border-slate-700 hover:bg-slate-800'}`}>
                   {t === 'supplier' ? 'Fornecedor' : t === 'customer' ? 'Cliente' : 'Ambos'}
                 </button>
               ))}
@@ -357,11 +357,11 @@ export const TransactionModal: React.FC<Props> = ({
 
         <div className="flex space-x-2 mt-3">
           <button type="button" onClick={resetQuickAdd}
-            className="flex-1 py-2 rounded-xl border border-slate-600 text-slate-400 text-xs font-semibold hover:bg-slate-700 transition">
+            className="flex-1 py-2 rounded-full border border-slate-600 text-slate-400 text-xs font-semibold hover:bg-slate-700 transition">
             Cancelar
           </button>
           <button type="button" onClick={handleQuickAddSave}
-            className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm">
+            className="flex-1 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm">
             Criar e Selecionar
           </button>
         </div>
@@ -626,7 +626,7 @@ export const TransactionModal: React.FC<Props> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1.5 rounded-xl hover:bg-slate-800 transition"
+            className="text-slate-400 hover:text-white p-1.5 rounded-full hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -648,7 +648,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setType('expense')}
-                  className={`py-2 rounded-xl flex items-center justify-center space-x-1 transition ${
+                  className={`py-2 rounded-full flex items-center justify-center space-x-1 transition ${
                     type === 'expense'
                       ? 'bg-red-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -661,7 +661,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setType('income')}
-                  className={`py-2 rounded-xl flex items-center justify-center space-x-1 transition ${
+                  className={`py-2 rounded-full flex items-center justify-center space-x-1 transition ${
                     type === 'income'
                       ? 'bg-emerald-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -677,7 +677,7 @@ export const TransactionModal: React.FC<Props> = ({
                     setType('transfer');
                     setModality('single');
                   }}
-                  className={`py-2 rounded-xl flex items-center justify-center space-x-1 transition ${
+                  className={`py-2 rounded-full flex items-center justify-center space-x-1 transition ${
                     type === 'transfer'
                       ? 'bg-blue-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -698,7 +698,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setScope('pessoal')}
-                  className={`py-2 px-2 rounded-xl flex items-center justify-center space-x-1.5 transition ${
+                  className={`py-2 px-2 rounded-full flex items-center justify-center space-x-1.5 transition ${
                     scope === 'pessoal'
                       ? 'bg-blue-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -710,7 +710,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setScope('familia')}
-                  className={`py-2 px-2 rounded-xl flex items-center justify-center space-x-1.5 transition ${
+                  className={`py-2 px-2 rounded-full flex items-center justify-center space-x-1.5 transition ${
                     scope === 'familia'
                       ? 'bg-purple-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -746,7 +746,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setStatus(status === 'paid' ? 'pending' : 'paid')}
-                  className="w-full py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-900 text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center justify-between transition h-[42px]"
+                  className="w-full py-2.5 px-3 rounded-full border border-slate-700 bg-slate-900 text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center justify-between transition h-[42px]"
                   title="Clique para alternar entre Pago e Pendente"
                 >
                   <span className="flex items-center space-x-1.5 min-w-0">
@@ -818,7 +818,7 @@ export const TransactionModal: React.FC<Props> = ({
                     />
                   </div>
                   <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('category'); setQuickAddExtra(type === 'transfer' ? 'both' : type); }}
-                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de categoria">
+                    className="shrink-0 w-9 h-[42px] rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de categoria">
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
@@ -840,7 +840,7 @@ export const TransactionModal: React.FC<Props> = ({
                     />
                   </div>
                   <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('beneficiary'); setQuickAddExtra('both'); }}
-                    className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de beneficiário">
+                    className="shrink-0 w-9 h-[42px] rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de beneficiário">
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
@@ -866,7 +866,7 @@ export const TransactionModal: React.FC<Props> = ({
                       />
                     </div>
                     <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('paymentMethod'); setQuickAddExtra('false'); }}
-                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de forma de pagamento">
+                      className="shrink-0 w-9 h-[42px] rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de forma de pagamento">
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
@@ -895,7 +895,7 @@ export const TransactionModal: React.FC<Props> = ({
                       />
                     </div>
                     <button type="button" onClick={() => { resetQuickAdd(); setQuickAddTarget('account'); setQuickAddExtra(''); }}
-                      className="shrink-0 w-9 h-[42px] rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de conta bancária">
+                      className="shrink-0 w-9 h-[42px] rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition border border-blue-500 shadow-sm text-white" title="Cadastro rápido de conta bancária">
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
@@ -969,7 +969,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setModality('single')}
-                  className={`py-2 px-2 rounded-xl flex items-center justify-center space-x-1.5 transition ${
+                  className={`py-2 px-2 rounded-full flex items-center justify-center space-x-1.5 transition ${
                     modality === 'single'
                       ? 'bg-amber-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -982,7 +982,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setModality('installment')}
-                  className={`py-2 px-2 rounded-xl flex items-center justify-center space-x-1.5 transition ${
+                  className={`py-2 px-2 rounded-full flex items-center justify-center space-x-1.5 transition ${
                     modality === 'installment'
                       ? 'bg-purple-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -995,7 +995,7 @@ export const TransactionModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setModality('recurring')}
-                  className={`py-2 px-2 rounded-xl flex items-center justify-center space-x-1.5 transition ${
+                  className={`py-2 px-2 rounded-full flex items-center justify-center space-x-1.5 transition ${
                     modality === 'recurring'
                       ? 'bg-blue-600 shadow-sm'
                       : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -1070,7 +1070,7 @@ export const TransactionModal: React.FC<Props> = ({
                         <button
                           type="button"
                           onClick={() => setInstallmentMode('total')}
-                          className={`py-1.5 rounded-xl transition ${
+                          className={`py-1.5 rounded-full transition ${
                             installmentMode === 'total'
                               ? 'bg-blue-600 shadow-sm'
                               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -1081,7 +1081,7 @@ export const TransactionModal: React.FC<Props> = ({
                         <button
                           type="button"
                           onClick={() => setInstallmentMode('per_installment')}
-                          className={`py-1.5 rounded-xl transition ${
+                          className={`py-1.5 rounded-full transition ${
                             installmentMode === 'per_installment'
                               ? 'bg-blue-600 shadow-sm'
                               : 'text-slate-400 hover:text-white hover:bg-slate-800'
@@ -1270,13 +1270,13 @@ export const TransactionModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
+              className="flex-1 py-1.5 px-4 border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex-1 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
+              className="flex-1 py-1.5 px-4 bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>

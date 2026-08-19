@@ -93,7 +93,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
         <div className="flex items-center space-x-2.5 self-start md:self-auto shrink-0">
           <button
             onClick={onPrint}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition shadow-sm active:scale-95"
+            className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition shadow-sm active:scale-95"
             title="Imprimir ou Salvar como PDF"
           >
             <Printer className="w-4 h-4 text-amber-400" />
@@ -102,7 +102,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
 
           <button
             onClick={() => setIsShareModalOpen(true)}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md shadow-blue-600/20 transition active:scale-95"
+            className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md shadow-blue-600/20 transition active:scale-95"
             title="Compartilhar Relatório"
           >
             <Share2 className="w-4 h-4" />
@@ -130,7 +130,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
               <button
                 key={p.id}
                 onClick={() => onApplyPreset(p.id as any)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${
                   activePreset === p.id
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-700/60'
@@ -229,7 +229,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
                 {csvData && (
                   <button
                     onClick={handleDownloadCSV}
-                    className="flex items-center justify-center space-x-2 p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition"
+                    className="flex items-center justify-center space-x-2 p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs transition"
                   >
                     <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
                     <span>Baixar Planilha CSV</span>
@@ -238,7 +238,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
 
                 <button
                   onClick={handleNativeShare}
-                  className="flex items-center justify-center space-x-2 p-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition"
+                  className="flex items-center justify-center space-x-2 p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-sm transition"
                 >
                   <Share2 className="w-4 h-4" />
                   <span>Enviar via Aplicativo</span>
@@ -250,7 +250,7 @@ export const ReportHeaderFilter: React.FC<Props> = ({
             <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end shrink-0">
               <button
                 onClick={() => setIsShareModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition"
+                className="px-4 py-1.5 px-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition"
               >
                 Fechar
               </button>

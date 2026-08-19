@@ -202,7 +202,7 @@ export const CategoriesView: React.FC<Props> = ({
           <div className="flex items-center space-x-2">
             <button
               onClick={() => handleOpenModal()}
-              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
+              className="px-4 py-1 px-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs shadow-sm transition flex items-center justify-center space-x-1.5"
             >
               <Plus className="w-4 h-4" />
               <span>+ Nova Categoria</span>
@@ -229,7 +229,7 @@ export const CategoriesView: React.FC<Props> = ({
           <div className="flex space-x-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-[11px] font-semibold">
             <button
               onClick={expandAll}
-              className="px-2.5 py-1 rounded-xl text-slate-400 hover:text-amber-400 hover:bg-slate-700 transition"
+              className="px-2.5 py-1 rounded-full text-slate-400 hover:text-amber-400 hover:bg-slate-700 transition"
               title="Expandir todas as categorias pai"
             >
               Expandir Todas
@@ -237,7 +237,7 @@ export const CategoriesView: React.FC<Props> = ({
             <span className="text-slate-700">|</span>
             <button
               onClick={collapseAll}
-              className="px-2.5 py-1 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition"
+              className="px-2.5 py-1 rounded-full text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition"
               title="Recolher todas"
             >
               Recolher
@@ -248,7 +248,7 @@ export const CategoriesView: React.FC<Props> = ({
           <div className="flex space-x-1 bg-slate-800 p-1 rounded-xl border border-slate-700 text-xs font-semibold">
             <button
               onClick={() => setFilterType('ALL')}
-              className={`px-3 py-1.5 rounded-xl transition ${
+              className={`px-3 py-1.5 rounded-full transition ${
                 filterType === 'ALL' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -256,7 +256,7 @@ export const CategoriesView: React.FC<Props> = ({
             </button>
             <button
               onClick={() => setFilterType('expense')}
-              className={`px-3 py-1.5 rounded-xl transition ${
+              className={`px-3 py-1.5 rounded-full transition ${
                 filterType === 'expense' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -264,7 +264,7 @@ export const CategoriesView: React.FC<Props> = ({
             </button>
             <button
               onClick={() => setFilterType('income')}
-              className={`px-3 py-1.5 rounded-xl transition ${
+              className={`px-3 py-1.5 rounded-full transition ${
                 filterType === 'income' ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -302,7 +302,7 @@ export const CategoriesView: React.FC<Props> = ({
                     {/* Expansion Toggle Button */}
                     <button
                       onClick={() => toggleExpand(parent.id)}
-                      className={`p-2 rounded-xl transition flex items-center justify-center ${
+                      className={`p-2 rounded-full transition flex items-center justify-center ${
                         childrenCount > 0
                           ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20'
                           : 'bg-slate-800 text-slate-500 hover:text-slate-300'
@@ -676,13 +676,13 @@ export const CategoriesView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
+                  className="flex-1 py-1.5 px-4 border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition"
+                  className="flex-1 py-1.5 px-4 bg-green-600 hover:bg-green-500 text-white font-semibold text-xs shadow-sm transition"
                 >
                   Salvar
                 </button>

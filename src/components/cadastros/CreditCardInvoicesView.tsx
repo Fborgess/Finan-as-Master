@@ -201,7 +201,7 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
               <button
                 key={card.id}
                 onClick={() => setSelectedCardId(card.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-black transition flex items-center space-x-2 shrink-0 border ${
+                className={`px-3.5 py-2 rounded-full text-xs font-black transition flex items-center space-x-2 shrink-0 border ${
                   isSelected
                     ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
                     : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-750'
@@ -256,7 +256,7 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
           {invoiceSummary.remainingBalance > 0 && canPay && (
             <button
               onClick={handleOpenPayModal}
-              className="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition flex items-center justify-center space-x-2 shrink-0"
+              className="px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition flex items-center justify-center space-x-2 shrink-0"
             >
               <DollarSign className="w-4 h-4" />
               <span>Pagar Fatura ({formatBRL(invoiceSummary.remainingBalance)})</span>
@@ -494,13 +494,13 @@ export const CreditCardInvoicesView: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setIsPayModalOpen(false)}
-                  className="flex-1 py-2 rounded-xl border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
+                  className="flex-1 py-1.5 px-4 border border-slate-700 text-slate-400 font-semibold text-xs hover:bg-slate-800 transition"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 text-slate-950 font-black text-xs shadow-md transition"
+                  className="flex-1 py-2.5 rounded-full bg-green-500 hover:bg-green-600 text-slate-950 font-black text-xs shadow-md transition"
                 >
                   Confirmar Pagamento
                 </button>

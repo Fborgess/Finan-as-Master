@@ -39,19 +39,21 @@ html, body {
 
 /* ==========================================================================
    GLOBAL BUTTON SYSTEM - Inter-like clean style
-   Compact, rounded-xl, solid colors, subtle shadow, no gradient/glow/lift.
+   Pill-shaped, compact, solid colors, no gradient/glow/lift.
    ========================================================================== */
 
 button, a[role="button"] {
   transition: all 0.15s ease !important;
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
 }
 
 /* Active press: slight scale */
 button:active:not(:disabled) {
-  transform: scale(0.97) !important;
+  transform: scale(0.96) !important;
 }
 
-/* Colored solid buttons: subtle flat shadow */
+/* Colored solid buttons: flat shadow */
 .bg-green-600,
 .bg-green-500,
 .bg-red-600,
@@ -68,10 +70,10 @@ button:active:not(:disabled) {
 .bg-orange-500,
 .bg-indigo-600,
 .bg-indigo-500 {
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08) !important;
 }
 
-/* Hover: darken slightly, keep shadow flat */
+/* Hover: darken slightly */
 .bg-green-600:hover,
 .bg-green-500:hover,
 .bg-red-600:hover,
@@ -88,17 +90,15 @@ button:active:not(:disabled) {
 .bg-orange-500:hover,
 .bg-indigo-600:hover,
 .bg-indigo-500:hover {
-  filter: brightness(0.92) !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important;
+  filter: brightness(0.9) !important;
 }
 
 /* White text on colored button children */
 .bg-green-600 *, .bg-green-500 *,
 .bg-red-600 *, .bg-red-500 *,
 .bg-blue-600 *, .bg-blue-500 *,
-.bg-amber-600 *, .bg-amber-500 *,
-.bg-purple-600 *, .bg-purple-500 *,
 .bg-emerald-600 *, .bg-emerald-500 *,
+.bg-purple-600 *, .bg-purple-500 *,
 .bg-orange-600 *, .bg-orange-500 *,
 .bg-indigo-600 *, .bg-indigo-500 * {
   color: #ffffff !important;
@@ -107,6 +107,15 @@ button:active:not(:disabled) {
 /* Dark text on amber buttons (yellow bg) */
 .bg-amber-500, .bg-amber-600 {
   color: #1e293b !important;
+}
+
+/* Segmented controls / toggle groups: keep rounded-lg, NOT pill */
+.bg-slate-950 > button,
+.bg-slate-800 > button,
+.bg-slate-900 > button,
+[class*="bg-slate-950 p-1"] > button,
+[class*="bg-slate-800/80 p-1"] > button {
+  border-radius: 0.5rem !important;
 }
 
 /* ==========================================================================
